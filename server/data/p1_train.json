@@ -1,0 +1,35 @@
+[
+    {
+        "article":{
+            "fact_checking_article": "example.com",
+            "fact_checking_date": "2020-01-01",
+            "claim": "test claim"
+        },
+        "gold_annotations":[
+            {
+                "claim": "test claim",
+                "label": "Supported",
+                "claim_date": "2020-01-01",
+                "speaker": "test speaker",
+                "original_claim_url": "example.com",
+                "reporting_source": "test source",
+                "location_ISO_code": "US",
+                "skipped": false,
+                "claim_types": ["Position Statement"],
+                "fact_checking_strategies": ["Written Evidence"]
+            },
+            {
+                "claim": "test claim annotation 2",
+                "label": "Supported",
+                "claim_date": "2020-01-01",
+                "speaker": "test speaker",
+                "original_claim_url": "example.com",
+                "reporting_source": "test source",
+                "location_ISO_code": "US",
+                "skipped": false,
+                "claim_types": ["Position Statement"],
+                "fact_checking_strategies": ["Written Evidence", "Expert Testimony"]
+            }
+        ]
+    }
+]

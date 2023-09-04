@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-const QuestionModel = require('./Question');
-const ArticleModel = require('./Article');
-const UserModel = require('./userModel');
 
 const claimNormAnnotationSchema = new mongoose.Schema({
     claim: String,
@@ -18,7 +15,7 @@ const claimNormAnnotationSchema = new mongoose.Schema({
     skipped: Boolean,
     claim_types: [String],
     fact_checking_strategies: [String],
-    user: UserModel.schema,
+    assigned_user_id: mongoose.Schema.Types.ObjectId,
 });
 
 const ClaimNormAnnotationModel = mongoose.model('ClaimNormAnnotation', claimNormAnnotationSchema);

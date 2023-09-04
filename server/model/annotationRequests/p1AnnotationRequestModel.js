@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
 const ClaimNormAnnotationModel = require('../annotations/claimNormAnnotationModel');
-const ArticleModel = require('./articleModel');
-const UserModel = require('./userModel');
 
 const p1AnnotationRequestSchema = new mongoose.Schema({
-    article: ArticleModel.schema,
-    assigned_user: UserModel.schema,
+    article_id: mongoose.Schema.Types.ObjectId,
+    assigned_user_id: mongoose.Schema.Types.ObjectId,
+    blocked_user_ids: [mongoose.Schema.Types.ObjectId],
     annotation: ClaimNormAnnotationModel.schema,
-    blocked_users: [UserModel.schema],
 });
 
 const P1AnnotationRequestModel = mongoose.model('P1AnnotationRequest', p1AnnotationRequestSchema);

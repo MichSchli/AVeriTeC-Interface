@@ -6,6 +6,6 @@ const articleSchema = new mongoose.Schema({
     fact_checking_article: String,
 });
 
-const ArticleModel = mongoose.model('Article', claimSchema);
+const ArticleModel = mongoose.model('Article', articleSchema);
 
 module.exports = ArticleModel;

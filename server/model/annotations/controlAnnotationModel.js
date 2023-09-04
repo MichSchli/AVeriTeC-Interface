@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const UserModel = require('./userModel');
 
 const controlAnnotationModelSchema = new mongoose.Schema({
     label: String,
@@ -7,7 +6,7 @@ const controlAnnotationModelSchema = new mongoose.Schema({
     submit_timestamp: Date,
     justification: String,
     include_in_next_phase: Boolean,
-    user: UserModel.schema,
+    assigned_user_id: mongoose.Schema.Types.ObjectId,
 });
 
 const ControlAnnotationModel = mongoose.model('ControlAnnotation', controlAnnotationModelSchema);

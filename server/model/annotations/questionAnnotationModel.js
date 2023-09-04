@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const QuestionModel = require('./Question');
-const UserModel = require('./userModel');
+const QuestionModel = require('../questionModel');
 
 const questionAnnotationSchema = new mongoose.Schema({
     label: String,
@@ -11,7 +10,7 @@ const questionAnnotationSchema = new mongoose.Schema({
     search_queries: [String],
     skipped: Boolean,
     include_in_next_phase: Boolean,
-    user: UserModel.schema,
+    assigned_user_id: mongoose.Schema.Types.ObjectId,
 });
 
 const QuestionAnnotationModel = mongoose.model('QuestionAnnotation', questionAnnotationSchema);
