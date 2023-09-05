@@ -40,13 +40,11 @@ class ChangePassword extends React.Component {
     var request = {
       method: "post",
       baseURL: config.api_url,
-      url: "/change_password.php",
+      url: "/users/change_password",
       data:{
-        name: this.state.name,
+        username: this.state.name,
         password: this.state.password,
-        password_md5: md5(this.state.password),
-        new_password: this.state.new_password,
-        new_password_md5: md5(this.state.new_password)
+        newPassword: this.state.new_password,
       }
     };
     console.log(this.state);

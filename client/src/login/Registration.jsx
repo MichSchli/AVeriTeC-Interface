@@ -10,6 +10,8 @@ import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
 import axios from 'axios';
 import config from "../config.json"
+import {Redirect} from "react-router-dom";
+
 
 const AvatarBox = styled.div`
     display: flex;
@@ -31,8 +33,7 @@ class Registration extends React.Component {
     this.state = {
       name: '',
       password: '',
-      registered: false,
-      duplicated: false
+      login: false
     }
   }
 
@@ -41,25 +42,31 @@ class Registration extends React.Component {
     var request = {
       method: "post",
       baseURL: config.api_url,
-      url: "/registration.php",
+      url: "/users/register",
       data:{
-        name: this.state.name,
+        username: this.state.name,
         password: this.state.password,
-        password_md5: md5(this.state.password)
       }
     };
     console.log(this.state);
     axios(request).then((response) => {
-      console.log(response.data);
-      if (response.data.duplicated) {
-        this.setState({duplicated: response.data.duplicated});
-      } else {
-        this.setState({registered: response.data.registered});
+      if (!response.data.token && response.data.message){
+        window.alert(response.data.message)
+      } else{
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', response.data.user.username);
+        localStorage.setItem('user_id', response.data.user._id);
+        localStorage.setItem('is_admin', response.data.is_admin);
+        this.setState({login: response.data.token !== undefined})
       }
     }).catch((error) => {window.alert(error)})	
   }
 
   render() {
+    if (this.state.login) {
+      return <Redirect to='/control'/>;
+    }
+
     return (
         <Container>
           <div>

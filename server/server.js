@@ -3,7 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-//const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
+const annotationRoutes = require('./routes/annotationRoutes');
 const { url, options } = require('./config/mongodb_config');
 
 console.log("Connecting to MongoDB at " + url);
@@ -33,7 +34,8 @@ db.once('open', () => {
 });
 
 // API routes
-//app.use('/api/users', userRoutes);
+app.use('/users', userRoutes);
+app.use('/annotations', annotationRoutes);
 
 // Start the server
 app.listen(PORT, () => {

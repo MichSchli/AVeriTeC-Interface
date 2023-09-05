@@ -35,9 +35,7 @@ jsonData.map( async (annotationSet) => {
     article_id = article._id;
   }
 
-  console.log(article_id)
-
-  annotationSet.article_id = article_id;
+  annotationSet.article = article_id;
   trainingP1AnnotationRequestModel.create(annotationSet).then(function(annotationRequest){
     console.log("Successfully inserted annotation request");
   } ).catch(function(error){

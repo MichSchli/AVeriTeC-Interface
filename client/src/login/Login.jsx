@@ -10,7 +10,6 @@ import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
 import axios from 'axios';
 import {Redirect} from "react-router-dom";
-import md5 from "md5";
 import config from "../config.json"
 
 const AvatarBox = styled.div`
@@ -33,6 +32,8 @@ class Login extends React.Component{
       password: '',
       login: false
     }
+
+    localStorage.clear();
   }
 
   handleFormSubmit = e => {
@@ -40,43 +41,30 @@ class Login extends React.Component{
     var request = {
           method: "post",
           baseURL: config.api_url,
-          url: "/login.php",
+          url: "/users/login",
           data:{
-              name: this.state.name,
-              password_md5: md5(this.state.password)
+              username: this.state.name,
+              password: this.state.password
           }
       };
 
       console.log(this.state);
       axios(request).then((response) => {
-          console.log(response.data);
-          localStorage.setItem('user_id', response.data.user_id);
-          localStorage.setItem('user_name', response.data.user_name);
-          localStorage.setItem('login', response.data.login);
-          localStorage.setItem('is_admin', response.data.is_admin);
-          localStorage.finished_norm_annotations = response.data.finished_norm_annotations;
-          localStorage.finished_qa_annotations = response.data.finished_qa_annotations;
-          localStorage.finished_valid_annotations = response.data.finished_valid_annotations;
-          localStorage.train_finished_norm_annotations = response.data.train_finished_norm_annotations? response.data.train_finished_norm_annotations : 0;;
-          localStorage.train_finished_qa_annotations = response.data.train_finished_qa_annotations? response.data.train_finished_qa_annotations : 0;
-          localStorage.train_finished_valid_annotations = response.data.train_finished_valid_annotations? response.data.train_finished_valid_annotations : 0;
-          localStorage.finished_p4_annotations = response.data.finished_p4_annotations? response.data.finished_p4_annotations : 0;
-          localStorage.finished_p5_annotations = response.data.finished_p5_annotations? response.data.finished_p5_annotations : 0;
-          localStorage.pc = 0;
-          localStorage.claim_id = 0;
-          localStorage.claim_norm_id = 0;
-          this.setState({login: response.data.login})
-          console.log(this.state);
-          console.log(localStorage.getItem('login'));
-
-          if (!response.data.login && response.data.message){
+          if (!response.data.token && response.data.message){
             window.alert(response.data.message)
+          } else{
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('username', response.data.user.username);
+            localStorage.setItem('user_id', response.data.user._id);
+            localStorage.setItem('is_admin', response.data.is_admin);
+            this.setState({login: response.data.token !== undefined})
           }
       }).catch((error) => {window.alert(error)})	
   }
 
   render() {
     if (this.state.login) {
+      console.log(localStorage.getItem('token'))
       return <Redirect to='/control'/>;
     }
 

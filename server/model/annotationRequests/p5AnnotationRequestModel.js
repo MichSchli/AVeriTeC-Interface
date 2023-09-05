@@ -4,14 +4,15 @@ const QuestionAnnotationModel = require('../annotations/questionAnnotationModel'
 const ControlAnnotationModel = require('../annotations/controlAnnotationModel');
 
 const p5AnnotationRequestSchema = new mongoose.Schema({
-    article_id: mongoose.Schema.Types.ObjectId,
-    assigned_user_id: mongoose.Schema.Types.ObjectId,
-    blocked_user_ids: [mongoose.Schema.Types.ObjectId],
+    article: {type: mongoose.Schema.Types.ObjectId, ref: 'Article'},
+    assigned_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    blocked_user_ids: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     p1_annotation: ClaimNormAnnotationModel.schema,
     p2_annotation: QuestionAnnotationModel.schema,
     p3_annotation: ControlAnnotationModel.schema,
     p4_annotation: QuestionAnnotationModel.schema,
-    p5_annotation: ControlAnnotationModel.schema,
+    annotation: ControlAnnotationModel.schema,
+    has_been_submitted: Boolean,
 });
 
 const P5AnnotationRequestModel = mongoose.model('P5AnnotationRequest', p5AnnotationRequestSchema);

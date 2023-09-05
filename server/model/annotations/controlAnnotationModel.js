@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const controlAnnotationModelSchema = new mongoose.Schema({
     label: String,
-    request_timestamp: Date,
-    submit_timestamp: Date,
+    load_seconds: Number,
+    work_seconds: Number,
     justification: String,
     include_in_next_phase: Boolean,
-    assigned_user_id: mongoose.Schema.Types.ObjectId,
+    assigned_user_id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 });
 
 const ControlAnnotationModel = mongoose.model('ControlAnnotation', controlAnnotationModelSchema);

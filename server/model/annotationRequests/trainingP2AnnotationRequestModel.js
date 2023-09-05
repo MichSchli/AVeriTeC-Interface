@@ -3,11 +3,12 @@ const ClaimNormAnnotationModel = require('../annotations/claimNormAnnotationMode
 const QuestionAnnotationModel = require('../annotations/questionAnnotationModel');
 
 const trainingP2AnnotationRequestSchema = new mongoose.Schema({
-    article_id: mongoose.Schema.Types.ObjectId,
-    assigned_user_id: mongoose.Schema.Types.ObjectId,
+    article: {type: mongoose.Schema.Types.ObjectId, ref: 'Article'},
+    assigned_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     p1_annotation: ClaimNormAnnotationModel.schema,
-    p2_annotation: QuestionAnnotationModel.schema,
+    annotation: QuestionAnnotationModel.schema,
     gold_annotations: [QuestionAnnotationModel.schema],
+    has_been_submitted: Boolean,
 });
 
 const TrainingP2AnnotationRequestModel = mongoose.model('trainingP2AnnotationRequest', trainingP2AnnotationRequestSchema);
