@@ -4,8 +4,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../model/userModel');
 const loginConfig = require('../config/login_config');
-const {checkAdmin, checkUserOrAdmin} = require('../middleware/authMiddleware');
+const { checkAdmin, checkUserOrAdmin } = require('../middleware/authMiddleware');
 const createTrainingRequests = require('../utils/createTrainingRequests');
+const getUserStatistics = require('../utils/getUserStatistics');
 
 // Registration route
 router.post('/register', async (req, res) => {
@@ -37,9 +38,9 @@ router.post('/register', async (req, res) => {
 
     // Generate a JWT token
     const token = jwt.sign({ userId: newUser._id, is_admin: newUser.is_admin }, loginConfig.jwt_secret_key, {
-        expiresIn: loginConfig.token_expiration_time, // Token expiration time
+      expiresIn: loginConfig.token_expiration_time, // Token expiration time
     });
-  
+
     res.status(201).json({ message: 'User registered successfully', newUser, token });
   } catch (error) {
     console.error(error);
@@ -49,148 +50,214 @@ router.post('/register', async (req, res) => {
 
 // Login route
 router.post('/login', async (req, res) => {
-    try {
-      const { username, password } = req.body;
-  
-      // Check if the user exists
-      const user = await UserModel.findOne({ username });
-      if (!user) {
-        return res.status(401).json({ message: 'Unknown username' });
-      }
-  
-      // Verify the password
-      const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Authentication failed' });
-      }
+  try {
+    const { username, password } = req.body;
 
-      // If the user is not active, return an error
-      if (!user.is_active) {
-        return res.status(401).json({ message: 'User is inactive' });
-      }
-  
-      // Generate a JWT token
-      const token = jwt.sign({ userId: user._id, is_admin: user.is_admin }, loginConfig.jwt_secret_key, {
-        expiresIn: loginConfig.token_expiration_time, // Token expiration time
-      });
-  
-      res.status(200).json({ user, token });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+    // Check if the user exists
+    const user = await UserModel.findOne({ username });
+    if (!user) {
+      return res.status(401).json({ message: 'Unknown username' });
     }
-  });
+
+    // Verify the password
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Authentication failed' });
+    }
+
+    // If the user is not active, return an error
+    if (!user.is_active) {
+      return res.status(401).json({ message: 'User is inactive' });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ userId: user._id, is_admin: user.is_admin }, loginConfig.jwt_secret_key, {
+      expiresIn: loginConfig.token_expiration_time, // Token expiration time
+    });
+
+    res.status(200).json({ user, token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 // Change password route
 router.post('/change_password', async (req, res) => {
-    try {
-      const { username, password, newPassword } = req.body;
-  
-      // Check if the user exists
+  try {
+    const { username, password, newPassword } = req.body;
+
+    // Check if the user exists
     const user = await UserModel.findOne({ username });
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Verify the current password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      user.passwordHash
+    );
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    // Hash and update the new password
+    const saltRounds = 10;
+    user.passwordHash = await bcrypt.hash(newPassword, saltRounds);
+    await user.save();
+
+    res.status(200).json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Statistics route (accessible to the user or admin)
+router.get('/statistics/:user_id', checkUserOrAdmin, async (req, res) => {
+  try {
+    const userId = req.params.user_id;
+    const user = await UserModel.findById(userId).populate("training_p1_annotation_requests");
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    statistics = getUserStatistics(user);
+
+    res.status(200).json(statistics);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Getter route for a single user (accessible to the user or admin)
+router.get('/get/:user_id', checkUserOrAdmin, async (req, res) => {
+  try {
+    const userId = req.params.user_id;
+    let user = await UserModel.findById(userId).populate("training_p1_annotation_requests").lean().exec();
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    statistics = getUserStatistics(user);
+    user.statistics = statistics;
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Statistics route that averages all fields (accessible to admin only)
+router.get('/average_statistics', checkAdmin, async (req, res) => {
+  try {
+    const users = await UserModel.find().populate("training_p1_annotation_requests").lean().exec();
+
+    let statistics = {};
+
+    // Add all statistics together
+    users.forEach((user) => {
+      let user_statistics = getUserStatistics(user);
+
+      // For all keys, if the value is a dict, recursively add the values. Otherwise, just add the values.
+      Object.keys(user_statistics).forEach((key) => {
+        if (typeof user_statistics[key] === 'object') {
+          if (!statistics[key]) {
+            statistics[key] = {};
+          }
+          Object.keys(user_statistics[key]).forEach((subkey) => {
+            if (!statistics[key][subkey]) {
+              statistics[key][subkey] = 0;
+            }
+            statistics[key][subkey] += user_statistics[key][subkey];
+          });
+        } else {
+          if (!statistics[key]) {
+            statistics[key] = 0;
+          }
+          statistics[key] += user_statistics[key];
+        }
       }
-  
-      // Verify the current password
-      const isPasswordValid = await bcrypt.compare(
-        password,
-        user.passwordHash
       );
-  
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Current password is incorrect' });
+    });
+
+    // Divide all keys by number of users. Also for keys where the values are dicts.
+    let num_users = users.length;
+    Object.keys(statistics).forEach((key) => {
+      if (typeof statistics[key] === 'object') {
+        Object.keys(statistics[key]).forEach((subkey) => {
+          statistics[key][subkey] /= num_users;
+        });
+      } else {
+        statistics[key] /= num_users;
       }
-  
-      // Hash and update the new password
-      const saltRounds = 10;
-      user.passwordHash = await bcrypt.hash(newPassword, saltRounds);
-      await user.save();
-  
-      res.status(200).json({ message: 'Password changed successfully' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  });
+    });
 
-  // Statistics route (accessible to the user or admin)
-  router.get('/statistics/:user_id', checkUserOrAdmin, async (req, res) => {
-    try {
-      const userId = req.params.user_id;
-      const user = await UserModel.findById(userId).populate("training_p1_annotation_requests");
-  
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
+    res.status(200).json(statistics);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
-      statistics = {};
-
-      for (let phase = 1; phase <= 5; phase++) {
-        user_phase_str = "p" + phase.toString() + "_annotation_requests";
-        stats_phase_str = "phase_" + phase.toString();
-
-        statistics[stats_phase_str] = {
-            annotations_assigned: user[user_phase_str].length,
-        };
-
-        // Count how many requests are done. Annotation requests are done if they have any annotation.
-        statistics[stats_phase_str].annotations_done = user[user_phase_str].filter((request) => request.annotation !== undefined).length;
-      }
-
-      for (let phase = 1; phase <= 3; phase++) {
-        user_phase_str = "training_p" + phase.toString() + "_annotation_requests";
-        stats_phase_str = "phase_" + phase.toString() + "_training";
-
-        statistics[stats_phase_str] = {
-            annotations_assigned: user[user_phase_str].length,
-        };
-
-        // Count how many requests are done. Annotation requests are done if they have any annotation.
-        statistics[stats_phase_str].annotations_done = user[user_phase_str].filter((request) => request.annotation !== undefined).length;
-      }
-
-  
-      res.status(200).json( statistics );
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  });
-  
-  module.exports = router;
-  
 
 // Update user route (only available for admins)
 router.put('/update/:userId', checkAdmin, async (req, res) => {
-    try {
-      const userId = req.params.userId;
-      const { username, password, is_admin, is_active } = req.body;
-  
-      // Check if the user exists
-      const user = await UserModel.findById(userId);
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      // Update user properties
-      user.username = username;
-      user.is_admin = is_admin;
-      user.is_active = is_active;
-  
-      if (password) {
-        // Hash and update the password if provided
-        const saltRounds = 10;
-        user.passwordHash = await bcrypt.hash(password, saltRounds);
-      }
-  
-      await user.save();
-  
-      res.status(200).json({ message: 'User updated successfully' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+  try {
+    const userId = req.params.userId;
+    const { username, password, is_admin, is_active } = req.body;
+
+    // Check if the user exists
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
+
+    // Update user properties
+    user.username = username;
+    user.is_admin = is_admin;
+    user.is_active = is_active;
+
+    if (password) {
+      // Hash and update the password if provided
+      const saltRounds = 10;
+      user.passwordHash = await bcrypt.hash(password, saltRounds);
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: 'User updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Get all user statistics route (only available for admins)
+router.get('/all', checkAdmin, async (req, res) => {
+  try {
+    // Have to use lean to get a json user object we can modify easily:
+    let users = await UserModel.find().populate("training_p1_annotation_requests").lean().exec();
+
+    // Add statistics to each user
+    let updated_users = await Promise.all(
+      users.map(async (user) => {
+        statistics = getUserStatistics(user);
+        return { ...user, statistics: statistics };
+      })
+    );
+
+    res.status(200).json({ users: updated_users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 module.exports = router;

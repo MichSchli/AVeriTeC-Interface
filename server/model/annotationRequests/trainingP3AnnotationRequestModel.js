@@ -11,6 +11,9 @@ const trainingP3AnnotationRequestSchema = new mongoose.Schema({
     annotation: ControlAnnotationModel.schema,
     gold_annotations: [ControlAnnotationModel.schema],
     has_been_submitted: Boolean,
+    request_made_timestamp: Date,
+    first_submission_timestamp: Date,
+    last_submission_timestamp: Date,
 });
 
 const TrainingP3AnnotationRequestModel = mongoose.model('trainingP3AnnotationRequest', trainingP3AnnotationRequestSchema);

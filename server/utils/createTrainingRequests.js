@@ -1,6 +1,5 @@
 const e = require('express');
 const TrainingP1AnnotationRequestModel = require('../model/annotationRequests/trainingP1AnnotationRequestModel');
-const { exists } = require('../model/questionModel');
 const mongoose = require('mongoose');
 
 const createTrainingRequests = async (user) => {
@@ -16,6 +15,9 @@ const createTrainingRequests = async (user) => {
           _id: new mongoose.Types.ObjectId(),
           assigned_user: user._id,
         });
+
+        // Add current time to the request_made_timestamp:
+        newRequest.request_made_timestamp = new Date();
 
         // Save the new request and add the ID to the user:
         await newRequest.save();

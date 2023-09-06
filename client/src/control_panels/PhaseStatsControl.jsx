@@ -58,27 +58,29 @@ class PhaseStatsControl extends react.Component {
             },
             phase_eval_stats: {
             },
-            annotation_data: 
-            [
-                {
-                    name: "Assignment Status",
-                    pending: 0,
-                    assigned: 0,
-                    completed: 0,
-                    skipped: 0,
-                },
-            ]
-            }
+            annotation_data:
+                [
+                    {
+                        name: "Assignment Status",
+                        pending: 0,
+                        assigned: 0,
+                        completed: 0,
+                        skipped: 0,
+                    },
+                ]
+        }
     }
 
     componentDidMount() {
         var request = {
             method: "post",
             baseURL: config.api_url,
-            url: "/global_statistics.php",
+            url: "/annotations/statistics/",
             data: {
-                logged_in_user_id: localStorage.getItem('user_id'),
-                req_type: 'get-statistics'
+                phase: this.props.phase,
+            },
+            headers: {
+                'Authorization': localStorage.getItem('token')
             }
         };
 
@@ -87,39 +89,57 @@ class PhaseStatsControl extends react.Component {
             if (response.data.is_admin === false) {
                 window.alert("Error: Access denied.")
             } else {
-                if (this.props.phase == 1) {            
+                if (this.props.phase == 1 || this.props.phase == 2 || this.props.phase == 4) {
                     this.setState({
                         phase_eval_stats: response.data.phase_1,
                         avg_times: {
-                            load: response.data.phase_1.average_load_time,
-                            finish: response.data.phase_1.average_task_time
+                            load: response.data.average_load_time,
+                            finish: response.data.average_task_time
                         },
-                        annotation_data: 
-                        [
-                            {
-                                name: "Assignment Status",
-                                pending: response.data.phase_1.pending_claims,
-                                assigned: response.data.phase_1.assigned_claims,
-                                completed: response.data.phase_1.completed_claims,
-                                skipped: response.data.phase_1.skipped_claims,
-                            },
-                        ]
-                    })
-                } else if (this.props.phase == 2) {
-                    this.setState({
-                        phase_eval_stats: response.data.phase_2,
-                        avg_times: {
-                            load: response.data.phase_2.average_load_time,
-                            finish: response.data.phase_2.average_task_time
-                        },
-                        annotation_data: 
+                        annotation_data:
                             [
                                 {
                                     name: "Assignment Status",
-                                    pending: response.data.phase_2.pending_claims,
-                                    assigned: response.data.phase_2.assigned_claims,
-                                    completed: response.data.phase_2.completed_claims,
-                                    skipped: response.data.phase_2.skipped_claims,
+                                    pending: response.data.pending,
+                                    assigned: response.data.assigned,
+                                    completed: response.data.completed,
+                                    skipped: response.data.skipped,
+                                },
+                            ]
+                    })
+                } else if (this.props.phase == 3 || this.props.phase == 5) {
+                    this.setState({
+                        phase_eval_stats: response.data.phase_1,
+                        avg_times: {
+                            finish: response.data.average_task_time
+                        },
+                        annotation_data:
+                            [
+                                {
+                                    name: "Assignment Status",
+                                    pending: response.data.pending,
+                                    assigned: response.data.assigned,
+                                    completed: response.data.completed,
+                                    skipped: response.data.skipped,
+                                },
+                            ]
+                    })
+                }
+                /*else if (this.props.phase == 2) {
+                    this.setState({
+                        phase_eval_stats: response.data,
+                        avg_times: {
+                            load: response.data.average_load_time,
+                            finish: response.data.average_task_time
+                        },
+                        annotation_data:
+                            [
+                                {
+                                    name: "Assignment Status",
+                                    pending: response.data.pending_claims,
+                                    assigned: response.data.assigned_claims,
+                                    completed: response.data.completed_claims,
+                                    skipped: response.data.skipped_claims,
                                 },
                             ]
                     })
@@ -129,7 +149,7 @@ class PhaseStatsControl extends react.Component {
                         avg_times: {
                             finish: response.data.phase_3.average_task_time
                         },
-                        annotation_data: 
+                        annotation_data:
                             [
                                 {
                                     name: "Assignment Status",
@@ -147,7 +167,7 @@ class PhaseStatsControl extends react.Component {
                             finish: response.data.phase_4.average_task_time,
                             load: response.data.phase_4.average_load_time
                         },
-                        annotation_data: 
+                        annotation_data:
                             [
                                 {
                                     name: "Assignment Status",
@@ -164,7 +184,7 @@ class PhaseStatsControl extends react.Component {
                         avg_times: {
                             finish: response.data.phase_5.average_task_time
                         },
-                        annotation_data: 
+                        annotation_data:
                             [
                                 {
                                     name: "Assignment Status",
@@ -178,7 +198,8 @@ class PhaseStatsControl extends react.Component {
                 }
 
 
-            }
+            }*/
+        }
         }).catch((error) => { window.alert(error) })
     }
 
@@ -204,7 +225,7 @@ class PhaseStatsControl extends react.Component {
 
         if (this.state.phase_eval_stats) {
             Object.keys(this.state.phase_eval_stats).forEach(key => {
-                if (key in chart_keys){
+                if (key in chart_keys) {
                     chartData = [
                         ...chartData,
                         {
@@ -219,7 +240,7 @@ class PhaseStatsControl extends react.Component {
 
         var timeData = []
         if (this.state.avg_times) {
-            if (this.props.phase == 3 || this.props.phase == 5){
+            if (this.props.phase == 3 || this.props.phase == 5) {
                 timeData = [
                     {
                         name: "Average task time",
@@ -264,9 +285,9 @@ class PhaseStatsControl extends react.Component {
                             <Bar barSize={60} name="Annotations completed" dataKey="completed" fill="#8884d8" />
                             <Bar barSize={60} name="Annotations assigned" dataKey="assigned" fill="#82ca9d" />
                             <Bar barSize={60} name="Annotations pending" dataKey="pending" fill="#ed6145" />
-                            {(this.props.name === "Analysis | Claim Normalization" || this.props.name === "Analysis | Question Generation")?                        
-                            <Bar barSize={60} name="Claims skipped" dataKey="skipped" fill="#e0cc19" />
-                            : ""
+                            {(this.props.name === "Analysis | Claim Normalization" || this.props.name === "Analysis | Question Generation") ?
+                                <Bar barSize={60} name="Claims skipped" dataKey="skipped" fill="#e0cc19" />
+                                : ""
                             }
                         </BarChart>
                     </ChartBox>

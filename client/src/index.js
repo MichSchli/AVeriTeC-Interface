@@ -5,6 +5,7 @@ import Login from './login/Login';
 import Registration from './login/Registration';
 import ChangePassword from './login/ChangePassword';
 import AnnotatorControl from './control_panels/AnnotatorControl';
+import UserDetailsOverview from './control_panels/UserDetailsOverview';
 
 import TrainingOverlay from './training_components/TrainingOverlay';
 import PreTrainingControl from './training_components/PreTrainingControl';
@@ -22,7 +23,6 @@ import PrePhaseOneScreen from './claim_normalization/PrePhaseOneScreen';
 import PostPhaseTwoScreen from './question_generation/PostPhaseTwoScreen';
 import PrePhaseTwoScreen from './question_generation/PrePhaseTwoScreen';
 import PrePhaseThreeScreen from './verdict_validation/PrePhaseThreeScreen';
-import UserDetailsOverview from './control_panels/UserDetailsOverview';
 import PrePhaseFourScreen from './phase_four_question_generation/PrePhaseFourScreen';
 import PostPhaseFourScreen from './phase_four_question_generation/PostPhaseFourScreen';
 import PhaseFourQuestionGeneration from './phase_four_question_generation/PhaseFourQuestionGeneration';
@@ -48,8 +48,12 @@ const routing = (
           <Route path="/change_password">
             <ChangePassword/>
           </Route>
+
           <Route path="/control">
             <AnnotatorControl />
+          </Route>
+          <Route path="/user">
+            <UserDetailsOverview />
           </Route>
 
           <Route path="/training/phase_1/task_1_start">

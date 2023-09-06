@@ -289,27 +289,26 @@ class AdminControl extends react.Component {
         if (this.props.name == "Users") {
             // TODO: set availableClaimsData via API call.
             var request = {
-                method: "post",
+                method: "get",
                 baseURL: config.api_url,
-                url: "/global_statistics.php",
+                url: "/annotations/pending_by_phase",
                 data: {
-                    logged_in_user_id: localStorage.getItem('user_id'),
-                    req_type: 'get-statistics'
+                },
+                headers: {
+                    'Authorization': localStorage.getItem('token')
                 }
             };
     
             axios(request).then((response) => {
-                console.log("Global statistics:")
-                console.log(response)
                 this.setState({
                     availableClaimsData: [
                         {
                             name: "Unassigned Claims",
-                            p1: response.data.phase_1.pending_claims,
-                            p2: response.data.phase_2.pending_claims,
-                            p3: response.data.phase_3.pending_claims,
-                            p4: response.data.phase_4? response.data.phase_4.pending_claims: 0,
-                            p5: response.data.phase_5? response.data.phase_5.pending_claims: 0,
+                            p1: response.data.phase_1,
+                            p2: response.data.phase_2,
+                            p3: response.data.phase_3,
+                            p4: response.data.phase_4,
+                            p5: response.data.phase_5,
                         },
                     ],
                 })
@@ -318,36 +317,39 @@ class AdminControl extends react.Component {
 
 
             var request = {
-                method: "post",
+                method: "get",
                 baseURL: config.api_url,
-                url: "/admin_control.php",
+                url: "/users/all",
                 data: {
-                    user_id: localStorage.getItem('user_id'),
-                    req_type: 'get-user'
+                },
+                headers: {
+                    'Authorization': localStorage.getItem('token')
                 }
             };
 
             axios(request).then((response) => {
-                var user_data = response.data
-                console.log("User data")
-                console.log(user_data)
-
-                // Please update this: 
-                // user_data = user_data.map(user_dict => {
-                //     let new_dict = user_dict
-                //     new_dict["p1_task_time"] = 8.2
-                //     new_dict["p2_task_time"] = 17.5
-                //     return new_dict
-                // });
-
-                console.log(user_data)
+                var user_data = response.data.users
                 user_data = user_data.map(user_dict => {
-                    let new_dict = user_dict
-                    new_dict["finished_norm_annotations_prop"] = new_dict["finished_norm_annotations"] + " / " + new_dict['p1_assigned']
-                    new_dict["finished_qa_annotations_prop"] = new_dict["finished_qa_annotations"] + " / " + new_dict['p2_assigned']
-                    new_dict["finished_valid_annotations_prop"] = new_dict["finished_valid_annotations"] + " / " + new_dict['p3_assigned']
-                    new_dict["finished_p4_prop"] = new_dict["finished_p4"] + " / " + new_dict['p4_assigned']
-                    new_dict["finished_p5_prop"] = new_dict["finished_p5"] + " / " + new_dict['p5_assigned']
+                    let new_dict = {
+                        ...user_dict.statistics,
+                        username: user_dict.username,
+                        id: user_dict._id,
+                        is_admin: user_dict.is_admin,
+                        total_minutes_working: user_dict.statistics.total_time_spent / 60,
+                        total_minutes_training: user_dict.statistics.total_time_spent_training / 60,
+                        total_minutes_loading: user_dict.statistics.total_time_loading / 60,
+                    }
+
+                    for (let index = 1; index <= 5; index++) {
+                        let phase_id = "phase_" + index
+                        new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_assigned"] + " / " + new_dict[phase_id]["annotations_done"]
+                    }
+
+                    for (let index = 1; index <= 3; index++) {
+                        let phase_id = "phase_" + index + "_training"
+                        new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_assigned"] + " / " + new_dict[phase_id]["annotations_done"]
+                    }
+                        
                     return new_dict
                 });
                 // ----------- 
@@ -362,22 +364,19 @@ class AdminControl extends react.Component {
                                 return <a href={`/user?id=${cellValues.row.id}`}>{cellValues.row.id}</a>;
                             }
                         },
-                        { field: "user_name", headerName: "Name", editable: true, width: 200 },
+                        { field: "username", headerName: "Name", editable: true, width: 200 },
                         { field: "is_admin", headerName: "Admin", editable: true, type: "boolean", width: 150 },
-                        { field: "finished_norm_annotations_prop", headerName: "Phase 1 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
-                        { field: "finished_qa_annotations_prop", headerName: "Phase 2 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
-                        { field: "finished_valid_annotations_prop", headerName: "Phase 3 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
-                        { field: "finished_p4_prop", headerName: "Phase 4 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
-                        { field: "finished_p5_prop", headerName: "Phase 5 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
-                        { field: "p1_task_time", headerName: "P1 Average Minutes", type: "number", editable: false, width: 220 },
-                        { field: "p2_task_time", headerName: "P2 Average Minutes", type: "number", editable: false, width: 220 },
-                        { field: "p3_task_time", headerName: "P3 Average Minutes", type: "number", editable: false, width: 220 },
-                        { field: "p4_task_time", headerName: "P2 Average Minutes", type: "number", editable: false, width: 220 },
-                        { field: "p5_task_time", headerName: "P3 Average Minutes", type: "number", editable: false, width: 220 },
-                        { field: "total_hours", headerName: "Total Hours Worked", type: "number", editable: false, width: 220 },
-                        { field: "pages_skipped", headerName: "Total Pages Skipped", type: "number", editable: false, width: 220 },
-                        { field: "pages_timed_out", headerName: "Timeouts", type: "number", editable: false, width: 220 },
-                        { field: "speed_traps_hit", headerName: "Speed traps hit", type: "number", editable: false, width: 220 },
+                        { field: "finished_phase_1_prop", headerName: "Phase 1 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_2_prop", headerName: "Phase 2 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_3_prop", headerName: "Phase 3 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_4_prop", headerName: "Phase 4 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_5_prop", headerName: "Phase 5 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "total_minutes_working", headerName: "Total Minutes Working (incl. Loading)", type: "number", editable: false, width: 220 },
+                        { field: "total_minutes_training", headerName: "Total Minutes Training", type: "number", editable: false, width: 220 },
+                        { field: "total_minutes_loading", headerName: "Total Minutes Loading", type: "number", editable: false, width: 220 },
+                        { field: "total_skips", headerName: "Total Pages Skipped", type: "number", editable: false, width: 220 },
+                        { field: "total_timeouts", headerName: "Timeouts", type: "number", editable: false, width: 220 },
+                        { field: "total_speed_traps", headerName: "Speed traps hit", type: "number", editable: false, width: 220 },
                         { field: "average_questions_p2", headerName: "Average P2 Questions", type: "number", editable: false, width: 220 },
                         { field: "average_questions_p4", headerName: "Average P4 Questions", type: "number", editable: false, width: 220 },
                     ],
@@ -386,39 +385,6 @@ class AdminControl extends react.Component {
 
 
             }).catch((error) => { window.alert(error) })
-        } else if (this.props.name == "Claims") {
-            this.setState({
-                header: [
-                    { field: "id", headerName: "ID", width: 120 },
-                    { field: "claim_url", editable: true, width: 600 },
-                    { field: "phase_1_annotation_ids", editable: true, width: 250 },
-                    { field: "phase_2_annotation_ids", editable: true, width: 250 },
-                    { field: "phase_3_annotation_ids", editable: true, width: 250 }
-                ],
-                table: [
-                    { id: 0, claim_url: "https://web.archive.org/web/20210717085246/https://www.factcheck.org/2021/07/cdc-data-thus-far-show-covid-19-vaccination-safe-during-pregnancy/", phase_1_annotation_ids: [23, 1, 7], phase_2_annotation_ids: [3, 4], phase_3_annotation_ids: [8] },
-                ]
-            })
-        } else if (this.props.name == "Disagreements") {
-            this.setState({
-                header: [
-                    { field: "id", headerName: "ID", width: 120 },
-                    {
-                        field: "resolve_link",
-                        editable: false,
-                        width: 250,
-                        renderCell: (cellValues) => {
-                            return <a href={`/disagreement?id=${cellValues.row.id}`}>Resolve</a>;
-                        }
-                    },
-                    { field: "resolved_status", type: "boolean", editable: true, width: 250 },
-                    { field: "phase_2_annotation_id", type: "number", editable: true, width: 250 },
-                    { field: "phase_3_annotation_id", type: "number", editable: true, width: 250 }
-                ],
-                table: [
-                    { id: 0, resolved_status: false, phase_2_annotation_id: 3, phase_3_annotation_id: 8 },
-                ]
-            })
         }
     }
 

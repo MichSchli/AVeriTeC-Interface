@@ -7,6 +7,7 @@ const questionAnnotationSchema = new mongoose.Schema({
     questions: [QuestionModel.schema],
     search_queries: [String],
     skipped: Boolean,
+    skipped_reason: String,
     include_in_next_phase: Boolean,
     assigned_user_id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 });

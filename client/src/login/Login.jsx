@@ -48,7 +48,6 @@ class Login extends React.Component{
           }
       };
 
-      console.log(this.state);
       axios(request).then((response) => {
           if (!response.data.token && response.data.message){
             window.alert(response.data.message)
@@ -56,7 +55,7 @@ class Login extends React.Component{
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('username', response.data.user.username);
             localStorage.setItem('user_id', response.data.user._id);
-            localStorage.setItem('is_admin', response.data.is_admin);
+            localStorage.setItem('is_admin', response.data.user.is_admin);
             this.setState({login: response.data.token !== undefined})
           }
       }).catch((error) => {window.alert(error)})	
@@ -64,7 +63,6 @@ class Login extends React.Component{
 
   render() {
     if (this.state.login) {
-      console.log(localStorage.getItem('token'))
       return <Redirect to='/control'/>;
     }
 

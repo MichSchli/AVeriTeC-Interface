@@ -9,6 +9,11 @@ const reportSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    annotation: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Annotation',
+    },
 });
 
 const ReportModel = mongoose.model('Report', reportSchema);

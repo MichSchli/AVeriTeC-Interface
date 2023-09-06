@@ -13,17 +13,32 @@ const checkAdmin = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, loginConfig.jwt_secret_key); // Use the secret key from login_config
 
-    if (!decoded.userId || !decoded.isAdmin) {
-      return res.status(403).json({ message: 'Not authorized' });
+    if (!decoded.userId) {
+      return res.status(403).json({ message: 'No valid userid in auth token' });
     }
 
-    // Add user information to the request for further processing
-    req.userId = decoded.userId;
-    req.isAdmin = decoded.isAdmin;
+    UserModel.findById(decoded.userId).then((user) => {
+      if (!user) {
+        return res.status(403).json({ message: 'User not found' });
+      }
 
-    next();
+      if (!user.is_admin) {
+        console.log("User " + decoded.userId + " is not an admin, but requested an admin route")
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+
+      // Add user information to the request for further processing
+      req.userId = decoded.userId;
+      req.is_admin = decoded.is_admin;
+
+      next();
+    }).catch((error) => {
+      console.log(error);
+      return res.status(500).json({ message: 'Internal server error' });
+    });
   } catch (error) {
-    return res.status(401).json({ message: 'Token is invalid' });
+    console.log(error)
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -31,6 +46,7 @@ const checkAdmin = (req, res, next) => {
 // Middleware to check if the token corresponds to the user ID or if the user is an admin
 const checkUserOrAdmin = async (req, res, next) => {
   const token = req.header('Authorization');
+  const userId = req.params.user_id;
 
   if (!token) {
     return res.status(401).json({ message: 'Token is missing' });
@@ -40,22 +56,24 @@ const checkUserOrAdmin = async (req, res, next) => {
     const decoded = jwt.verify(token, loginConfig.jwt_secret_key); // Use the secret key from login_config
 
     if (!decoded.userId) {
-      return res.status(403).json({ message: 'Not authorized' });
+      return res.status(403).json({ message: 'No valid userid in auth token' });
     }
 
-    // Check if the user is an admin
-    const user = await UserModel.findById(decoded.userId);
-    if (!user) {
-      return res.status(403).json({ message: 'User not found' });
-    }
+    UserModel.findById(decoded.userId).then((user) => {
+      if (!user) {
+        return res.status(403).json({ message: 'User not found' });
+      }
 
-    if (decoded.isAdmin || decoded.userId === req.params.user_id) {
-      req.userId = decoded.userId;
-      req.isAdmin = decoded.isAdmin;
+      if (!user.is_admin && user._id.toString() !== userId) {
+        console.log("User " + decoded.userId + " is not an admin, but requested to view data for user " + userId)
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+
       next();
-    } else {
-      return res.status(403).json({ message: 'Not authorized' });
-    }
+    }).catch((error) => {
+      console.log(error);
+      return res.status(500).json({ message: 'Internal server error' });
+    });
   } catch (error) {
     return res.status(401).json({ message: 'Token is invalid or expired' });
   }
@@ -80,7 +98,7 @@ const checkUserIsAssigned = async (req, res, next) => {
     const decoded = jwt.verify(token, loginConfig.jwt_secret_key); // Use the secret key from login_config
 
     if (!decoded.userId) {
-      return res.status(403).json({ message: 'Not authorized' });
+      return res.status(403).json({ message: 'No valid userid in auth token' });
     }
 
     const user = await UserModel.findById(decoded.userId);

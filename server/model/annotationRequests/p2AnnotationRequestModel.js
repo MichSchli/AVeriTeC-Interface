@@ -9,6 +9,9 @@ const p2AnnotationRequestSchema = new mongoose.Schema({
     p1_annotation: ClaimNormAnnotationModel.schema,
     annotation: QuestionAnnotationModel.schema,
     has_been_submitted: Boolean,
+    request_made_timestamp: Date,
+    first_submission_timestamp: Date,
+    last_submission_timestamp: Date,
 });
 
 const P2AnnotationRequestModel = mongoose.model('P2AnnotationRequest', p2AnnotationRequestSchema);

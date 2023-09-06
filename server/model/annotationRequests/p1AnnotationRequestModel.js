@@ -7,6 +7,9 @@ const p1AnnotationRequestSchema = new mongoose.Schema({
     blocked_user_ids: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     has_been_submitted: Boolean,
     annotation: ClaimNormAnnotationModel.schema,
+    request_made_timestamp: Date,
+    first_submission_timestamp: Date,
+    last_submission_timestamp: Date,
 });
 
 const P1AnnotationRequestModel = mongoose.model('P1AnnotationRequest', p1AnnotationRequestSchema);

@@ -9,6 +9,9 @@ const trainingP2AnnotationRequestSchema = new mongoose.Schema({
     annotation: QuestionAnnotationModel.schema,
     gold_annotations: [QuestionAnnotationModel.schema],
     has_been_submitted: Boolean,
+    request_made_timestamp: Date,
+    first_submission_timestamp: Date,
+    last_submission_timestamp: Date,
 });
 
 const TrainingP2AnnotationRequestModel = mongoose.model('trainingP2AnnotationRequest', trainingP2AnnotationRequestSchema);

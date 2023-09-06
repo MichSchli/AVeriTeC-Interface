@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import UserPanel from './UserPanel';
 import AssignmentControl from './AssignmentControl';
 import AdminControl from './AdminControl';
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import TrainingControl from './TrainingControl';
 import PhaseStatsControl from './PhaseStatsControl';
 import config from "../config.json"
@@ -57,14 +57,14 @@ const SepDiv = styled("div")`
 class AnnotatorControl extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
-            user : {
+            user: {
                 username: localStorage.getItem('username'),
-                is_admin: localStorage.getItem('is_admin')
+                is_admin: localStorage.getItem('is_admin') === "true"
             },
             logged_in: localStorage.getItem('token') !== undefined,
-            assignments:{
+            assignments: {
                 phase_1: {
                     done: 0,
                     total: 0
@@ -99,7 +99,7 @@ class AnnotatorControl extends React.Component {
                 }
             }
         }
-      }
+    }
 
     componentDidMount() {
         console.log(localStorage.getItem('token'))
@@ -110,7 +110,7 @@ class AnnotatorControl extends React.Component {
             data: {
             },
             headers: {
-              'Authorization': localStorage.getItem('token') 
+                'Authorization': localStorage.getItem('token')
             }
         };
 
@@ -173,38 +173,40 @@ class AnnotatorControl extends React.Component {
     }
 
     render() {
+        console.log("Rendering AnnotatorControl")
         console.log(this.state)
-	if (!this.state.logged_in) {
-            return <Redirect to='/'/>;
-        } 
+        console.log(this.state.user.is_admin)
+        if (!this.state.logged_in) {
+            return <Redirect to='/' />;
+        }
 
         return (
             <div>
-                <UserPanel user={this.state.user}/>
+                <UserPanel user={this.state.user} />
                 <div>
-                    {(this.state.assignments.phase_1.total > 0)?<AssignmentField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1}/>: ""}
-                    {(this.state.assignments.phase_2.total > 0)?<AssignmentField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2}/>: ""}
-                    {(this.state.assignments.phase_3.total > 0)?<AssignmentField name="Quality Control" page="phase_3" assignments={this.state.assignments.phase_3}/>: ""}
-                    {(this.state.assignments.phase_4.total > 0)?<AssignmentField name="Dispute Resolution" page="phase_4" assignments={this.state.assignments.phase_4}/>: ""}
-                    {(this.state.assignments.phase_5.total > 0)?<AssignmentField name="Post-Resolution Quality Control" page="phase_5" assignments={this.state.assignments.phase_5}/>: ""}
+                    {(this.state.assignments.phase_1.total > 0) ? <AssignmentField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1} /> : ""}
+                    {(this.state.assignments.phase_2.total > 0) ? <AssignmentField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2} /> : ""}
+                    {(this.state.assignments.phase_3.total > 0) ? <AssignmentField name="Quality Control" page="phase_3" assignments={this.state.assignments.phase_3} /> : ""}
+                    {(this.state.assignments.phase_4.total > 0) ? <AssignmentField name="Dispute Resolution" page="phase_4" assignments={this.state.assignments.phase_4} /> : ""}
+                    {(this.state.assignments.phase_5.total > 0) ? <AssignmentField name="Post-Resolution Quality Control" page="phase_5" assignments={this.state.assignments.phase_5} /> : ""}
                 </div>
-                <SepDiv/>
+                <SepDiv />
                 <div>
-                    {(this.state.assignments.phase_1_training.total > 0)?<TrainingField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1_training}/>: ""}
-                    {(this.state.assignments.phase_2_training.total > 0)?<TrainingField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2_training}/>: ""}
-                    {(this.state.assignments.phase_3_training.total > 0)?<TrainingField name="Quality Control" page="phase_3" assignments={this.state.assignments.phase_3_training}/>: ""}
+                    {(this.state.assignments.phase_1_training.total > 0) ? <TrainingField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1_training} /> : ""}
+                    {(this.state.assignments.phase_2_training.total > 0) ? <TrainingField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2_training} /> : ""}
+                    {(this.state.assignments.phase_3_training.total > 0) ? <TrainingField name="Quality Control" page="phase_3" assignments={this.state.assignments.phase_3_training} /> : ""}
                 </div>
-                {(this.state.user.is_admin === true)? <AdminPanel>
-                    <AdminControl name="Users"/> 
-                    <PhaseStatsControl phase={1} name={"Analysis | Claim Normalization"}/>
-                    <PhaseStatsControl phase={2} name={"Analysis | Question Generation"}/>
-                    <PhaseStatsControl phase={3} name={"Analysis | Quality Control"}/>
-                    <PhaseStatsControl phase={4} name={"Analysis | Dispute Resolution"}/>
-                    <PhaseStatsControl phase={5} name={"Analysis | Post-Resolution Quality Control"}/>
+                {(this.state.user.is_admin === true) ? <AdminPanel>
+                    <AdminControl name="Users" />
+                    <PhaseStatsControl phase={1} name={"Analysis | Claim Normalization"} />
+                    <PhaseStatsControl phase={2} name={"Analysis | Question Generation"} />
+                    <PhaseStatsControl phase={3} name={"Analysis | Quality Control"} />
+                    <PhaseStatsControl phase={4} name={"Analysis | Dispute Resolution"} />
+                    <PhaseStatsControl phase={5} name={"Analysis | Post-Resolution Quality Control"} />
                 </AdminPanel> : ""}
             </div>
         );
-      }
+    }
 }
 
 export default AnnotatorControl;

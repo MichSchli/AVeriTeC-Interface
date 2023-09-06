@@ -17,18 +17,18 @@ export default function UserDetailsOverview(props) {
         // Todo: get this only if admin. Else, show access denied error and redirect to /.
 
         var request = {
-            method: "post",
+            method: "get",
             baseURL: config.api_url,
-            url: "/user_statistics.php",
+            url: "/users/get/" + userId,
             data: {
-                logged_in_user_id: localStorage.getItem('user_id'),
-                req_type: 'get-statistics',
-                get_by_user_id: userId
+            },
+            headers: {
+                'Authorization': localStorage.getItem('token')
             }
         };
 
         axios(request).then((response) => {
-            if (!response.data.is_admin) {
+            if (!localStorage.getItem('is_admin')) {
                 window.alert("Error: Access denied.")
             } else {
                 // Replace with:
@@ -76,17 +76,18 @@ export default function UserDetailsOverview(props) {
         }).catch((error) => { window.alert(error) })
 
         var request = {
-            method: "post",
+            method: "get",
             baseURL: config.api_url,
-            url: "/global_statistics.php",
+            url: "/users/average_statistics",
             data: {
-                logged_in_user_id: localStorage.getItem('user_id'),
-                req_type: 'get-statistics'
+            },
+            headers: {
+                'Authorization': localStorage.getItem('token')
             }
         };
 
         axios(request).then((response) => {
-            if (!response.data.is_admin) {
+            if (!localStorage.getItem('is_admin')) {
                 window.alert("Error: Access denied.")
             } else {
                 // Replace with:
@@ -138,29 +139,32 @@ export default function UserDetailsOverview(props) {
 
     let header_text = "User Overview | " + user.username
 
+    console.log(user)
+    console.log(taskStats)
+
     return <NoteScreen header={header_text}>
-        {user.phase_1 && taskStats.phase_1?
-        <UserTaskPerformanceOverview name={"Phase 1"} userStats={user.phase_1} averageStats={taskStats.phase_1} />
+        {user.statistics.phase_1 && taskStats.phase_1?
+        <UserTaskPerformanceOverview name={"Phase 1"} userStats={user.statistics.phase_1} averageStats={taskStats.phase_1} />
         :
         ""
         }
-        {user.phase_3 && taskStats.phase_3?
-        <UserTaskPerformanceOverview name={"Phase 2"} userStats={user.phase_2} averageStats={taskStats.phase_2} />
+        {user.statistics.phase_3 && taskStats.phase_3?
+        <UserTaskPerformanceOverview name={"Phase 2"} userStats={user.statistics.phase_2} averageStats={taskStats.phase_2} />
         :
         ""
         }
-        {user.phase_3 && taskStats.phase_3?
-        <UserTaskPerformanceOverview name={"Phase 3"} userStats={user.phase_3} averageStats={taskStats.phase_3} />
+        {user.statistics.phase_3 && taskStats.phase_3?
+        <UserTaskPerformanceOverview name={"Phase 3"} userStats={user.statistics.phase_3} averageStats={taskStats.phase_3} />
         :
         ""
         }
-        {user.phase_4 && taskStats.phase_4?
-        <UserTaskPerformanceOverview name={"Phase 4"} userStats={user.phase_4} averageStats={taskStats.phase_4} />
+        {user.statistics.phase_4 && taskStats.phase_4?
+        <UserTaskPerformanceOverview name={"Phase 4"} userStats={user.statistics.phase_4} averageStats={taskStats.phase_4} />
         :
         ""
         }
-        {user.phase_5 && taskStats.phase_5?
-        <UserTaskPerformanceOverview name={"Phase 5"} userStats={user.phase_5} averageStats={taskStats.phase_5} />
+        {user.statistics.phase_5 && taskStats.phase_5?
+        <UserTaskPerformanceOverview name={"Phase 5"} userStats={user.statistics.phase_5} averageStats={taskStats.phase_5} />
         :
         ""
         }

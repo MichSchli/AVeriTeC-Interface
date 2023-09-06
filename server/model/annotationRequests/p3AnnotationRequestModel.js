@@ -11,6 +11,9 @@ const p3AnnotationRequestSchema = new mongoose.Schema({
     p2_annotation: QuestionAnnotationModel.schema,
     annotation: ControlAnnotationModel.schema,
     has_been_submitted: Boolean,
+    request_made_timestamp: Date,
+    first_submission_timestamp: Date,
+    last_submission_timestamp: Date,
 });
 
 const P3AnnotationRequestModel = mongoose.model('P3AnnotationRequest', p3AnnotationRequestSchema);
