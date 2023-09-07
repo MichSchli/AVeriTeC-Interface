@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 const annotationRoutes = require('./routes/annotationRoutes');
+const assignmentRoutes = require('./routes/assignmentRoutes');
 const { url, options } = require('./config/mongodb_config');
 
 console.log("Connecting to MongoDB at " + url);
@@ -36,6 +37,7 @@ db.once('open', () => {
 // API routes
 app.use('/users', userRoutes);
 app.use('/annotations', annotationRoutes);
+app.use('/assignment', assignmentRoutes);
 
 // Start the server
 app.listen(PORT, () => {

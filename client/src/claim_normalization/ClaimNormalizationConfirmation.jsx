@@ -73,28 +73,28 @@ class ClaimNormalizationConfirmation extends React.Component {
 
               {
                 this.props.entries[claim_id].transcription?
-                <CheckDiv>You have entered the following <b>transcription</b>: "{this.props.entries[claim_id].transcription}". Please confirm that the original source involves an image that contains text (for example a meme or image macro), and that it contains <b>exactly</b> the text you have transcribed. For example, for <a href="https://cdn.broadbandsearch.net/images/blogs/most-popular-internet-memes-in-history/ceiling-cat.jpg">this</a> image, the transcription should be "ceiling cat is watching you".</CheckDiv>
+                <CheckDiv>You have entered the following <b>transcription</b>: "{this.props.entries[claim_id].transcription}" for the claim <i>"{this.props.entries[claim_id].claim}"</i>. Please confirm that the original source involves an image that contains text (for example a meme or image macro), and that it contains <b>exactly</b> the text you have transcribed. For example, for <a href="https://cdn.broadbandsearch.net/images/blogs/most-popular-internet-memes-in-history/ceiling-cat.jpg">this</a> image, the transcription should be "ceiling cat is watching you".</CheckDiv>
                 :
                 ""
               }
 
               {
                 this.props.entries[claim_id].claim_types && this.props.entries[claim_id].claim_types.includes("Speculative Claim")?
-                <CheckDiv>You have selected the claim type <b>Speculative Claim</b>. Please confirm that the primary task for this claim is to assess whether a prediction is plausible or realistic. For example, "the price of crude oil will rise next year."</CheckDiv>
+                <CheckDiv>You have selected the claim type <b>Speculative Claim</b> for the claim <i>"{this.props.entries[claim_id].claim}"</i>. Please confirm that the primary task for this claim is to assess whether a prediction is plausible or realistic. For example, "the price of crude oil will rise next year."</CheckDiv>
                 :
                 ""
               }
 
               {
                 this.props.entries[claim_id].claim_types && this.props.entries[claim_id].claim_types.includes("Opinion Claim")?
-                <CheckDiv>You have selected the claim type <b>Opinion Claim</b>. Please confirm that claim is a non-factual opinion, e.g. "cannabis should be legalized". Note that this is distinct from Causal Claims, e.g. "the legalization of cannabis would/has helped reduce opiod deaths", and Position Claims, e.g. "Julius Caesar believed cannabis should be legalized".</CheckDiv>
+                <CheckDiv>You have selected the claim type <b>Opinion Claim</b> for the claim <i>"{this.props.entries[claim_id].claim}"</i>. Please confirm that claim is a non-factual opinion, e.g. "cannabis should be legalized". Note that this is distinct from Causal Claims, e.g. "the legalization of cannabis would/has helped reduce opiod deaths", and Position Claims, e.g. "Julius Caesar believed cannabis should be legalized".</CheckDiv>
                 :
                 ""
               }
 
               {
                 this.props.entries[claim_id].fact_checker_strategy && this.props.entries[claim_id].fact_checker_strategy.includes("Media Source Discovery")?
-                <CheckDiv>You have selected the claim type <b>Media Source Discovery</b>. Please confirm that the fact-checking process involved finding the original source of a (potentially doctored) <b>image, video, or soundbite</b>. An example can be seen <a href="https://www.indiatoday.in/fact-check/story/old-videos-go-viral-visuals-telangana-rains-lash-state-1731843-2020-10-15">here</a>, where a claim of a crocodile swimming through the streets of Hyderabad is fact-checked by identifying the original source as an older video from Vadodara. If the source is <b>text</b>, e.g. a social media post, the strategy is <b>not</b> media source discovery.</CheckDiv>
+                <CheckDiv>You have selected the fact-checking strategy <b>Media Source Discovery</b> for the claim <i>"{this.props.entries[claim_id].claim}"</i>. Please confirm that the fact-checking process involved finding the original source of a (potentially doctored) <b>image, video, or soundbite</b>. An example can be seen <a href="https://www.indiatoday.in/fact-check/story/old-videos-go-viral-visuals-telangana-rains-lash-state-1731843-2020-10-15">here</a>, where a claim of a crocodile swimming through the streets of Hyderabad is fact-checked by identifying the original source as an older video from Vadodara. If the source is <b>text</b>, e.g. a social media post, the strategy is <b>not</b> media source discovery.</CheckDiv>
                 :
                 ""
               }

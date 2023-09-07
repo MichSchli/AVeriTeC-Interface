@@ -119,7 +119,9 @@ router.post('/change_password', async (req, res) => {
 router.get('/statistics/:user_id', checkUserOrAdmin, async (req, res) => {
   try {
     const userId = req.params.user_id;
-    const user = await UserModel.findById(userId).populate("training_p1_annotation_requests");
+    const user = await UserModel.findById(userId)
+    .populate("training_p1_annotation_requests")
+    .populate("p1_annotation_requests");
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

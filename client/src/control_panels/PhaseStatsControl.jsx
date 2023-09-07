@@ -309,7 +309,7 @@ class PhaseStatsControl extends react.Component {
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
-                                <Bar barSize={60} name="Average" dataKey="average" fill="#82ca9d" unit=" m" />
+                                <Bar barSize={60} name="Average" dataKey="average" fill="#82ca9d" unit=" s" />
                             </BarChart>
                         </ChartBox>
                         :

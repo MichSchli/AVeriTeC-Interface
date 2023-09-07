@@ -12,6 +12,7 @@ const p2AnnotationRequestSchema = new mongoose.Schema({
     request_made_timestamp: Date,
     first_submission_timestamp: Date,
     last_submission_timestamp: Date,
+    child_requests: [{type: mongoose.Schema.Types.ObjectId, ref: 'P3AnnotationRequest'}],
 });
 
 const P2AnnotationRequestModel = mongoose.model('P2AnnotationRequest', p2AnnotationRequestSchema);

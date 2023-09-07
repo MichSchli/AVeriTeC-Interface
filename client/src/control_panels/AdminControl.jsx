@@ -230,12 +230,14 @@ class AdminControl extends react.Component {
         var request = {
             method: "post",
             baseURL: config.api_url,
-            url: "/assign_claims.php",
+            url: "/assignment/list",
             data: {
-                user_id: localStorage.getItem('user_id'),
-                req_type: this.state.assignment.assignment_phase,
                 assignments_per_user: this.state.assignment.n_to_assign,
-                assignment_user_ids: this.state.assignment.assignment_type === "selection" ? this.state.selected : uids
+                user_ids: this.state.assignment.assignment_type === "selection" ? this.state.selected : uids,
+                phase : this.state.assignment.assignment_phase
+            },
+            headers: {
+                'Authorization': localStorage.getItem('token')
             }
         };
 

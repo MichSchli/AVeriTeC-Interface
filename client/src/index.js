@@ -14,12 +14,12 @@ import PostTrainingControl from './training_components/PostTrainingControl';
 import PostReviewTrainingControl from './training_components/PostReviewTrainingControl';
 
 import ClaimNormalization from './claim_normalization/ClaimNormalization';
+import PostPhaseOneScreen from './claim_normalization/PostPhaseOneScreen';
+import PrePhaseOneScreen from './claim_normalization/PrePhaseOneScreen';
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 /*import QuestionGeneration from './question_generation/QuestionGeneration';
 import VerdictValidation from './verdict_validation/VerdictValidation';
-import PostPhaseOneScreen from './claim_normalization/PostPhaseOneScreen';
-import PrePhaseOneScreen from './claim_normalization/PrePhaseOneScreen';
 import PostPhaseTwoScreen from './question_generation/PostPhaseTwoScreen';
 import PrePhaseTwoScreen from './question_generation/PrePhaseTwoScreen';
 import PrePhaseThreeScreen from './verdict_validation/PrePhaseThreeScreen';
@@ -79,6 +79,16 @@ const routing = (
           </Route>
           <Route path="/training/phase_1/review">
             <TrainingOverlay phase={1}/>
+          </Route>
+
+          <Route path="/phase_1/begin">
+            <PrePhaseOneScreen />
+          </Route>
+          <Route path="/phase_1/completed">
+            <PostPhaseOneScreen />
+          </Route>
+          <Route path="/phase_1">
+            <ClaimNormalization finish_path="/phase_1/completed/"/>
           </Route>
       </Switch>
   </Router>
