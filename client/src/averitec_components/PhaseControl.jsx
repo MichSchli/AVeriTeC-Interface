@@ -75,7 +75,7 @@ class PhaseControl extends React.Component {
 
         return (
             <EntryCard className={className}>
-                <PhaseHeader>{this.props.phaseName} ({current_idx}/{final_idx})</PhaseHeader>
+                <PhaseHeader>{this.props.phaseName} ({current_idx + 1}/{final_idx})</PhaseHeader>
                 <LogoutBox>
                     <a target="_blank" rel="noopener noreferrer" href={config.api_url + "/guideline.pdf"} >Guidelines</a> | <a href="/control" >Control Panel</a> | <a href="#" onClick={this.onLogout}>Log out</a>
                 </LogoutBox>

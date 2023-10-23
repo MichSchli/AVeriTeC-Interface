@@ -1,48 +1,694 @@
 [
     {
         "article": {
-            "fact_checking_article": "example.com",
-            "fact_checking_date": "2020-01-01",
-            "claim": "test claim"
+            "fact_checking_article": "https://web.archive.org/web/20210426134644/https://www.altnews.in/thorough-hand-washing-with-an-ordinary-soap-is-effective-in-killing-coronavirus-covid-19/",
+            "fact_checking_date": "2020-03-14",
+            "claim": "Thorough hand-washing with an ordinary soap is effective in killing coronavirus (COVID-19)"
         },
         "gold_annotations": [
             {
                 "claims": [
                     {
-                        "claim": "test claim",
+                        "claim": "Thorough hand-washing with an ordinary soap is effective in killing coronavirus (COVID-19).",
                         "label": "Supported",
-                        "claim_date": "2020-01-01",
-                        "speaker": "test speaker",
-                        "original_claim_url": "example.com",
-                        "reporting_source": "test source",
-                        "location_ISO_code": "US",
+                        "claim_date": "2020-03-03",
+                        "speaker": "@TenseHealer",
+                        "original_claim_url": "https://twitter.com/TenseHealer/status/1238529076882591745",
+                        "reporting_source": "Twitter",
+                        "location_ISO_code": "IN",
                         "skipped": false,
                         "claim_types": [
-                            "Position Statement"
+                            "Causal Claim",
+                            "Event/Property Claim"
                         ],
                         "fact_checking_strategies": [
                             "Written Evidence"
                         ]
                     }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210227031424/https://misbar.com/en/factcheck/2021/01/08/fda-approves-at-home-covid-test",
+            "fact_checking_date": "2021-08-01",
+            "claim": "FDA Approves At-Home COVID Test"
+        },
+        "gold_annotations": [
             {
                 "claims": [
                     {
-                        "claim": "test claim annotation 2",
+                        "claim": "The FDA has approved an at-home COVID-19 test.",
                         "label": "Supported",
-                        "claim_date": "2020-01-01",
-                        "speaker": "test speaker",
-                        "original_claim_url": "example.com",
-                        "reporting_source": "test source",
+                        "claim_date": "2020-11-18",
+                        "speaker": "@armchairviewnet",
+                        "original_claim_url": "",
+                        "reporting_source": "Twitter",
                         "location_ISO_code": "US",
                         "skipped": false,
                         "claim_types": [
-                            "Position Statement"
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20201227050229/https://www.politifact.com/factchecks/2019/mar/21/cory-booker/farmer-suicides-high-great-depression-no-data-says/",
+            "fact_checking_date": "2019-03-18",
+            "claim": "Farmer suicide rates are as high as they have been since the Great Depression."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Farmer suicide rates in the US are as high as they have been since the Great Depression.",
+                        "label": "Refuted",
+                        "claim_date": "2019-03-18",
+                        "speaker": "Cory Booker",
+                        "original_claim_url": "",
+                        "reporting_source": "MSNBC",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Numerical Claim"
                         ],
                         "fact_checking_strategies": [
                             "Written Evidence",
-                            "Expert Testimony"
+                            "Numerical Comparison",
+                            "Consultation"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20201108002810/https://www.boomlive.in/did-nasa-astronaut-sunita-williams-convert-to-islam-after-a-glimpse-of-mecca-from-space/",
+            "fact_checking_date": "2019-08-03",
+            "claim": "NASA Astronaut Sunita Williams Convert to Islam After A Glimpse Of Mecca From Space"
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "NASA Astronaut Sunita Williams Converted to Islam After A Glimpse Of Mecca From Space.",
+                        "label": "Refuted",
+                        "claim_date": "2008-12-05",
+                        "speaker": "Mossavi model",
+                        "original_claim_url": "https://archive.ph/wSFFW",
+                        "reporting_source": "",
+                        "location_ISO_code": "IN",
+                        "skipped": false,
+                        "claim_types": [
+                            "Causal Claim",
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210512230517/https://www.politifact.com/factchecks/2019/mar/25/john-hickenlooper/did-spike-marijuana-use-colorado-after-legal/",
+            "fact_checking_date": "2019-03-20",
+            "claim": "After legalizing marijuana in Colorado, we haven't seen a spike in consumption."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "After legalizing marijuana in Colorado, there has not been a spike in consumption.",
+                        "label": "Conflicting Evidence/Cherrypicking",
+                        "claim_date": "2019-03-20",
+                        "speaker": "John Hickenlooper",
+                        "original_claim_url": "https://web.archive.org/web/20210127201932/http://www.cnn.com/TRANSCRIPTS/1903/20/se.01.html",
+                        "reporting_source": "CNN",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Causal Claim",
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210225080646/https://verafiles.org/articles/vera-files-fact-check-trillanes-claim-status-covid-19-vaccin",
+            "fact_checking_date": "2021-02-04",
+            "claim": "Israel already had 50% of their population vaccinated. ASEAN countries have rolled out vaccination programs as well."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Israel already had 50% of their population vaccinated in February 2021.",
+                        "label": "Conflicting Evidence/Cherrypicking",
+                        "claim_date": "2021-02-01",
+                        "speaker": "Antonio Trillanes IV",
+                        "original_claim_url": "https://archive.is/RSsv9",
+                        "reporting_source": "Facebook",
+                        "location_ISO_code": "IL",
+                        "skipped": false,
+                        "claim_types": [
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Numerical Comparison",
+                            "Consultation"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210212044022/https://www.politifact.com/factchecks/2021/feb/02/tony-evers/evers-right-unemployment-benefits-harder-access-go/",
+            "fact_checking_date": "2021-01-12",
+            "claim": "The Legislature spent the last decade passing laws deliberately making it even harder for people to access these critical supports when they need it most, exacerbating the problems with our already-outdated system."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "The Legislature spent the last decade passing laws deliberately making it even harder for people to access these critical supports when they need it most, exacerbating the problems with our already-outdated system.",
+                        "label": "Conflicting Evidence/Cherrypicking",
+                        "claim_date": "2021-01-12",
+                        "speaker": "Tony Evers",
+                        "original_claim_url": "",
+                        "reporting_source": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Causal Claim",
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence",
+                            "Consultation"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://newsmeter.in/fact-check-viral-video-of-crocodile-in-residential-area-is-from-gujarat-not-hyderabad/",
+            "fact_checking_date": "2020-10-15",
+            "claim": "Video shows crocodile swimming on Hyderabad roads."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Viral video of crocodile in residential area is from Hyderabad.",
+                        "label": "Refuted",
+                        "claim_date": "2019-08-30",
+                        "speaker": "Gautam Kumar Singh",
+                        "original_claim_url": "",
+                        "reporting_source": "Twitter",
+                        "location_ISO_code": "In",
+                        "skipped": false,
+                        "claim_types": [
+                            "Event/Property Claim",
+                            "Media Analysis Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Media Source Discovery",
+                            "Fact-checker Reference"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://factly.in/the-photo-of-killing-a-cow-on-the-indian-flag-and-burning-the-flag-was-taken-in-pakistan-not-in-kashmir/",
+            "fact_checking_date": "2019-06-20",
+            "claim": "A cow was killed on the Indian flag and the flag was burnt in Kashmir."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Photos of a cow being killed on the Indian flag and the flag burnt were taken in Kashmir.",
+                        "label": "Refuted",
+                        "claim_date": "2019-06-16",
+                        "speaker": "Thakur Jeetesh Singh",
+                        "original_claim_url": "https://www.facebook.com/photo.php?fbid=519420768253241&set=a.243574842504503&type=3&theater",
+                        "reporting_source": "Facebook",
+                        "media_source_url": "https://www.facebook.com/photo.php?fbid=519420768253241&set=a.243574842504503&type=3&theater",
+                        "location_ISO_code": "In",
+                        "skipped": false,
+                        "claim_types": [
+                            "Event/Property Claim",
+                            "Media Analysis Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Media Source Discovery",
+                            "Image Analysis",
+                            "Geolocation",
+                            "Fact-checker Reference"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210720224307/https://leadstories.com/hoax-alert/2020/01/fake-news-ship-has-not-reappeared-ninety-years-after-going-missing-in-bermuda-triangle.html",
+            "fact_checking_date": "2020-01-15",
+            "claim": "A ship reappeared 90 years after going missing in the Bermuda Triangle."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "The SS Cotopaxi reappeared 90 years after going missing in the Bermuda Triangle.",
+                        "label": "Refuted",
+                        "claim_date": "2015-05-18",
+                        "speaker": "World News Daily Report",
+                        "original_claim_url": "https://web.archive.org/web/20210708060144/https://worldnewsdailyreport.com/bermuda-triangle-ship-reappears-90-years-after-going-missing/",
+                        "reporting_source": "",
+                        "location_ISO_code": "CU",
+                        "skipped": false,
+                        "claim_types": [
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Satirical Source Identification"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20200511095743/https://leadstories.com/hoax-alert/2019/09/fake-news-donald-trump-women-you-have-to-treat-them-like-shit.html",
+            "fact_checking_date": "2019-09-16",
+            "claim": "Donald Trump said \"Women, you have to treat them like shit\"."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Donald Trump said \"women, you have to treat them like shit\" in a 1992 interview in New York Magazine.",
+                        "label": "Refuted",
+                        "claim_date": "2019-09-14",
+                        "speaker": "Occupy Democrats",
+                        "original_claim_url": "https://archive.is/28fMd",
+                        "reporting_source": "Facebook",
+                        "location_ISO_code": "US",
+                        "transcription": "\"Women, you have to treat them like shit\" - Donald Trump, 1992, New York Magazine. This is an actual Trump quote, and the party of \"family values\" couldn't care less!",
+                        "skipped": false,
+                        "claim_types": [
+                            "Quote Verification"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210901020221/https://www.usatoday.com/story/news/factcheck/2021/08/05/fact-check-false-claims-jug-indents-pop-out-milk-old/5458044001/",
+            "fact_checking_date": "2021-05-08",
+            "claim": "Indent on milk jug pops out when milk is old."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Indent on milk jug pops out when milk is old.",
+                        "label": "Refuted",
+                        "claim_date": "2021-07-24",
+                        "speaker": "",
+                        "original_claim_url": "",
+                        "reporting_source": "Facebook",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Causal Claim",
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence",
+                            "Consultation"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://checkyourfact.com/2019/10/24/fact-check-michelle-obama-white-folks-wrong-america/",
+            "fact_checking_date": "2019-10-24",
+            "claim": "Michelle Obama said, \"White folks are what’s wrong with America.\""
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Michelle Obama said, \"White folks are what’s wrong with America.\"",
+                        "label": "Refuted",
+                        "claim_date": "2019-10-18",
+                        "speaker": "Carla Froude",
+                        "original_claim_url": "https://web.archive.org/web/20200909095353/https://www.facebook.com/photo.php?fbid=2443372822565726&set=a.2206544059581938&type=3",
+                        "reporting_source": "Facebook",
+                        "media_source_url": "https://scontent-man2-1.xx.fbcdn.net/v/t1.6435-9/74667886_2443372825899059_5119153197771915264_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=730e14&_nc_ohc=Ckcp9Cp5XpQAX_1uOvl&_nc_oc=AQkaYAewTeDRtZS7Eizb8MJ4GQkCFPdwDuLpWu1NRKdEENVxshUnNF7tUSuD-Ap3DG-HZrJNGUS9wlo0Yq46s1VM&_nc_ht=scontent-man2-1.xx&oh=00_AT_5QS1LOWg_Y99y53b2A_QjVDaaBhjrBUwMCwo9QguXCA&oe=623A86F9",
+                        "transcription": "Michelle Obama... Quote \"white folks are what's wrong with America\". Now imagine George Bush saying \"black folks are what's wrong with America\". Still think there is no media bias",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Quote Verification"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence",
+                            "Fact-checker Reference"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210304063725/https://leadstories.com/hoax-alert/2021/02/fact-check-fox-news-did-air-the-impeachment-proceedings-on-february-10-2021.html",
+            "fact_checking_date": "2021-02-10",
+            "claim": "Fox News Channel did not air the impeachment proceedings on Wednesday, February 10, 2021"
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Fox News did not air impeachment proceedings on February 10th, 2021.",
+                        "label": "Refuted",
+                        "claim_date": "2021-02-10",
+                        "speaker": "Rachel Maddow",
+                        "original_claim_url": "https://web.archive.org/web/20210210224945/https://twitter.com/maddow/status/1359635607316799489",
+                        "reporting_source": "Twitter",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218145211/https://www.politifact.com/factchecks/2017/aug/23/scott-walker/testing-scott-walkers-top-10-business-ranking-clai/",
+            "fact_checking_date": "2017-07-19",
+            "claim": "We took Wisconsin from the Bottom 10 for business to the Top 10."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Scott Walker's government took Wisconsin from the Bottom 10 for business to the Top 10.",
+                        "label": "Refuted",
+                        "claim_date": "2017-07-19",
+                        "speaker": "Scott Walker",
+                        "original_claim_url": "",
+                        "reporting_source": "Twitter",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Causal Claim",
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218145627/https://www.politifact.com/factchecks/2018/dec/11/terry-van-duyn/voters-werent-denied-ballot-when-nc-had-voter-id/",
+            "fact_checking_date": "2018-11-27",
+            "claim": "\"Over 1,000 people were denied a ballot on Election Day\" in the 2016 North Carolina primaries."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Over 1,000 people were denied a ballot on election day in the 2016 North Carolina primaries.",
+                        "label": "Conflicting Evidence/Cherrypicking",
+                        "claim_date": "2018-11-27",
+                        "speaker": "Terry Van Duyn",
+                        "original_claim_url": "",
+                        "reporting_source": "",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence",
+                            "Numerical Comparison",
+                            "Consultation"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218150007/https://www.factcheck.org/2018/04/the-stats-on-border-apprehensions/",
+            "fact_checking_date": "2018-04-06",
+            "claim": "Monthly border apprehensions have returned to \"previous levels\""
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "In the US, the numbers of illegal border crossings rise from 40 -year lows last April, back to previous levels.",
+                        "label": "Conflicting Evidence/Cherrypicking",
+                        "claim_date": "2018-04-04",
+                        "speaker": "Kirstjen Nielsen",
+                        "original_claim_url": "https://web.archive.org/web/20180429211639/https://www.whitehouse.gov/briefings-statements/press-briefing-by-press-secretary-sarah-sanders-and-department-of-homeland-security-secretary-kirstjen-nielsen-040418/",
+                        "reporting_source": "",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence",
+                            "Numerical Comparison"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218150338/https://www.politifact.com/article/2017/aug/16/trump-takes-aim-amazon-barbed-tweet/",
+            "fact_checking_date": "2017-08-16",
+            "claim": "Trump takes aim at Amazon in barbed tweet."
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Amazon is doing great damage to tax paying retailers.",
+                        "label": "Refuted",
+                        "claim_date": "2017-08-16",
+                        "speaker": "Donald Trump",
+                        "original_claim_url": "https://web.archive.org/web/20220218150338/https://twitter.com/realDonaldTrump/status/897763049226084352?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.bloomberg.com%2Fnews%2Farticles%2F2017-08-16%2Ftrump-says-amazon-does-great-damage-to-retailers-shares-fall",
+                        "reporting_source": "Twitter",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Numerical Comparison"
+                        ]
+                    },
+                    {
+                        "claim": "Towns, cities and states throughout the U.S. are being hurt by Amazon tax avoidance.",
+                        "label": "Not Enough Evidence",
+                        "claim_date": "2017-08-16",
+                        "speaker": "Donald Trump",
+                        "original_claim_url": "https://web.archive.org/web/20220218150338/https://twitter.com/realDonaldTrump/status/897763049226084352?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.bloomberg.com%2Fnews%2Farticles%2F2017-08-16%2Ftrump-says-amazon-does-great-damage-to-retailers-shares-fall",
+                        "reporting_source": "Twitter",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Numerical Comparison",
+                            "Consultation",
+                            "Fact-checker Reference"
+                        ]
+                    },
+                    {
+                        "claim": "Many jobs are being lost in the USA due to Amazon.",
+                        "label": "Not Enough Evidence",
+                        "claim_date": "2017-08-16",
+                        "speaker": "Donald Trump",
+                        "original_claim_url": "https://web.archive.org/web/20220218150338/https://twitter.com/realDonaldTrump/status/897763049226084352?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.bloomberg.com%2Fnews%2Farticles%2F2017-08-16%2Ftrump-says-amazon-does-great-damage-to-retailers-shares-fall",
+                        "reporting_source": "Twitter",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Event/Property Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Consultation",
+                            "Fact-checker Reference"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://www.factcheck.org/2018/03/will-trumps-wall-pay-for-itself/",
+            "fact_checking_date": "2018-03-16",
+            "claim": "Trump's wall will pay for itself"
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "According to the Center for Immigration Studies, a $18 billion wall along the US southern border will pay for itself by curbing the importation of crime, drugs and illegal immigrants who tend to go on the federal dole.",
+                        "label": "Conflicting Evidence/Cherrypicking",
+                        "claim_date": "2018-03-16",
+                        "speaker": "Donald Trump",
+                        "original_claim_url": "https://web.archive.org/web/20201019040748/https://twitter.com/realDonaldTrump/status/973580538358374402?ref_src=twsrc%5Etfw",
+                        "reporting_source": "Twitter",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Speculative Claim",
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Written Evidence",
+                            "Numerical Comparison"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218161911/https://www.nbcmiami.com/news/politics/politifact/politifact-fact-checking-claims-on-build-back-better-bill/2627480/",
+            "fact_checking_date": "2021-11-23",
+            "claim": "Factchecking \"Build Back Better\" Bill Claims"
+        },
+        "gold_annotations": [
+            {
+                "claims": [
+                    {
+                        "claim": "Never in American history has so much been spent at one time as would be for the Build Back Better bill.",
+                        "label": "Refuted",
+                        "claim_date": "2021-11-18",
+                        "speaker": "Keven McCarthy",
+                        "original_claim_url": "https://web.archive.org/web/20220123143858/https://www.republicanleader.gov/leader-kevin-mccarthy-dismantles-democrats-socialist-spending-scam/",
+                        "reporting_source": "",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Numerical Comparison"
+                        ]
+                    },
+                    {
+                        "claim": "Never in American history will so many taxes be raised as are needed to fund the Build Back Better bill.",
+                        "label": "Refuted",
+                        "claim_date": "2021-11-18",
+                        "speaker": "Keven McCarthy",
+                        "original_claim_url": "https://web.archive.org/web/20220123143858/https://www.republicanleader.gov/leader-kevin-mccarthy-dismantles-democrats-socialist-spending-scam/",
+                        "reporting_source": "",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Numerical Comparison"
+                        ]
+                    },
+                    {
+                        "claim": "Never in American history will so much borrowing be needed as for the Build Back Better bill.",
+                        "label": "Refuted",
+                        "claim_date": "2021-11-18",
+                        "speaker": "Keven McCarthy",
+                        "original_claim_url": "https://web.archive.org/web/20220123143858/https://www.republicanleader.gov/leader-kevin-mccarthy-dismantles-democrats-socialist-spending-scam/",
+                        "reporting_source": "",
+                        "media_source_url": "",
+                        "transcription": "",
+                        "location_ISO_code": "US",
+                        "skipped": false,
+                        "claim_types": [
+                            "Numerical Claim"
+                        ],
+                        "fact_checking_strategies": [
+                            "Numerical Comparison"
                         ]
                     }
                 ]

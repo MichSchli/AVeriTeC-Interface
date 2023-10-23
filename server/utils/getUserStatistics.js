@@ -1,6 +1,6 @@
 const e = require('express');
 const mongoose = require('mongoose');
-
+const UserModel = require('../model/userModel');
 
 const getUserStatistics = (user) => {
     statistics = {};

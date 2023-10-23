@@ -4,12 +4,15 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../model/userModel');
 const ArticleModel = require('../model/articleModel');
+const ClaimNormAnnotationModel = require('../model/annotations/claimNormAnnotationModel');
 const P1AnnotationRequestModel = require('../model/annotationRequests/p1AnnotationRequestModel');
 const P2AnnotationRequestModel = require('../model/annotationRequests/p2AnnotationRequestModel');
 const P3AnnotationRequestModel = require('../model/annotationRequests/p3AnnotationRequestModel');
 const P4AnnotationRequestModel = require('../model/annotationRequests/p4AnnotationRequestModel');
 const P5AnnotationRequestModel = require('../model/annotationRequests/p5AnnotationRequestModel');
 const TrainingP1AnnotationRequestModel = require('../model/annotationRequests/trainingP1AnnotationRequestModel');
+const TrainingP2AnnotationRequestModel = require('../model/annotationRequests/trainingP2AnnotationRequestModel');
+const TrainingP3AnnotationRequestModel = require('../model/annotationRequests/trainingP3AnnotationRequestModel');
 const loginConfig = require('../config/login_config');
 const { checkAdmin, checkUserOrAdmin, checkUserIsAssigned } = require('../middleware/authMiddleware');
 
@@ -32,20 +35,77 @@ router.post('/p1/:user_id', checkUserOrAdmin, async (req, res) => {
       annotationRequests = user.p1_annotation_requests;
       await user.populate({
         path: 'p1_annotation_requests',
-        populate: {
+        populate: [{
           path: 'article',
           model: 'Article',
-        },
-      });
+        }, {
+          path: 'annotation',
+          model: 'ClaimNormAnnotation',
+        }],
+      })
     } else if (dataset === 'training') {
       annotationRequests = user.training_p1_annotation_requests;
       await user.populate({
         path: 'training_p1_annotation_requests',
-        populate: {
+        populate: [{
           path: 'article',
           model: 'Article',
-        },
-      });
+        }, {
+          path: 'annotation',
+          model: 'ClaimNormAnnotation',
+        }],
+      })
+    } else {
+      return res.status(400).json({ message: 'Invalid dataset type' });
+    }
+
+
+    res.status(200).json({ annotationRequests });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Route to get P2 annotation requests or training requests for the user
+router.post('/p2/:user_id', checkUserOrAdmin, async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { dataset } = req.body;
+
+    console.log("Fetching " + dataset + " requests for user " + user_id)
+
+    const user = await UserModel.findById(user_id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    let annotationRequests;
+    if (dataset === 'annotation') {
+      annotationRequests = user.p2_annotation_requests;
+      await user.populate({
+        path: 'p2_annotation_requests',
+        populate: [{
+          path: 'article',
+          model: 'Article',
+        }, {
+          path: 'annotation',
+          model: 'QuestionAnnotation',
+        }],
+      })
+    } else if (dataset === 'training') {
+      annotationRequests = user.training_p2_annotation_requests;
+      await user.populate({
+        path: 'training_p2_annotation_requests',
+        populate: [{
+          path: 'article',
+          model: 'Article',
+        }, {
+          path: 'annotation',
+          model: 'QuestionAnnotation',
+        }],
+      })
     } else {
       return res.status(400).json({ message: 'Invalid dataset type' });
     }
@@ -64,16 +124,32 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
     const { annotation_request, dataset, phase } = req.body;
 
     console.log("Submitting annotation for request " + annotation_request._id + " in dataset " + dataset + " in phase " + phase.toString());
-
-    let dbAnnotationRequest;
-
+    let annotationRequestClass = null;
     if (dataset === 'annotation') {
-      dbAnnotationRequest = await P1AnnotationRequestModel.findById(annotation_request._id);
+      if (phase === 1) {
+        annotationRequestClass = P1AnnotationRequestModel;
+      } else if (phase === 2) {
+        annotationRequestClass = P2AnnotationRequestModel;
+      } else if (phase === 3) {
+        annotationRequestClass = P3AnnotationRequestModel;
+      } else if (phase === 4) {
+        annotationRequestClass = P4AnnotationRequestModel;
+      } else if (phase === 5) {
+        annotationRequestClass = P5AnnotationRequestModel;
+      }
     } else if (dataset === 'training') {
-      dbAnnotationRequest = await TrainingP1AnnotationRequestModel.findById(annotation_request._id);
+      if (phase === 1) {
+        annotationRequestClass = TrainingP1AnnotationRequestModel;
+      } else if (phase === 2) {
+        annotationRequestClass = TrainingP2AnnotationRequestModel;
+      } else if (phase === 3) {
+        annotationRequestClass = TrainingP3AnnotationRequestModel;
+      }
     } else {
       return res.status(400).json({ message: 'Invalid dataset type' });
     }
+
+    let dbAnnotationRequest = await annotationRequestClass.findById(annotation_request._id);
 
     if (!dbAnnotationRequest) {
       return res.status(404).json({ message: 'Annotation request not found' });
@@ -100,6 +176,8 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
     // Set the last_submission_timestamp
     dbAnnotationRequest.last_submission_timestamp = new Date();
     dbAnnotationRequest.annotation = annotation_request.annotation;
+
+    console.log("Saving annotation request " + dbAnnotationRequest._id + " with annotation " + JSON.stringify(annotation_request.annotation));
 
     // If it a training request or a skip, we are done:
     if (dataset === 'training' || annotation_request.annotation.skipped) {
@@ -251,8 +329,8 @@ router.post('/statistics', checkAdmin, async (req, res) => {
     }
 
     let statistics = {
-      assigned: annotationRequests.filter((request) => request.assigned_user).length,
-      completed: annotationRequests.filter((request) => request.annotation).length,
+      assigned: annotationRequests.filter((request) => request.assigned_user && !request.annotation).length,
+      completed: annotationRequests.filter((request) => request.annotation && !request.annotation.skipped).length,
       pending: annotationRequests.filter((request) => request.assigned_user === undefined).length,
       total: annotationRequests.length,
       skipped: annotationRequests.filter((request) => request.annotation && request.annotation.skipped).length,

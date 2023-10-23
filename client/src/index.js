@@ -17,11 +17,13 @@ import ClaimNormalization from './claim_normalization/ClaimNormalization';
 import PostPhaseOneScreen from './claim_normalization/PostPhaseOneScreen';
 import PrePhaseOneScreen from './claim_normalization/PrePhaseOneScreen';
 
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-/*import QuestionGeneration from './question_generation/QuestionGeneration';
-import VerdictValidation from './verdict_validation/VerdictValidation';
+import QuestionGeneration from './question_generation/QuestionGeneration';
 import PostPhaseTwoScreen from './question_generation/PostPhaseTwoScreen';
 import PrePhaseTwoScreen from './question_generation/PrePhaseTwoScreen';
+
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+/*
+import VerdictValidation from './verdict_validation/VerdictValidation';
 import PrePhaseThreeScreen from './verdict_validation/PrePhaseThreeScreen';
 import PrePhaseFourScreen from './phase_four_question_generation/PrePhaseFourScreen';
 import PostPhaseFourScreen from './phase_four_question_generation/PostPhaseFourScreen';
@@ -81,6 +83,32 @@ const routing = (
             <TrainingOverlay phase={1}/>
           </Route>
 
+          <Route path="/training/phase_2/task_1_start">
+            <PreTrainingControl phase={2} taskLink="/training/phase_2/task_1"/>
+          </Route>
+          <Route path="/training/phase_2/task_1">
+            <QuestionGeneration dataset="training" finish_at={10} finish_path="/training/phase_2/complete"/>
+          </Route>
+          <Route path="/training/phase_2/mid">
+            <MidTrainingControl phase={2} taskLink="/training/phase_2/mid_review"/>
+          </Route>
+          <Route path="/training/phase_2/mid_review">
+            <TrainingOverlay phase={2} finish_path="/training/phase_2/task_2_start"/>
+          </Route>
+          <Route path="/training/phase_2/task_2_start">
+            <PostReviewTrainingControl phase={2} taskLink="/training/phase_2/task_2"/>
+          </Route>
+          <Route path="/training/phase_2/task_2">
+            <QuestionGeneration dataset="training" finish_path="/training/phase_2/complete"/>
+          </Route>
+          <Route path="/training/phase_2/complete">
+            <PostTrainingControl phase={2}  reviewLink="/training/phase_2/review" start_at={10}/>
+          </Route>
+          <Route path="/training/phase_2/review">
+            <TrainingOverlay phase={2}/>
+          </Route>
+          
+
           <Route path="/phase_1/begin">
             <PrePhaseOneScreen />
           </Route>
@@ -89,6 +117,16 @@ const routing = (
           </Route>
           <Route path="/phase_1">
             <ClaimNormalization finish_path="/phase_1/completed/"/>
+          </Route>
+
+          <Route path="/phase_2/begin">
+            <PrePhaseTwoScreen />
+          </Route>
+          <Route path="/phase_2/completed">
+            <PostPhaseTwoScreen />
+          </Route>
+          <Route path="/phase_2">
+            <QuestionGeneration finish_path="/phase_2/completed/"/>
           </Route>
       </Switch>
   </Router>

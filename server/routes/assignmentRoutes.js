@@ -30,7 +30,8 @@ router.post('/list', checkAdmin, async (req, res) => {
         }
 
         let annotationRequestModel;
-        switch (phase) {
+
+        switch (parseInt(phase)) {
             case 1:
                 annotationRequestModel = P1AnnotationRequestModel;
                 break;
@@ -47,7 +48,7 @@ router.post('/list', checkAdmin, async (req, res) => {
                 annotationRequestModel = P5AnnotationRequestModel;
                 break;
             default:
-                return res.status(400).json({ message: 'Invalid phase' });
+                return res.status(400).json({ message: 'Invalid phase (' + phase.toString() + ')' });
         }
 
         // Find N annotation requests for each user that are not assigned to anyone

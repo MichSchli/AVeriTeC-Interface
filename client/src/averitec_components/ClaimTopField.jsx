@@ -95,6 +95,12 @@ const TextRightEntryDiv = styled.div`
   }
 `
 
+// Hack to format date strings to match material-ui date pickers:
+function formatDate(date){
+  date = new Date(date)
+  return ('00' + (date.getDate())).slice(-2) + "/" + ('00' + (date.getMonth() + 1)).slice(-2) + "/" + ('0000' + (date.getFullYear())).slice(-4)
+}
+
 class ClaimTopField extends React.Component {
   constructor(props) {
     super(props);
@@ -123,7 +129,7 @@ class ClaimTopField extends React.Component {
 
   render() {
     var location = ""
-    if (this.props.claim && this.props.claim.country_code) {
+    if (this.props.static_data.p1_annotation.claim && this.props.static_data.p1_annotation.location_ISO_code) {
       var country_list = countryFlagEmoji.list.filter((entry) => { return !["European Union", "United Nations"].includes(entry.name) }).sort((a, b) => {
         var textA = a.name.toUpperCase();
         var textB = b.name.toUpperCase();
@@ -131,12 +137,12 @@ class ClaimTopField extends React.Component {
       });
 
       var country_by_code_dict = country_list.reduce((a, x) => ({ ...a, [x.code]: x }), {})
-      location = country_by_code_dict[this.props.claim.country_code].name + " (" + country_by_code_dict[this.props.claim.country_code].code + ")"
+      location = country_by_code_dict[this.props.static_data.p1_annotation.location_ISO_code].name + " (" + country_by_code_dict[this.props.static_data.p1_annotation.location_ISO_code].code + ")"
     }
 
     var other_claims_field = ""
-    if (this.props.claim && this.props.claim.other_extracted_claims && this.props.claim.other_extracted_claims.length > 0) {
-      var other_claims_items = this.props.claim.other_extracted_claims.map(claim =>
+    if (this.props.static_data.other_extracted_claims && this.props.static_data.other_extracted_claims.length > 0) {
+      var other_claims_items = this.props.static_data.other_extracted_claims.map(claim =>
         <li>
           {claim}
         </li>
@@ -150,22 +156,24 @@ class ClaimTopField extends React.Component {
       </OtherClaimWarningDiv>
     }
 
+    console.log("Top field")
+    console.log(this.props.static_data)
 
     return (
       <EntryCard>
         <ContainerDiv>
 
-          <ClaimHeader data-tour="claim_text">{this.props.claim.claim_text}</ClaimHeader>
+          <ClaimHeader data-tour="claim_text">{this.props.static_data.p1_annotation.claim}</ClaimHeader>
           {other_claims_field}
           <TextLeftEntryDiv>
-            <TextFieldWithTooltip name='claim_speaker' label="Claim Speaker" value={this.props.claim.claim_speaker} defaultValue={this.props.claim.claim_speaker} InputProps={{ readOnly: true }} variant="filled" tooltip="The person or organization that said or wrote the original claim." />
+            <TextFieldWithTooltip name='claim_speaker' label="Claim Speaker" value={this.props.static_data.p1_annotation.speaker} InputProps={{ readOnly: true }} variant="filled" tooltip="The person or organization that said or wrote the original claim." />
             <SepSpaceDiv />
-            <TextFieldWithTooltip name='claim_source' label="Claim Source" value={this.props.claim.claim_source} defaultValue={this.props.claim.claim_source} InputProps={{ readOnly: true }} variant="filled" tooltip="The source that published the original claim." />
+            <TextFieldWithTooltip name='claim_source' label="Claim Source" value={this.props.static_data.p1_annotation.reporting_source} InputProps={{ readOnly: true }} variant="filled" tooltip="The source that published the original claim." />
             <SepSpaceDiv />
             <EmptySpaceDiv />
-            <TextFieldWithTooltip name='claim_date' label="Claim Date" value={this.props.claim.claim_date} defaultValue={this.props.claim.claim_date} InputProps={{ readOnly: true }} variant="filled" tooltip="The date the original claim was made." />
+            <TextFieldWithTooltip name='claim_date' label="Claim Date" value={formatDate(this.props.static_data.p1_annotation.claim_date)} InputProps={{ readOnly: true }} variant="filled" tooltip="The date the original claim was made." />
             <SepSpaceDiv />
-            <TextFieldWithTooltip name='claim_location' label="Location" value={location} defaultValue={location} InputProps={{ readOnly: true }} variant="filled" tooltip="The location most relevant to the claim." />
+            <TextFieldWithTooltip name='claim_location' label="Location" value={location} InputProps={{ readOnly: true }} variant="filled" tooltip="The location most relevant to the claim." />
           </TextLeftEntryDiv>
           <TextRightEntryDiv>
             <CheckboxBox data-tour="should_correct" control={<Checkbox name="should_correct" checked={this.props.data["should_correct"] ? this.props.data["should_correct"] : false} onChange={this.props.posthocView ? () => { } : this.handleCheckboxChange} />} label="I think the claim has been formatted wrong. It should be:" />

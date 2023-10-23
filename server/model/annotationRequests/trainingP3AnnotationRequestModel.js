@@ -16,6 +16,6 @@ const trainingP3AnnotationRequestSchema = new mongoose.Schema({
     last_submission_timestamp: Date,
 });
 
-const TrainingP3AnnotationRequestModel = mongoose.model('trainingP3AnnotationRequest', trainingP3AnnotationRequestSchema);
+const TrainingP3AnnotationRequestModel = mongoose.model('TrainingP3AnnotationRequest', trainingP3AnnotationRequestSchema);
 
 module.exports = TrainingP3AnnotationRequestModel;

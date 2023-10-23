@@ -1,0 +1,37 @@
+[
+    {
+        "p1_annotation": {
+            "claim": "Thorough hand-washing with an ordinary soap is effective in killing coronavirus (COVID-19).",
+            "label": "Supported",
+            "claim_date": "2020-03-03",
+            "speaker": "@TenseHealer",
+            "original_claim_url": "https://twitter.com/TenseHealer/status/1238529076882591745",
+            "reporting_source": "Twitter",
+            "location_ISO_code": "IN"
+        },
+        "question_answer_pairs": {
+            "questions": [
+                {
+                    "text": "How can ordinary soap kill coronavirus?",
+                    "question_problems": [],
+                    "answers": [
+                        {
+                            "answer": "SARS-COV-2, the virus that causes COVID-19, is wrapped in a membrane that can be broken up by the lather from soap.",
+                            "source_url": "https://www.npr.org/sections/goatsandsoda/2020/03/07/812861599/a-90-second-video-on-how-to-master-the-20-second-hand-wash?t=1647269158294",
+                            "answer_type": "Extractive",
+                            "source_medium": "Web text",
+                            "answer_problems": []
+                        }
+                    ]
+                }
+            ]
+        },
+        "gold_annotations": [
+            {
+                "label": "Supported",
+                "justification": "Ordinary soap can kill coronavirus by breaking up the membranes of the viral particles.",
+                "unreadable": false
+            }
+        ]
+    }
+]

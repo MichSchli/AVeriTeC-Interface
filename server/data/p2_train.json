@@ -1,0 +1,1555 @@
+[
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210426134644/https://www.altnews.in/thorough-hand-washing-with-an-ordinary-soap-is-effective-in-killing-coronavirus-covid-19/",
+            "fact_checking_date": "2020-03-14",
+            "claim": "Thorough hand-washing with an ordinary soap is effective in killing coronavirus (COVID-19)"
+        },
+        "p1_annotation": {
+            "claim": "Soap kills coronavirus.",
+            "claim_date": "2020-03-13",
+            "speaker": "@TenseHealer",
+            "reporting_source": "Twitter",
+            "location_ISO_code": "IN"
+        },
+        "gold_annotations": [
+            {
+                "label": "Supported",
+                "should_correct": true,
+                "claim_correction": "Thorough hand-washing with an ordinary soap is effective in killing coronavirus (COVID-19).",
+                "questions": [
+                    {
+                        "question": "How can ordinary soap kill coronavirus?",
+                        "answers": [
+                            {
+                                "answer": "SARS-COV-2, the virus that causes COVID-19, is wrapped in a membrane that can be broken up by the lather from soap.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.npr.org/sections/goatsandsoda/2020/03/07/812861599/a-90-second-video-on-how-to-master-the-20-second-hand-wash?t=1647269158294",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210227031424/https://misbar.com/en/factcheck/2021/01/08/fda-approves-at-home-covid-test",
+            "fact_checking_date": "2021-08-01",
+            "claim": "FDA Approves At-Home COVID Test"
+        },
+        "p1_annotation": {
+            "claim": "The FDA has approved an at-home COVID-19 test.",
+            "claim_date": "2020-11-18",
+            "speaker": "@armchairviewnet",
+            "reporting_source": "Twitter",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Supported",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "Which at-home COVID-19 tests have been approved by the FDA?",
+                        "answers": [
+                            {
+                                "answer": "The Lucira COVID-19 All-In-One Test Kit test has been authorized for home use.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.fda.gov/news-events/press-announcements/coronavirus-covid-19-update-fda-authorizes-first-covid-19-test-self-testing-home",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When was the Lucira COVID-19 All-In-One test approved for home use?",
+                        "answers": [
+                            {
+                                "answer": "November 17, 2020",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.fda.gov/news-events/press-announcements/coronavirus-covid-19-update-fda-authorizes-first-covid-19-test-self-testing-home",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When was this claim made?",
+                        "answers": [
+                            {
+                                "answer": "November 18, 2020",
+                                "answer_type": "Extractive",
+                                "source_url": "Metadata",
+                                "source_medium": "Metadata"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Supported",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "Has the FDA approved an at-home COVID-19 test?",
+                        "answers": [
+                            {
+                                "answer": "Yes",
+                                "boolean_explanation": "On November 17th, the U.S. Food and Drug Administration issued an emergency use authorization (EUA) for the first COVID-19 diagnostic test for self-testing at home and that provides rapid results.",
+                                "answer_type": "Boolean",
+                                "source_url": "https://www.fda.gov/news-events/press-announcements/coronavirus-covid-19-update-fda-authorizes-first-covid-19-test-self-testing-home",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20201227050229/https://www.politifact.com/factchecks/2019/mar/21/cory-booker/farmer-suicides-high-great-depression-no-data-says/",
+            "fact_checking_date": "2019-03-18",
+            "claim": "Farmer suicide rates in the US are as high as they have been since the Great Depression."
+        },
+        "p1_annotation": {
+            "claim": "Farmer suicide rates in the US are as high as they have been since the Great Depression.",
+            "claim_date": "2019-03-18",
+            "speaker": "Cory Booker",
+            "reporting_source": "MSNBC",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Not Enough Evidence ",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "What was the most recent estimate of the suicide rate for farmers?",
+                        "answers": [
+                            {
+                                "answer": "32.2 per 100,000",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20201212075824/https://www.cdc.gov/mmwr/volumes/67/wr/mm6745a1.htm",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What has been the highest farmer suicide rate since the Great Depression?",
+                        "answers": [
+                            {
+                                "answer": "They found in the upper midwest the farmer suicide rates peaked in 1982 at 58 suicides for every 100,000 male farmers and ranchers.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20201212075824/https://www.cdc.gov/mmwr/volumes/67/wr/mm6745a1.htm",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20201108002810/https://www.boomlive.in/did-nasa-astronaut-sunita-williams-convert-to-islam-after-a-glimpse-of-mecca-from-space/",
+            "fact_checking_date": "2019-08-03",
+            "claim": "NASA Astronaut Sunita Williams Convert to Islam After A Glimpse Of Mecca From Space"
+        },
+        "p1_annotation": {
+            "claim": "NASA Astronaut Sunita Williams Converted to Islam After A Glimpse Of Mecca From Space.",
+            "claim_date": "2008-12-05",
+            "speaker": "Mossavi model",
+            "original_claim_url": "https://archive.ph/wSFFW",
+            "reporting_source": "",
+            "location_ISO_code": "IN"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted ",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "What religion is Sunita Williams?",
+                        "answers": [
+                            {
+                                "answer": "Hindu",
+                                "answer_type": "Extractive",
+                                "source_url": "https://en.wikipedia.org/wiki/Category:American_Hindus",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What did Sunita Williams say about her religion?",
+                        "answers": [
+                            {
+                                "answer": "\"I don't have favoritism for any religion. But my dad is Hindu and I grew up trying to understand, what Krishna, Ram and Sita means? My mother is Christian, so then, what does Jesus mean? Me personally—not something to do with NASA—I do think there is a God and it's somebody looking out for us and trying to guide us to live a very happy, productive life. There is further meaning. That's just my thought.\"",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.cntraveller.in/story/conversation-sunita-williams/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210512230517/https://www.politifact.com/factchecks/2019/mar/25/john-hickenlooper/did-spike-marijuana-use-colorado-after-legal/",
+            "fact_checking_date": "2019-03-20",
+            "claim": "After legalizing marijuana in Colorado, we haven't seen a spike in consumption."
+        },
+        "p1_annotation": {
+            "claim": "After legalizing marijuana in Colorado, there has not been a spike in consumption.",
+            "label": "Conflicting Evidence/Cherrypicking",
+            "claim_date": "2019-03-20",
+            "speaker": "John Hickenlooper",
+            "original_claim_url": "https://web.archive.org/web/20210127201932/http://www.cnn.com/TRANSCRIPTS/1903/20/se.01.html",
+            "reporting_source": "CNN",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Conflicting Evidence/Cherrypicking ",
+                "should_correct": true,
+                "claim_correction": "After legalizing marijuana in Colorado, there has not been a spike in consumption.",
+                "questions": [
+                    {
+                        "question": "When did the legal adult sales of marijuana begin in Colorado?",
+                        "answers": [
+                            {
+                                "answer": "January 1, 2014",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4695936/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How have rates of marijuana usage by adults changed in Colorado since 2014?",
+                        "answers": [
+                            {
+                                "answer": "In 2017, 15.5% of adults reported marijuana use in the past 30 days, compared to 13.6% in 2014, a significant increase.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20210518043020/http://cdpsdocs.state.co.us/ors/docs/reports/2018-SB13-283_Rpt.pdf",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How have rates of marijuana usage by teenagers changed in Colorado since 2014?",
+                        "answers": [
+                            {
+                                "answer": "21.2 percent of Colorado high school students surveyed in 2015 had used marijuana during the preceding 30 days, down from 22 percent in 2011.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.scientificamerican.com/article/colorado-s-teen-marijuana-usage-dips-after-legalization/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210225080646/https://verafiles.org/articles/vera-files-fact-check-trillanes-claim-status-covid-19-vaccin",
+            "fact_checking_date": "2021-02-04",
+            "claim": "Israel already had 50% of their population vaccinated. ASEAN countries have rolled out vaccination programs as well."
+        },
+        "p1_annotation": {
+            "claim": "Israel already had 50% of their population vaccinated in February 2021.",
+            "label": "Conflicting Evidence/Cherrypicking",
+            "claim_date": "2021-02-01",
+            "speaker": "Antonio Trillanes IV",
+            "original_claim_url": "https://archive.is/RSsv9",
+            "reporting_source": "Facebook",
+            "location_ISO_code": "IL"
+        },
+        "gold_annotations": [
+            {
+                "label": "Supported ",
+                "should_correct": true,
+                "claim_correction": "Israel already had 50% of their population vaccinated against COVID-19 in February 2021.",
+                "questions": [
+                    {
+                        "question": "What was the population of Israel in 2021?",
+                        "answers": [
+                            {
+                                "answer": "9,400,000",
+                                "answer_type": "Extractive",
+                                "source_url": "https://en.wikipedia.org/wiki/Demographics_of_Israel",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What proportion of the population of Israel was vaccinated by February 2021?",
+                        "answers": [
+                            {
+                                "answer": "34.36%",
+                                "answer_type": "Extractive",
+                                "source_url": "https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=true&minPopulationFilter=1000000&time=2020-03-01..latest&facet=none&pickerSort=asc&pickerMetric=location&Metric=People+vaccinated&Interval=Cumulative&Relative+to+Population=true&Color+by+test+positivity=true&country=ISR",
+                                "source_medium": "Image/graphic"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Supported ",
+                "should_correct": true,
+                "claim_correction": "Israel already had 50% of their population vaccinated against COVID-19 in February 2021.",
+                "questions": [
+                    {
+                        "question": "How many Israelis had been vaccinated against covid-19 in February 2021?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How many Israelis had been vaccinated against covid-19 at the end of January 2021?",
+                        "answers": [
+                            {
+                                "answer": "One in three Israelis had received at least one shot as of January 31st.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://www.theguardian.com/world/2021/jan/31/israel-covid-vaccination-data-offers-hope-exit-pandemic",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210212044022/https://www.politifact.com/factchecks/2021/feb/02/tony-evers/evers-right-unemployment-benefits-harder-access-go/",
+            "fact_checking_date": "2021-01-12",
+            "claim": "The Legislature spent the last decade passing laws deliberately making it even harder for people to access these critical supports when they need it most, exacerbating the problems with our already-outdated system."
+        },
+        "p1_annotation": {
+            "claim": "The Legislature spent the last decade passing laws deliberately making it even harder for people to access these critical supports when they need it most, exacerbating the problems with our already-outdated system.",
+            "label": "Conflicting Evidence/Cherrypicking",
+            "claim_date": "2021-01-12",
+            "speaker": "Tony Evers",
+            "original_claim_url": "",
+            "reporting_source": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Conflicting Evidence/Cherrypicking ",
+                "should_correct": true,
+                "claim_correction": "The Wisconsin Legislature spent the last decade passing laws deliberately making it even harder for people to access unemployment benefits when they need it most, exacerbating the problems with the already-outdated IT system.",
+                "questions": [
+                    {
+                        "question": "Did the Wisconsin legislature make it harder to access unemployment benefits?",
+                        "answers": [
+                            {
+                                "answer": "In 2011, they approved a law that requires those thrown out of work to wait a week before they can claim benefits.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20210223204513/https://eu.jsonline.com/story/news/politics/2020/05/26/unemployment-insurance-latest-political-flashpoint-wisconsin/5246151002/",
+                                "source_medium": "Web text"
+                            },
+                            {
+                                "answer": "In 2012, Republicans approved a law that prevented many claimants from receiving benefits if they did not search for work.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20210223204513/https://eu.jsonline.com/story/news/politics/2020/05/26/unemployment-insurance-latest-political-flashpoint-wisconsin/5246151002/",
+                                "source_medium": "Web text"
+                            },
+                            {
+                                "answer": "In 2013, Republicans expanded the requirement to search for work and established more instances in which claimants would have their benefits automatically cut off for what was considered misconduct.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20210223204513/https://eu.jsonline.com/story/news/politics/2020/05/26/unemployment-insurance-latest-political-flashpoint-wisconsin/5246151002/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Have laws making it harder to access unemployment benefits slowed down the IT system?",
+                        "answers": [
+                            {
+                                "answer": "Since March 15 2020, DWD has processed nearly 8.8 million claims. That’s compared to 7.2 million claims processed in the entire period 2016-2019.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://www.wbay.com/2020/12/30/state-clears-regular-unemployment-backlog-thousands-of-claims-remain-in-adjudication/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Refuted ",
+                "should_correct": true,
+                "claim_correction": "The Wisconsin Legislature spent the last decade passing laws deliberately making it even harder for people to access unemployment benefits when they need it most, exacerbating the problems with an already-outdated computer system.",
+                "questions": [
+                    {
+                        "question": "Did the Wisconsin legislature make it harder for people access benefits?",
+                        "answers": [
+                            {
+                                "answer": "Over the last decade, Republicans have enacted a dozen laws tightening the state's unemployment insurance program.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20210223204513/https://eu.jsonline.com/story/news/politics/2020/05/26/unemployment-insurance-latest-political-flashpoint-wisconsin/5246151002/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How old is the computer system handling the applications for benefits in Wisconsin?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Is the computer system handling the applications for benefits in Wisconsin able to cope with the demand?",
+                        "answers": [
+                            {
+                                "answer": "The Department has completed an unprecedented number of claims using this system.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://eu.jsonline.com/story/news/2020/10/19/wisconsin-unemployment-adjudication-getting-help-google-cloud/5981380002/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210720224307/https://leadstories.com/hoax-alert/2020/01/fake-news-ship-has-not-reappeared-ninety-years-after-going-missing-in-bermuda-triangle.html",
+            "fact_checking_date": "2020-01-15",
+            "claim": "A ship reappeared 90 years after going missing in the Bermuda Triangle."
+        },
+        "p1_annotation": {
+            "claim": "The SS Cotopaxi reappeared 90 years after going missing in the Bermuda Triangle.",
+            "label": "Refuted",
+            "claim_date": "2015-05-18",
+            "speaker": "World News Daily Report",
+            "original_claim_url": "https://web.archive.org/web/20210708060144/https://worldnewsdailyreport.com/bermuda-triangle-ship-reappears-90-years-after-going-missing/",
+            "reporting_source": "",
+            "location_ISO_code": "CU"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "Which source does the claim originate from?",
+                        "answers": [
+                            {
+                                "answer": "An article published by World News Daily Report on May 18, 2015.",
+                                "answer_type": "Abstractive",
+                                "source_url": "Metadata",
+                                "source_medium": "Metadata"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Is World News Daily Report a real news website or a satirical one?",
+                        "answers": [
+                            {
+                                "answer": "WNDR assumes however all responsibility for the satirical nature of its articles and for the fictional nature of their content. All characters appearing in the articles in this website – even those based on real people –  are entirely fictional and any resemblance between them and any persons, living, dead, or undead is purely a miracle.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20210720224307/http://worldnewsdailyreport.com/disclaimer_/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "What is the SS Cotopaxi?",
+                        "answers": [
+                            {
+                                "answer": "A merchant ship that vanished in the Bermuda Triangle in 1925.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.maritimequest.com/in_the_news_pages/2020/2020_01_28_cotopaxi_wreck_found.pdf",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Has the wreck of the SS Cotopaxi been found?",
+                        "answers": [
+                            {
+                                "answer": "Yes",
+                                "boolean_explanation": "A group of underwater explorers and maritime archaeologists have located the ill-fated ship about 35 nautical miles off the coast of St. Augustine, Florida.",
+                                "answer_type": "Boolean",
+                                "source_url": "https://www.maritimequest.com/in_the_news_pages/2020/2020_01_28_cotopaxi_wreck_found.pdf",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20200511095743/https://leadstories.com/hoax-alert/2019/09/fake-news-donald-trump-women-you-have-to-treat-them-like-shit.html",
+            "fact_checking_date": "2019-09-16",
+            "claim": "Donald Trump said \"Women, you have to treat them like shit\"."
+        },
+        "p1_annotation": {
+            "claim": "Donald Trump said \"women, you have to treat them like shit\" in a 1992 interview in New York Magazine.",
+            "label": "Refuted",
+            "claim_date": "2019-09-14",
+            "speaker": "Occupy Democrats",
+            "original_claim_url": "https://archive.is/28fMd",
+            "reporting_source": "Facebook",
+            "location_ISO_code": "US",
+            "transcription": "\"Women, you have to treat them like shit\" - Donald Trump, 1992, New York Magazine. This is an actual Trump quote, and the party of \"family values\" couldn't care less!"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "Is \"Women, you have to treat them like shit\" an actual Trump quote?",
+                        "answers": [
+                            {
+                                "answer": "No",
+                                "boolean_explanation": "The November 9, 1992 issue of New York Magazine did have a Trump quote about treating people \"like s---\" on page 41 but it was not exactly \"Women, You Have To Treat Them Like Shit\".",
+                                "answer_type": "Boolean",
+                                "source_url": "https://web.archive.org/web/20200511095743/https://books.google.be/books?id=BeUCAAAAMBAJ&lpg=PA41&dq=%22Marie%20Brenner%22%20trump%20wine&pg=PA41#v=onepage&q=%22You%20have%20to%20treat%20them%20like%22&f=false",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What is the context of Trump saying \"Women, you have to treat them like shit\"?",
+                        "answers": [
+                            {
+                                "answer": "Trump was not speaking about women in general but about a very narrow category of women, to be particular \"supermodels... clinging to a rock star's legs\".",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20200511095743/https://books.google.be/books?id=BeUCAAAAMBAJ&lpg=PA41&dq=%22Marie%20Brenner%22%20trump%20wine&pg=PA41#v=onepage&q=%22You%20have%20to%20treat%20them%20like%22&f=false",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210901020221/https://www.usatoday.com/story/news/factcheck/2021/08/05/fact-check-false-claims-jug-indents-pop-out-milk-old/5458044001/",
+            "fact_checking_date": "2021-05-08",
+            "claim": "Indent on milk jug pops out when milk is old."
+        },
+        "p1_annotation": {
+            "claim": "Indent on milk jug pops out when milk is old.",
+            "label": "Refuted",
+            "claim_date": "2021-07-24",
+            "speaker": "",
+            "original_claim_url": "",
+            "reporting_source": "Facebook",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "Why do milk jugs have inserts?",
+                        "answers": [
+                            {
+                                "answer": "Mould volume inserts: mould volumes can be adjusted using volume inserts in the side of the mould body. Inserts allow for seasonal adjustment of container volume or when switching bottle production, such as bottles going directly to the filler to bottles being packed off for storage.",
+                                "boolean_explanation": "The November 9, 1992 issue of New York Magazine did have a Trump quote about treating people \"like s---\" on page 41 but it was not exactly \"Women, You Have To Treat Them Like Shit\".",
+                                "answer_type": "Boolean",
+                                "source_url": "https://web.archive.org/web/20210618082644/http://www.qenos.com/internet/home.nsf/(LUImages)/WP%20Understanding%20Dairy%20Bottle%20Shrinkage/$File/WP%20Understanding%20Dairy%20Bottle%20Shrinkage.pdf",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Why do the indents on milk jugs pop out?",
+                        "answers": [
+                            {
+                                "answer": "They pop due to shrinkage, often due to temperature.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20210618082644/http://www.qenos.com/internet/home.nsf/(LUImages)/WP%20Understanding%20Dairy%20Bottle%20Shrinkage/$File/WP%20Understanding%20Dairy%20Bottle%20Shrinkage.pdf",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "A volume insert attaches to the inside of a mould, creating a circular indentation on the side of the finished bottle.",
+                        "answers": [
+                            {
+                                "answer": "They pop due to shrinkage, often due to temperature.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://en.wikipedia.org/wiki/Plastic_milk_container",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Do the indents on milk jugs pop out if the milk spoils?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What is the purpose of volume inserts in dairy bottle moulds?",
+                        "answers": [
+                            {
+                                "answer": "They pop due to shrinkage, often due to temperature.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://web.archive.org/web/20210618082644/http://www.qenos.com/internet/home.nsf/(LUImages)/WP%20Understanding%20Dairy%20Bottle%20Shrinkage/$File/WP%20Understanding%20Dairy%20Bottle%20Shrinkage.pdf",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20210304063725/https://leadstories.com/hoax-alert/2021/02/fact-check-fox-news-did-air-the-impeachment-proceedings-on-february-10-2021.html",
+            "fact_checking_date": "2021-02-10",
+            "claim": "Fox News Channel did not air the impeachment proceedings on Wednesday, February 10, 2021"
+        },
+        "p1_annotation": {
+            "claim": "Fox News did not air impeachment proceedings on February 10th, 2021.",
+            "label": "Refuted",
+            "claim_date": "2021-02-10",
+            "speaker": "Rachel Maddow",
+            "original_claim_url": "https://web.archive.org/web/20210210224945/https://twitter.com/maddow/status/1359635607316799489",
+            "reporting_source": "Twitter",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "What did Fox News Channel show on February 10th, 2021?",
+                        "answers": [
+                            {
+                                "answer": "Fox covered House impeachment managers outlining their case against Trump live for nearly five hours Wednesday.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://spectrumlocalnews.com/nc/triad/ap-top-news/2021/02/11/fox-abruptly-cuts-off-impeachment-manager-during-testimony",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How long did the impeachment proceedings on February 10th 2021 last?",
+                        "answers": [
+                            {
+                                "answer": "12:00 p.m. – 6:15 p.m.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://cnnpressroom.blogs.cnn.com/2021/02/10/cnns-coverage-of-the-senate-impeachment-trial-was-1-in-demo-25-54-ahead-of-broadcast-and-cable-news-nets/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Dix did Fox News Channel cut away from the impeachment proceedings on February 10th?",
+                        "answers": [
+                            {
+                                "answer": "Fox cut things off, shortly after 5 p.m. Eastern, when the network started its commentary show \"The Five.\"",
+                                "answer_type": "Extractive",
+                                "source_url": "https://spectrumlocalnews.com/nc/triad/ap-top-news/2021/02/11/fox-abruptly-cuts-off-impeachment-manager-during-testimony",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Conflicting Evidence/Cherrypicking",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "Which channels aired Trump's impeachment proceedings on Wednesday, February 10, 2021?",
+                        "answers": [
+                            {
+                                "answer": "Live coverage of the impeachment trial will broadcast on PBS, C-SPAN, CNN, Fox News and MSNBC.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://www.syracuse.com/us-news/2021/02/trump-impeachment-trial-how-to-watch-day-2-live-on-tv-streaming-wednesday-2102021.html",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When did Fox News end airing the impeachment?",
+                        "answers": [
+                            {
+                                "answer": "5 p.m.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://spectrumlocalnews.com/nc/triad/ap-top-news/2021/02/11/fox-abruptly-cuts-off-impeachment-manager-during-testimony",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How long were the impeachment proceedings on February 10th 2021?",
+                        "answers": [
+                            {
+                                "answer": "12:00 p.m. – 6:15 p.m.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://cnnpressroom.blogs.cnn.com/2021/02/10/cnns-coverage-of-the-senate-impeachment-trial-was-1-in-demo-25-54-ahead-of-broadcast-and-cable-news-nets/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218145211/https://www.politifact.com/factchecks/2017/aug/23/scott-walker/testing-scott-walkers-top-10-business-ranking-clai/",
+            "fact_checking_date": "2017-07-19",
+            "claim": "We took Wisconsin from the Bottom 10 for business to the Top 10."
+        },
+        "p1_annotation": {
+            "claim": "Scott Walker's government took Wisconsin from the Bottom 10 for business to the Top 10.",
+            "label": "Refuted",
+            "claim_date": "2017-07-19",
+            "speaker": "Scott Walker",
+            "original_claim_url": "",
+            "reporting_source": "Twitter",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "When did Scott Walker start serving as governor of Wisconsin?",
+                        "answers": [
+                            {
+                                "answer": "Scott Kevin Walker (born November 2, 1967) is an American politician who served as the 45th Governor of Wisconsin from 2011 to 2019.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://en.wikipedia.org/wiki/Scott_Walker_(politician)",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Which ranking placed Wisconsin as the bottom 10 for business in 2011?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Which rankings placed Wisconsin as the top 10 for business in 2017?",
+                        "answers": [
+                            {
+                                "answer": "The Chief Executive Magazine ranked Wisconsin as 10 out of 50 states in Best/Worst States for Business 2017.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://chiefexecutive.net/2017-best-worst-states-business/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Did other ratings from prominent sources also rank Wisconsion the top 10 for business?",
+                        "answers": [
+                            {
+                                "answer": "CNBC ranked Wisconsin 21st in America's Top States for Business 2017.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.cnbc.com/2017/07/11/americas-top-states-for-business-2017-overall-ranking.html",
+                                "source_medium": "Web text"
+                            },
+                            {
+                                "answer": "Site Selection Magazine placed Wisconsin 25th in 2016 for business climate ranking.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://siteselection.com/issues/2016/nov/cover.cfm",
+                                "source_medium": "Web text"
+                            },
+                            {
+                                "answer": "Forbes placed Wisconsin 27th in 2016 among its best states for business ranking.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.forbes.com/best-states-for-business/list/#tab:overall",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How did Chief Executive Magazine rank Wisconsin for business in 2011?",
+                        "answers": [
+                            {
+                                "answer": "The Chief Executive Magazine ranked Wisconsin as 24 out of 50 states in Best/Worst States for Business 2011.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://co.mendocino.ca.us/bos/meetings/MG22474/AS22482/AS22498/AI22636/DO22716/1.PDF",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218145627/https://www.politifact.com/factchecks/2018/dec/11/terry-van-duyn/voters-werent-denied-ballot-when-nc-had-voter-id/",
+            "fact_checking_date": "2018-11-27",
+            "claim": "\"Over 1,000 people were denied a ballot on Election Day\" in the 2016 North Carolina primaries."
+        },
+        "p1_annotation": {
+            "claim": "Over 1,000 people were denied a ballot on election day in the 2016 North Carolina primaries.",
+            "label": "Conflicting Evidence/Cherrypicking",
+            "claim_date": "2018-11-27",
+            "speaker": "Terry Van Duyn",
+            "original_claim_url": "",
+            "reporting_source": "",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Not Enough Evidence",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "How many people were denied a ballot on election day in the 2016 North Carolina primaries?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What happens in North Carolina when a voter cannot show photo ID?",
+                        "answers": [
+                            {
+                                "answer": "In states with voter ID requirements, voters who show up at polling locations without proper identification can also vote provisionally.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.propublica.org/article/why-you-might-have-to-vote-a-provisional-ballot",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What is a provisional ballot?",
+                        "answers": [
+                            {
+                                "answer": "A provisional ballot works like this: A voter whose name doesn’t appear on the voter registration list at a precinct polling place on Election Day—but who believes she or he is, in fact, registered—may be offered a provisional ballot. After being marked, it's placed in a special secrecy envelope rather than in the ballot box. After the polls close, the registration status of the voter is determined. If the voter was in fact registered on Election Day, the ballot is removed from the secrecy envelope and counted just like any other ballot. If the voter wasn’t registered, the ballot remains in the secrecy envelope and is not counted.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://electionlab.mit.edu/research/provisional-ballots",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What percentage of provisional ballots are counted?",
+                        "answers": [
+                            {
+                                "answer": "Seventy-two percent of provisional ballots submitted are counted.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.ncsl.org/research/elections-and-campaigns/lb-provisional-ballots.aspx",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How many voters were offered provisional ballots in the 2016 North Carolina primaries?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218150007/https://www.factcheck.org/2018/04/the-stats-on-border-apprehensions/",
+            "fact_checking_date": "2018-04-06",
+            "claim": "Monthly border apprehensions have returned to \"previous levels\""
+        },
+        "p1_annotation": {
+            "claim": "In the US, the numbers of illegal border crossings rise from 40 -year lows last April, back to previous levels.",
+            "label": "Conflicting Evidence/Cherrypicking",
+            "claim_date": "2018-04-04",
+            "speaker": "Kirstjen Nielsen",
+            "original_claim_url": "https://web.archive.org/web/20180429211639/https://www.whitehouse.gov/briefings-statements/press-briefing-by-press-secretary-sarah-sanders-and-department-of-homeland-security-secretary-kirstjen-nielsen-040418/",
+            "reporting_source": "",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Supported",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "How many US border apprehensions took place in March 2018?",
+                        "answers": [
+                            {
+                                "answer": "37,390",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.cbp.gov/newsroom/stats/sw-border-migration/fy-2018",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What is the lowest number of monthly US border apprehensions in the last 40 years?",
+                        "answers": [
+                            {
+                                "answer": "The lowest since 2012 was 11,127 in April 2017.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://www.cbp.gov/newsroom/stats/sw-border-migration-fy2017",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What were the monthly US border apprehension levels before 2017?",
+                        "answers": [
+                            {
+                                "answer": "In 2016, there were 553K, that is 44K per month. In 2015, 444K, that is 37K per month. In 2014, 569K. In 2013, 489K.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://www.cbp.gov/newsroom/stats/sw-border-migration/fy-2018",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Conflicting Evidence/Cherrypicking",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "What is the trend of US border apprehensions since 2000?",
+                        "answers": [
+                            {
+                                "answer": "A steady downwards curve.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://www.migrationpolicy.org/news/crisis-border-not-numbers",
+                                "source_medium": "Image/graphic"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Is the current US border apprehension level back in line with 2016?",
+                        "answers": [
+                            {
+                                "answer": "Yes",
+                                "boolean_explanation": "There was a sharp rise in those apprehended at the Southwest border in March from a year ago, putting the figure back in line with 2016.",
+                                "answer_type": "Boolean",
+                                "source_url": "https://web.archive.org/web/20220218150007/https://www.cbp.gov/newsroom/stats/sw-border-migration",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Is the current US border apprehension level back in line with 2000?",
+                        "answers": [
+                            {
+                                "answer": "No",
+                                "boolean_explanation": "During that time, border apprehensions were at their highest in March 2000, with 220,063 people captured at the Southwest border. The numbers for March have fluctuated a bit, but have been on a general downward trend since 2006.",
+                                "answer_type": "Boolean",
+                                "source_url": "https://web.archive.org/web/20220218150007/https://www.cbp.gov/sites/default/files/assets/documents/2017-Dec/BP%20Total%20Monthly%20Apps%20by%20Sector%20and%20Area%2C%20FY2000-FY2017.pdf",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218150338/https://www.politifact.com/article/2017/aug/16/trump-takes-aim-amazon-barbed-tweet/",
+            "fact_checking_date": "2017-08-16",
+            "claim": "Trump takes aim at Amazon in barbed tweet."
+        },
+        "p1_annotation": {
+            "claim": "Many jobs are being lost in the USA due to Amazon.",
+            "label": "Not Enough Evidence",
+            "claim_date": "2017-08-16",
+            "speaker": "Donald Trump",
+            "original_claim_url": "https://web.archive.org/web/20220218150338/https://twitter.com/realDonaldTrump/status/897763049226084352?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.bloomberg.com%2Fnews%2Farticles%2F2017-08-16%2Ftrump-says-amazon-does-great-damage-to-retailers-shares-fall",
+            "reporting_source": "Twitter",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Not Enough Evidence",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "What are the employment trends in retail sectors?",
+                        "answers": [
+                            {
+                                "answer": "From December 2009 to December 2019 employment in retail trade rose by 9 percent, or 1.3 million. In contrast, total private employment grew by 21 percent over the same period. Although retail trade showed a net growth over the decade, retail employment peaked in January 2017 and began declining through 2019—losing 248,000 jobs.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.bls.gov/opub/btn/volume-10/employment-trends-in-retail-trade-2010-19.htm",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How many jobs does Amazon bring?",
+                        "answers": [
+                            {
+                                "answer": "Amazon.com said it plans to add 100,000 full-time U.S. employees to its ranks over the next 18 months, a move that comes amid pressure on the private sector by the incoming Trump administration to create jobs.",
+                                "answer_type": "Extractive",
+                                "source_url": "seattletimes.com/business/amazon/amazon-plans-to-hire-100000-over-the-next-18-months-2/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How has Amazon affected the number of retail jobs?",
+                        "answers": [
+                            {
+                                "answer": "The relentless growth of e-commerce sales affects individual retail trade industries differently, and, therefore, affects employment trends by industry differently. As retail sales shift from traditional storefronts to e-commerce, employment grew in the strong-growth and medium-growth industries—motor vehicle and parts dealers; nonstore retailers; building material and garden supply stores; food and beverage stores; and gasoline stations. However, sluggish growth and protracted employment declines occurred in the slow-growth and contracting industries, respectively.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.bls.gov/opub/btn/volume-10/employment-trends-in-retail-trade-2010-19.htm",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Not Enough Evidence",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "How does online retail affect the number of jobs available?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How has the number of jobs available in the retail sector changed recently?",
+                        "answers": [
+                            {
+                                "answer": "While the economy has added around 2.4 million jobs since the Great Recession, the retail industry has experienced a net loss of 60,000 jobs.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.shorr.com/resources/blog/the-amazon-effect-impacts-on-shipping-and-retail/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How has Amazon affected the number of retail jobs available?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218150338/https://www.politifact.com/article/2017/aug/16/trump-takes-aim-amazon-barbed-tweet/",
+            "fact_checking_date": "2017-08-16",
+            "claim": "Trump takes aim at Amazon in barbed tweet."
+        },
+        "p1_annotation": {
+            "claim": "Towns, cities and states throughout the U.S. are being hurt by Amazon tax avoidance.",
+            "label": "Not Enough Evidence",
+            "claim_date": "2017-08-16",
+            "speaker": "Donald Trump",
+            "original_claim_url": "https://web.archive.org/web/20220218150338/https://twitter.com/realDonaldTrump/status/897763049226084352?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.bloomberg.com%2Fnews%2Farticles%2F2017-08-16%2Ftrump-says-amazon-does-great-damage-to-retailers-shares-fall",
+            "reporting_source": "Twitter",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Supported",
+                "should_correct": true,
+                "claim_correction": "Towns, cities and states throughout the U.S. are losing state tax revenue because of Amazon.",
+                "questions": [
+                    {
+                        "question": "How much have the states lost in taxes due to Amazon?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "answer_type": "Unanswerable",
+                                "source_url": "",
+                                "source_medium": ""
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Is Amazon paying state taxes?",
+                        "answers": [
+                            {
+                                "answer": "Yes",
+                                "boolean_explanation": "From April 2017, Amazon will be collecting sales tax nationwide.",
+                                "answer_type": "Boolean",
+                                "source_url": "https://www.forbes.com/sites/kellyphillipserb/2017/03/27/tax-free-no-more-amazon-to-begin-collecting-sales-tax-nationwide-on-april-1/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Has Amazon avoided paying sales taxes?",
+                        "answers": [
+                            {
+                                "answer": "For years, the Seattle-based company has avoided paying sales tax through lawsuits or by closing local business operations. In fact, it closed its distribution center at the Dallas/Fort Worth International Airport in the fall after the company received a $269-million bill covering uncollected sales taxes from 2005 to 2009, Reuters reported.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.accountingweb.com/tax/sales-tax/amazon-collecting-sales-taxes-in-texastps://www.accountingweb.com/tax/sales-tax/amazon-collecting-sales-taxes-in-texas",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Why can Amazon avoid collecting sales tax in some states?",
+                        "answers": [
+                            {
+                                "answer": "Typically, an online retailer only has to collect sales tax in states where they have a physical presence, such as a storefront or a distribution center. That loophole cost states $17.2 billion in lost sales taxes last year, according to the National Conference of State Legislatures.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.supremecourt.gov/opinions/URLs_Cited/OT2017/17-494/17-494-3.pdf",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Conflicting Evidence/Cherrypicking",
+                "should_correct": true,
+                "claim_correction": "Amazon is causing state tax losses to towns, cities and states throughout the U.S.",
+                "questions": [
+                    {
+                        "question": "Do online retailers pay less taxes than brick-and-mortar retailers?",
+                        "answers": [
+                            {
+                                "answer": "An online retailer only has to collect sales tax in states where they have a physical presence, such as a storefront or a  distribution center. That loophole cost states $17.2 billion in lost sales taxes in 2017.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.supremecourt.gov/opinions/URLs_Cited/OT2017/17-494/17-494-3.pdf",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What is Amazon's role in online retailers paying less taxes?",
+                        "answers": [
+                            {
+                                "answer": "Amazon has taken the lead in opposing laws that force online retailers to pay sales taxes in the state of purchase, in the media as well as through lobbying.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://www.cbpp.org/research/amazons-arguments-against-collecting-sales-taxes-do-not-withstand-scrutiny",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Is Amazon still avoiding state taxes in 2017?",
+                        "answers": [
+                            {
+                                "answer": "No",
+                                "boolean_explanation": "From April 2017, Amazon will be collecting sales tax nationwide.",
+                                "answer_type": "Boolean",
+                                "source_url": "https://www.forbes.com/sites/kellyphillipserb/2017/03/27/tax-free-no-more-amazon-to-begin-collecting-sales-tax-nationwide-on-april-1/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218161911/https://www.nbcmiami.com/news/politics/politifact/politifact-fact-checking-claims-on-build-back-better-bill/2627480/",
+            "fact_checking_date": "2021-11-23",
+            "claim": "Factchecking \"Build Back Better\" Bill Claims"
+        },
+        "p1_annotation": {
+            "claim": "Never in American history has so much been spent at one time as would be for the Build Back Better bill.",
+            "label": "Refuted",
+            "claim_date": "2021-11-18",
+            "speaker": "Keven McCarthy",
+            "original_claim_url": "https://web.archive.org/web/20220123143858/https://www.republicanleader.gov/leader-kevin-mccarthy-dismantles-democrats-socialist-spending-scam/",
+            "reporting_source": "",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "How much spending has been allocated for the Build Back Better act?",
+                        "answers": [
+                            {
+                                "answer": "roughly $1.75 trillion",
+                                "answer_type": "Extractive",
+                                "source_url": "https://www.aha.org/special-bulletin/2021-11-18-house-passes-build-back-better-act-significant-health-care-provisions",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What is the largest stimulus package in US history?",
+                        "answers": [
+                            {
+                                "answer": "The 2020 coronavirus relief package stands as the largest emergency aid package in US history.",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://edition.cnn.com/2020/03/27/politics/coronavirus-stimulus-house-vote/index.html",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How much spending was allocated for the 2020 coronavirus relief package?",
+                        "answers": [
+                            {
+                                "answer": "$2 trillion",
+                                "answer_type": "Extractive",
+                                "source_url": "https://edition.cnn.com/2020/03/27/politics/coronavirus-stimulus-house-vote/index.html",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20220218161911/https://www.nbcmiami.com/news/politics/politifact/politifact-fact-checking-claims-on-build-back-better-bill/2627480/",
+            "fact_checking_date": "2021-11-23",
+            "claim": "Factchecking \"Build Back Better\" Bill Claims"
+        },
+        "p1_annotation": {
+            "claim": "Never in American history will so much borrowing be needed as for the Build Back Better bill.",
+            "label": "Refuted",
+            "claim_date": "2021-11-18",
+            "speaker": "Keven McCarthy",
+            "original_claim_url": "https://web.archive.org/web/20220123143858/https://www.republicanleader.gov/leader-kevin-mccarthy-dismantles-democrats-socialist-spending-scam/",
+            "reporting_source": "",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "How much borrowing will be needed for the Build Back Better bill?",
+                        "answers": [
+                            {
+                                "answer": "The non-partisan Congressional Budget Office on Thursday released its full cost estimate of President Joe Biden's Build Back Better bill, projecting the measure would add $160 billion to the national debt over the next decade.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://eu.usatoday.com/story/news/politics/2021/11/18/bidens-build-back-better-bill-would-add-deficit-cbo-estimate-says/6360581001/",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Have other US bills caused deficits greater than $160 billion?",
+                        "answers": [
+                            {
+                                "answer": "CARES act, $1.7 trillion",
+                                "answer_type": "Abstractive",
+                                "source_url": "https://www.cbo.gov/system/files/2020-04/hr748.pdf",
+                                "source_medium": "PDF"
+                            },
+                            {
+                                "answer": "American Rescue Plan, $1.8 trillion.",
+                                "answer_type": "Extractive",
+                                "source_url": "https://crsreports.congress.gov/product/pdf/R/R46729",
+                                "source_medium": "PDF"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20211011153628/https://www.politifact.com/factchecks/2021/sep/14/instagram-posts/no-lloyd-austin-didnt-text-military-personnel-say-/",
+            "fact_checking_date": "2021-09-08",
+            "claim": "No, Lloyd Austin didn’t text military personnel to say they’d be discharged if they refused the COVID-19 vaccine"
+        },
+        "p1_annotation": {
+            "claim": "Defense secretary Lloyd Austin texted all active military personnel saying they needed to get vaccinated by the following morning or “be court martialed.",
+            "label": "Refuted",
+            "claim_date": "2021-09-08",
+            "speaker": "titan_of_truth4.0",
+            "reporting_source": "Instagram",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "When is the deadline for all active service military personnel in the US to get vaccinated?",
+                        "answers": [
+                            {
+                                "answer": "The service implementation plan requires Airmen and Guardians to be fully vaccinated against COVID-19 by the following dates, unless seeking an exemption:\n\n· Nov. 2 – Active Duty personnel\n· Dec. 2 – Air National Guard and Air Force Reserve personnel",
+                                "source_url": "https://web.archive.org/web/20211009033425/https://www.af.mil/News/Article-Display/Article/2765008/daf-announces-mandatory-covid-vaccine-implementation-guidelines-for-airmen-guar/",
+                                "answer_type": "Extractive",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When was this claim made?",
+                        "answers": [
+                            {
+                                "answer": "08/09/2021",
+                                "source_url": "Metadata",
+                                "answer_type": "Extractive",
+                                "source_medium": "Metadata",
+                                "bool_explanation": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "What is the policy of the Pentagon on COVID-19 vaccine?",
+                        "answers": [
+                            {
+                                "answer": "The Pentagon announced in August that service members would be required to receive the COVID-19 vaccine.",
+                                "source_url": "https://web.archive.org/web/20211011153628/https://apnews.com/article/business-health-coronavirus-pandemic-e08a6e68308b27ad7653ca9210d953dc",
+                                "answer_type": "Extractive",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "What is the policy of Air Force on COVID-19 vaccine?",
+                        "answers": [
+                            {
+                                "answer": "The Air Force said that unless they were seeking an exemption, active duty airmen needed to be fully vaccinated against COVID-19 by Nov. 2. Air National Guard and Air Force Reserve personnel have until Dec. 2.",
+                                "source_url": "https://web.archive.org/web/20211011153628/https://www.af.mil/News/Article-Display/Article/2765008/daf-announces-mandatory-covid-vaccine-implementation-guidelines-for-airmen-guar/",
+                                "answer_type": "Extractive",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "When was the claim made?",
+                        "answers": [
+                            {
+                                "answer": "September 8, 2021",
+                                "source_url": "Metadata",
+                                "answer_type": "Extractive",
+                                "source_medium": "Metadata"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "article": {
+            "fact_checking_article": "https://web.archive.org/web/20211003200502/https://www.politifact.com/factchecks/2020/nov/11/facebook-posts/no-joe-bidens-leads-havent-disappeared-key-battleg/",
+            "fact_checking_date": "2020-11-11",
+            "claim": "Biden lead disappears in NV, AZ, GA, PA."
+        },
+        "p1_annotation": {
+            "claim": "Biden's leads in Nevada, Arizona, Georgia and Pennsylvania have disappeared.",
+            "label": "Refuted",
+            "claim_date": "2020-11-11",
+            "speaker": "Ben Ferguson",
+            "original_claim_url": "https://web.archive.org/web/20211003200502/https://www.facebook.com/100000164823427/posts/3850007655004465/?d=n",
+            "reporting_source": "Facebook",
+            "media_source_url": "",
+            "transcription": "",
+            "location_ISO_code": "US"
+        },
+        "gold_annotations": [
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "Did Biden lose a lead in NV, AZ, GA, PA on 10/11/2020?",
+                        "answers": [
+                            {
+                                "answer": "With the past few hours' updates, Biden's lead in Georgia (14,149) is now larger than his lead in Arizona (13,582). But both leads are quite robust.",
+                                "source_url": "https://twitter.com/Redistrict/status/1326344835876483084?s=20",
+                                "answer_type": "Extractive",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Had NV, AZ, GA, PA been called for Biden by 10/11/2020?",
+                        "answers": [
+                            {
+                                "answer": "PA, AZ, and NV had been called for Biden by the Associated Press.",
+                                "source_url": "https://www.nytimes.com/interactive/2020/11/03/upshot/network-race-call-tracker.html",
+                                "answer_type": "Abstractive",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "How certain is the result when it is called by the Associated Press?",
+                        "answers": [
+                            {
+                                "answer": "Only when AP is fully confident a race has been won – defined most simply as the moment a trailing candidate no longer has a path to victory – will we make a call.",
+                                "source_url": "https://www.nytimes.com/interactive/2020/11/03/upshot/network-race-call-tracker.html",
+                                "answer_type": "Extractive",
+                                "source_medium": "Web text"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Refuted",
+                "should_correct": false,
+                "claim_correction": "",
+                "questions": [
+                    {
+                        "question": "Which media outlets predicted Biden would win in Nevada on 10/11/2020?",
+                        "answers": [
+                            {
+                                "answer": "ABC News, CBS News, NBC News, CNN, Fox News, Decision Desk HQ, Associated Press, Reuters, New York Times.",
+                                "source_url": "https://web.archive.org/web/20211009052546/https://www.nytimes.com/interactive/2020/11/03/upshot/network-race-call-tracker.html",
+                                "answer_type": "Extractive",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Which media outlets predicted Biden would win in Arizona on 10/11/2020?",
+                        "answers": [
+                            {
+                                "answer": "Fox News, Associated Press",
+                                "source_url": "https://web.archive.org/web/20211009052546/https://www.nytimes.com/interactive/2020/11/03/upshot/network-race-call-tracker.html",
+                                "answer_type": "Extractive",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Which media outlets predicted Biden would win in Georgia on 10/11/2020?",
+                        "answers": [
+                            {
+                                "answer": "No answer could be found.",
+                                "source_url": "",
+                                "answer_type": "Unanswerable",
+                                "source_medium": ""
+                            }
+                        ]
+                    },
+                    {
+                        "question": "Which media outlets predicted Biden would win in Pennsylvania on 10/11/2020?",
+                        "answers": [
+                            {
+                                "answer": "ABC News, CBS News, NBC News, CNN, Fox News, Decision Desk HQ, Associated Press, Reuters, New York Times.",
+                                "source_url": "https://web.archive.org/web/20211009052546/https://www.nytimes.com/interactive/2020/11/03/upshot/network-race-call-tracker.html",
+                                "answer_type": "Extractive",
+                                "source_medium": "Web table"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -5,8 +5,40 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../model/userModel');
 const loginConfig = require('../config/login_config');
 const { checkAdmin, checkUserOrAdmin } = require('../middleware/authMiddleware');
-const createTrainingRequests = require('../utils/createTrainingRequests');
+const { createTrainingRequests, resetTrainingRequests } = require('../utils/trainingRequestUtils');
 const getUserStatistics = require('../utils/getUserStatistics');
+
+// Query to populate a user:
+const populateQuery = [
+  {
+    path: "p1_annotation_requests",
+    populate: {
+      path: "annotation",
+      model: "ClaimNormAnnotation"
+    }
+  },
+  {
+    path: "training_p1_annotation_requests",
+    populate: {
+      path: "annotation",
+      model: "ClaimNormAnnotation"
+    }
+  },
+  {
+    path: "p2_annotation_requests",
+    populate: {
+      path: "annotation",
+      model: "QuestionAnnotation"
+    }
+  },
+  {
+    path: "training_p2_annotation_requests",
+    populate: {
+      path: "annotation",
+      model: "QuestionAnnotation"
+    }
+  }
+];
 
 // Registration route
 router.post('/register', async (req, res) => {
@@ -120,8 +152,7 @@ router.get('/statistics/:user_id', checkUserOrAdmin, async (req, res) => {
   try {
     const userId = req.params.user_id;
     const user = await UserModel.findById(userId)
-    .populate("training_p1_annotation_requests")
-    .populate("p1_annotation_requests");
+      .populate(populateQuery);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -140,7 +171,7 @@ router.get('/statistics/:user_id', checkUserOrAdmin, async (req, res) => {
 router.get('/get/:user_id', checkUserOrAdmin, async (req, res) => {
   try {
     const userId = req.params.user_id;
-    let user = await UserModel.findById(userId).populate("training_p1_annotation_requests").lean().exec();
+    let user = await UserModel.findById(userId).populate(populateQuery).lean().exec();
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -159,7 +190,7 @@ router.get('/get/:user_id', checkUserOrAdmin, async (req, res) => {
 // Statistics route that averages all fields (accessible to admin only)
 router.get('/average_statistics', checkAdmin, async (req, res) => {
   try {
-    const users = await UserModel.find().populate("training_p1_annotation_requests").lean().exec();
+    const users = await UserModel.find().populate(populateQuery).lean().exec();
 
     let statistics = {};
 
@@ -244,8 +275,10 @@ router.put('/update/:userId', checkAdmin, async (req, res) => {
 // Get all user statistics route (only available for admins)
 router.get('/all', checkAdmin, async (req, res) => {
   try {
+    
     // Have to use lean to get a json user object we can modify easily:
-    let users = await UserModel.find().populate("training_p1_annotation_requests").lean().exec();
+    let users = await UserModel.find().populate(populateQuery)
+      .lean().exec();
 
     // Add statistics to each user
     let updated_users = await Promise.all(

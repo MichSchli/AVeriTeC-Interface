@@ -34,37 +34,8 @@ const DeleteButton = styled(IconButton)`
 class EntryCardContainer extends React.Component {
   constructor(props) {
     super(props);
-
-    this.doPrevious = this.doPrevious.bind(this);
-    this.doNext = this.doNext.bind(this);
   }
 
-
-  doPrevious() {
-    let phase = localStorage.getItem('phase');
-    localStorage.pc = Number(localStorage.pc) + 1;
-    window.location.reload(false);
-    // if (phase === 'phase_1') {
-    //   localStorage.pc = Number(localStorage.pc) + 1;
-    //   window.location.reload(false);
-    // } else if (phase === 'phase_2') {
-    //   localStorage.pc = Number(localStorage.pc) + 1;
-    //   window.location.reload(false);
-    // }
-  }
-
-  doNext() {
-    let phase = localStorage.getItem('phase');
-    localStorage.pc = Number(localStorage.pc) - 1;
-    window.location.reload(false);
-    // if (phase === 'phase_1') {
-    //   localStorage.pc = Number(localStorage.pc) - 1;
-    //   window.location.reload(false);
-    // } else if (phase === 'phase_2') {
-    //   localStorage.pc = Number(localStorage.pc) - 1;
-    //   window.location.reload(false);
-    // }
-  }
 
   render() {
     let entry_count = 0;
@@ -131,25 +102,30 @@ class EntryCardContainer extends React.Component {
       ]
     }
 
+    console.log("entry")
+    console.log(this.props)
+
 
     if (this.props.headerClass != null) {
       var headerField = <this.props.headerClass
-        key={this.props.entryName + "_header"}
-        id={this.props.entryName + "_header"}
+        key={"claim_header"}
+        id={"claim_header"}
         onChange={this.props.handleFieldChange}
         valid={this.props.valid}
         data={this.props.annotation}
+        static_data={this.props.static_data}
         {...this.props}
       />;
     };
 
     if (this.props.footerClass != null) {
       var footerField = <this.props.footerClass
-        key={this.props.entryName + "_footer"}
-        id={this.props.entryName + "_footer"}
+        key={"claim_footer"}
+        id={"claim_footer"}
         onChange={this.props.handleFieldChange}
         valid={this.props.valid}
         data={this.props.annotation}
+        static_data={this.props.static_data}
         {...this.props}
       />;
     }
@@ -169,7 +145,7 @@ class EntryCardContainer extends React.Component {
         }
         {footerField}
         {!this.props.posthocView ?
-          <NavBar onPrevious={this.doPrevious} onSubmit={this.props.doSubmit} onNext={this.doNext} dataset={this.props.dataset} /> : ""
+          <NavBar onPrevious={this.props.doPrevious} onSubmit={this.props.doSubmit} onNext={this.props.doNext} current_idx={this.props.current_idx} latest_idx={this.props.latest_idx} /> : ""
         }
       </div>
     );

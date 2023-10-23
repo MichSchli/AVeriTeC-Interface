@@ -61,16 +61,19 @@ class NavBar extends React.Component {
         console.log("Dataset")
         console.log(this.props.dataset)
         console.log(phase)
+        
+        console.log(this.props.current_idx)
+        console.log(this.props.latest_idx)
 
         return (
             <EntryCard>
-                <PrevButton variant="contained" color="secondary" disabled={Number(localStorage.pc) === finished_num} onClick={this.props.onPrevious}>
+                <PrevButton variant="contained" color="secondary" disabled={this.props.current_idx <= 0} onClick={this.props.onPrevious}>
                   Previous
                 </PrevButton>
                 <SubmitButton data-tour="submit" variant="contained" color="primary" onClick={this.props.onSubmit}>
                   Submit
                 </SubmitButton>
-                <NextButton variant="contained" color="secondary" disabled={Number(localStorage.pc) <= 0}  onClick={this.props.onNext}>
+                <NextButton variant="contained" color="secondary" disabled={this.props.current_idx > this.props.latest_idx}  onClick={this.props.onNext}>
                   Next
                 </NextButton>
             </EntryCard>

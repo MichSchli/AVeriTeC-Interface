@@ -344,12 +344,12 @@ class AdminControl extends react.Component {
 
                     for (let index = 1; index <= 5; index++) {
                         let phase_id = "phase_" + index
-                        new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_assigned"] + " / " + new_dict[phase_id]["annotations_done"]
+                        new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"] + " / " + new_dict[phase_id]["annotations_assigned"]
                     }
 
                     for (let index = 1; index <= 3; index++) {
                         let phase_id = "phase_" + index + "_training"
-                        new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_assigned"] + " / " + new_dict[phase_id]["annotations_done"]
+                        new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"] + " / " + new_dict[phase_id]["annotations_assigned"]
                     }
                         
                     return new_dict

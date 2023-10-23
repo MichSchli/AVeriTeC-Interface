@@ -68,11 +68,7 @@ class ClaimNormalization extends React.Component {
 
         this.state = {
             annotation_request: {
-                annotation: {
-                    claims: [
-                        this.get_default_claim(),
-                    ],
-                },
+                annotation: this.get_default_annotation(),
                 article: {
                     "claim": "",
                     "fact_checking_article": "",
@@ -88,6 +84,7 @@ class ClaimNormalization extends React.Component {
             current_idx: 0,
             final_idx: 0,
             confirmation: false,
+            latest_idx: -1
         }
 
         this.doSubmit = this.doSubmit.bind(this);
@@ -97,6 +94,8 @@ class ClaimNormalization extends React.Component {
         this.deleteEntry = this.deleteEntry.bind(this);
         this.addEntry = this.addEntry.bind(this);
         this.loadingDoneHandler = this.loadingDoneHandler.bind(this);
+        this.doNext = this.doNext.bind(this);
+        this.doPrevious = this.doPrevious.bind(this);
     }
 
     get_default_claim = () => {
@@ -112,6 +111,14 @@ class ClaimNormalization extends React.Component {
             "claim_types": [
             ],
             "fact_checking_strategies": [
+            ]
+        }
+    }
+
+    get_default_annotation = () => {
+        return {
+            "claims": [
+                this.get_default_claim()
             ]
         }
     }
@@ -144,12 +151,6 @@ class ClaimNormalization extends React.Component {
                 }
             }
         });
-    }
-
-    setEntries = (newEntries) => {
-        this.setState({
-            entries: newEntries
-        })
     }
 
     handleFieldChange(fieldId, element, value) {
@@ -195,8 +196,8 @@ class ClaimNormalization extends React.Component {
 
         var current_idx = this.state.current_idx
         let is_at_last_claim = current_idx + 1 === this.state.final_idx;
-        
-        let actual_finish_path = this.props.finish_path? this.props.finish_path : "/control/";
+
+        let actual_finish_path = this.props.finish_path ? this.props.finish_path : "/control/";
 
         console.log("Valid: " + validate(this.state.annotation_request.annotation));
         if (validate(this.state.annotation_request.annotation)) {
@@ -207,8 +208,8 @@ class ClaimNormalization extends React.Component {
             console.log("Current annotation request:")
             console.log(annotation_request)
 
-            annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds? annotation_request.annotation.load_seconds : seconds_taken;
-            annotation_request.annotation.work_seconds = annotation_request.annotation.work_seconds? annotation_request.annotation.work_seconds + seconds_taken: seconds_taken;
+            annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds : seconds_taken;
+            annotation_request.annotation.work_seconds = annotation_request.annotation.work_seconds ? annotation_request.annotation.work_seconds + seconds_taken : seconds_taken;
 
             annotation_request.submit_timestamp = now_timestamp;
 
@@ -233,7 +234,16 @@ class ClaimNormalization extends React.Component {
                 if (is_at_last_claim) {
                     window.location.href = actual_finish_path
                 } else {
-                    this.updateData();
+                    // If the current idx is higher than latest idx, update it:
+                    if (current_idx > this.state.latest_idx) {
+                        this.setState({
+                            latest_idx: current_idx,
+                            userIsFirstVisiting: false
+                        });
+                    }
+
+                    // Go to the next claim, then update data:
+                    this.doNext();
                 }
             }).catch((error) => { window.alert(error) })
         } else {
@@ -244,11 +254,10 @@ class ClaimNormalization extends React.Component {
     }
 
     componentDidMount() {
-        //localStorage.setItem('phase', "phase_1");
-        this.updateData();
+        this.updateData(true);
     }
 
-    updateData() {
+    updateData(is_initial) {
         var dataset = "annotation";
         if (this.props.dataset) {
             dataset = this.props.dataset;
@@ -283,32 +292,42 @@ class ClaimNormalization extends React.Component {
                     final_idx: all_annotation_requests.length
                 });
 
-                // Set the current index to the first request that has not been submitted:
                 let current_idx = 0;
-                for (let i = 0; i < all_annotation_requests.length; i++) {
-                    if (!all_annotation_requests[i].has_been_submitted) {
+                if (is_initial) {
+                    // Set the current index to the first request that has not been submitted:
+                    for (let i = 0; i < all_annotation_requests.length; i++) {
                         current_idx = i;
-                        break;
+                        if (!all_annotation_requests[i].has_been_submitted) {
+                            break;
+                        }
                     }
-                }
-                this.setState({
-                    current_idx: current_idx
-                });
 
-                // If the current annotation request has no annotation, add the one from the state as default:
+                    this.setState({
+                        current_idx: current_idx,
+                        latest_idx: current_idx - 1
+                    });
+                } else {
+                    current_idx = this.state.current_idx;
+                }
+
+                // If the current annotation request has no annotation, add the default one:
                 if (!all_annotation_requests[current_idx].annotation) {
-                    all_annotation_requests[current_idx].annotation = this.state.annotation_request.annotation;
+                    all_annotation_requests[current_idx].annotation = this.get_default_annotation();
                 }
 
-                console.log(all_annotation_requests[current_idx]);
+                console.log("Current index: " + current_idx)
+                console.log(all_annotation_requests[current_idx])
 
                 // Memorize the current annotation request:
                 this.setState({
-                    annotation_request: all_annotation_requests[current_idx]
+                    annotation_request: all_annotation_requests[current_idx],
+                    request_timestamp: new Date(),
+                    confirmation: false,
+                    valid: true
                 });
 
                 // If the user is visiting for the first time, set the flag:
-                if (current_idx === 0) {
+                if (current_idx === 0 && is_initial) {
                     this.setState({
                         userIsFirstVisiting: true
                     });
@@ -377,7 +396,7 @@ class ClaimNormalization extends React.Component {
     }
 
     loadingDoneHandler(seconds_taken) {
-        let previous_load_seconds = this.state.annotation_request.annotation? this.state.annotation_request.annotation.load_seconds : 0;
+        let previous_load_seconds = this.state.annotation_request.annotation ? this.state.annotation_request.annotation.load_seconds : 0;
         this.setState({
             annotation_request: {
                 ...this.state.annotation_request,
@@ -388,6 +407,24 @@ class ClaimNormalization extends React.Component {
             }
         })
         console.log("Loading done!")
+    }
+
+    doNext() {
+        this.setState({
+            current_idx: this.state.current_idx + 1
+        }, () => {
+            this.updateData(false);
+        }
+        );
+    }
+
+    doPrevious() {
+        this.setState({
+            current_idx: this.state.current_idx - 1
+        }, () => {
+            this.updateData(false);
+        }
+        );
     }
 
     render() {
@@ -446,8 +483,9 @@ class ClaimNormalization extends React.Component {
                         <NPageView src={this.state.annotation_request.article.fact_checking_article} loadingDoneHandler={this.loadingDoneHandler} />
                         <NEntryBar
                             handleFieldChange={this.handleFieldChange}
-                            current_idx={this.state.current_idx + 1}
+                            current_idx={this.state.current_idx}
                             final_idx={this.state.final_idx}
+                            latest_idx={this.state.latest_idx}
                             annotation={this.state.annotation_request.annotation}
                             addEntry={this.addEntry}
                             deleteEntry={this.deleteEntry}
@@ -456,6 +494,8 @@ class ClaimNormalization extends React.Component {
                             valid={this.state.valid}
                             dataset={dataset}
                             finish_path={this.props.finish_path}
+                            doNext={this.doNext}
+                            doPrevious={this.doPrevious}
                         />
                         {this.state.userIsFirstVisiting ? <TourWrapper /> : ""}
                     </TourProvider>

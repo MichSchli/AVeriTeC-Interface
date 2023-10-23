@@ -120,6 +120,14 @@ class TrainingOverlay extends React.Component {
 
       axios(request).then((response) => {
         let all_annotation_requests = response.data.annotationRequests;
+
+        // Remove requests with no user annotation
+        all_annotation_requests = all_annotation_requests.filter((annotationRequest) => {
+          return annotationRequest.annotation
+        })
+
+        console.log("Register all requests")
+
         console.log(all_annotation_requests)
         this.setState({
           annotationRequests: all_annotation_requests
@@ -158,24 +166,25 @@ class TrainingOverlay extends React.Component {
     var current_idx = 0
     var final_idx = 0
 
+    if (this.state.annotationRequests.length == 0){
+      return <div></div>
+    }
+
     console.log(this.state)
 
     let annotator_view = ""
     let gold_view = ""
 
-    if (this.props.phase === 1 && this.state.annotationRequests.length > 0) {
-      let annotation = this.state.annotationRequests[this.state.shown_annotation_id].annotation;
-      if (!annotation) {
-        annotation = {"claims" : []}
-      }
+    let annotation = this.state.annotationRequests[this.state.shown_annotation_id].annotation;
+    let annotationRequest = this.state.annotationRequests[this.state.shown_annotation_id];
+    if (!annotation) {
+      annotation = { "claims": [] }
+    }
 
-      console.log("Annotation")
-      console.log(annotation)
+    let gold_annotations = this.state.annotationRequests[this.state.shown_annotation_id].gold_annotations;
 
+    if (this.props.phase === 1) {
       annotator_view = <MetadataEntryBar posthocView={true} current_idx={current_idx} final_idx={final_idx} annotation={annotation} />
-
-      let gold_annotations = this.state.annotationRequests[this.state.shown_annotation_id].gold_annotations;
-
       gold_view = gold_annotations.map((gold_annotation, index) => {
         return <div>
           <SepBox>
@@ -188,16 +197,16 @@ class TrainingOverlay extends React.Component {
       })
 
     } else if (this.props.phase === 2) {
-      annotator_view = <QuestionGenerationBar posthocView={true} current_idx={current_idx} final_idx={final_idx} entries={this.state.shown_annotation.entries} claim={this.state.shown_annotation.claim} header={this.state.shown_annotation.qa_pair_header} footer={this.state.shown_annotation.qa_pair_footer} />
+      annotator_view = <QuestionGenerationBar posthocView={true} current_idx={current_idx} final_idx={final_idx} annotation={annotation} static_data={annotationRequest} />
 
-      gold_view = this.state.gold_annotations.map((annotation, index) => {
+      gold_view = gold_annotations.map((annotation, index) => {
         return <div>
           <SepBox>
             <EntryCard>
               <h3>Suggested Annotation #{index + 1}</h3>
             </EntryCard>
           </SepBox>
-          <QuestionGenerationBar posthocView={true} entries={annotation.entries} claim={annotation.claim} header={annotation.qa_pair_header} footer={annotation.qa_pair_footer} />
+          <QuestionGenerationBar posthocView={true} annotation={annotation} static_data={annotationRequest} />
         </div>
       })
     } else if (this.props.phase === 3) {

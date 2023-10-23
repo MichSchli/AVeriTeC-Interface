@@ -66,6 +66,10 @@ const SubmitButton = styled(Button)`
   width:130px;
   margin: 15px 5px 10px 5px!important;
 `
+function formatDate(date){
+  date = new Date(date)
+  return ('00' + (date.getDate())).slice(-2) + "/" + ('00' + (date.getMonth() + 1)).slice(-2) + "/" + ('0000' + (date.getFullYear())).slice(-4)
+}
 
 class QAConfirmationClaimTopField extends React.Component {
   constructor(props) {
@@ -78,17 +82,17 @@ class QAConfirmationClaimTopField extends React.Component {
     return (
       <EntryCard>
         <ContainerDiv>
-          <ClaimHeader>{this.props.claim_text}</ClaimHeader>
+          <ClaimHeader>{this.props.annotation_request.p1_annotation.claim}</ClaimHeader>
           <TextEntryDiv>
-                    <TextFieldWithTooltip name='claim_speaker' label="Claim Speaker" value={this.props.claim.claim_speaker} defaultValue={this.props.claim.claim_speaker} InputProps={{readOnly: true}} variant="filled" tooltip="The person or organization that said or wrote the original claim."/>
+                    <TextFieldWithTooltip name='claim_speaker' label="Claim Speaker" value={this.props.annotation_request.p1_annotation.speaker} InputProps={{readOnly: true}} variant="filled" tooltip="The person or organization that said or wrote the original claim."/>
                     <SepSpaceDiv/>
-                    <TextFieldWithTooltip name='claim_source' label="Claim Source" value={this.props.claim.claim_source} defaultValue={this.props.claim.claim_source} InputProps={{readOnly: true}} variant="filled" tooltip="The source that published the original claim."/>
+                    <TextFieldWithTooltip name='claim_source' label="Claim Source" value={this.props.annotation_request.p1_annotation.reporting_source} InputProps={{readOnly: true}} variant="filled" tooltip="The source that published the original claim."/>
                     <SepSpaceDiv/>
-                    <TextFieldWithTooltip name='claim_date' label="Claim Date" value={this.props.claim.claim_date} InputProps={{readOnly: true}} variant="filled" tooltip="The date the original claim was made."/>
+                    <TextFieldWithTooltip name='claim_date' label="Claim Date" value={formatDate(this.props.annotation_request.p1_annotation.claim_date)} InputProps={{readOnly: true}} variant="filled" tooltip="The date the original claim was made."/>
                     <SepSpaceDiv/>
           </TextEntryDiv>
           <TextEntryDiv>
-            <SelectWithTooltip name="label" validator={notEmptyValidator} valid={this.props.valid} required value={this.props.label} label="Claim Label" onChange={this.props.changeLabel} items={["Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking"]} tooltip={
+            <SelectWithTooltip name="label" required value={this.props.annotation_request.annotation.label} label="Claim Label" onChange={this.props.changeLabel} items={["Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking"]} tooltip={
               <ul>
                 <li>Supported: The claim is fully supported by the arguments and evidence presented.</li>
                 <li>Refuted: The claim is fully contradicted by the arguments and evidence presented.</li>

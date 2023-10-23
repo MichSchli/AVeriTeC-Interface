@@ -51,23 +51,20 @@ const WarningDiv = styled.div`
 function validate(content) {
   var valid = true
 
-  if (!("label" in content["qa_pair_footer"]) || notEmptyValidator(content["qa_pair_footer"]["label"]).error) {
+  console.log("validating...")
+  console.log(content)
+
+  if (!("label" in content["annotation_request"]["annotation"]) || notEmptyValidator(content["annotation_request"]["annotation"]["label"]).error) {
     console.log("no label");
     valid = false;
   }
 
-  // if("should_correct" in content["qa_pair_header"] && (!("claim_correction" in content["qa_pair_header"]) || notEmptyValidator(content["qa_pair_header"]["claim_correction"]).error)){
-  // if(content["qa_pair_header"]["should_correct"] === 1 && (!("claim_correction" in content["qa_pair_header"]) || notEmptyValidator(content["qa_pair_header"]["claim_correction"]).error)){
-  //     console.log("no correction");
-  //     valid = false;
-  // }
-
-  if ("should_correct" in content["qa_pair_header"] && content["qa_pair_header"]["should_correct"] == true && (!("claim_correction" in content["qa_pair_header"]) || notEmptyValidator(content["qa_pair_header"]["claim_correction"]).error)) {
+  if ("should_correct" in content["annotation_request"]["annotation"] && content["annotation_request"]["annotation"]["should_correct"] == true && (!("claim_correction" in content["annotation_request"]["annotation"]) || notEmptyValidator(content["annotation_request"]["annotation"]["claim_correction"]).error)) {
     console.log("no correction");
     valid = false;
   }
 
-  Object.values(content["entries"]).forEach(entry => {
+  Object.values(content["annotation_request"]["annotation"]["questions"]).forEach(entry => {
     if (!("question" in entry) || notEmptyValidator(entry["question"]).error) {
       console.log("no question");
       valid = false;
@@ -89,7 +86,7 @@ function validate(content) {
           }
         }
 
-        if ("source_url" in answer && noUrlOverlapValidator(content["claim"]["web_archive"])(answer["source_url"]).error) {
+        if ("source_url" in answer && noUrlOverlapValidator(content["annotation_request"]["article"]["fact_checking_article"])(answer["source_url"]).error) {
           console.log("url overlap");
           valid = false;
         }
@@ -102,7 +99,7 @@ function validate(content) {
         }
 
         if (answer["answer_type"] == "Boolean") {
-          if (!("bool_explanation" in answer) || notEmptyValidator(answer["bool_explanation"]).error) {
+          if (!("boolean_explanation" in answer) || notEmptyValidator(answer["boolean_explanation"]).error) {
             console.log("boolean and no expl");
             valid = false;
           }
@@ -132,44 +129,63 @@ class QuestionGeneration extends React.Component {
     super(props);
 
     this.state = {
-      claim: {
-        web_archive: "",
-        claim_text: "",
-        claim_speaker: "",
-        claim_date: "",
-        country_code: "",
-        other_extracted_claims: []
+      annotation_request: {
+        annotation: this.get_default_annotation(),
+        article: {
+          "claim": "",
+          "fact_checking_article": "",
+          "fact_checking_date": new Date(),
+        },
+        p1_annotation: {
+          "claim": "",
+        },
+        load_seconds: 0,
+        work_seconds: 0,
+        has_been_submitted: false,
       },
-      entries: {
-        "qa_pair_entry_field_0": {}
-      },
-      qa_pair_header: {},
-      qa_pair_footer: {},
+      request_timestamp: new Date(),
       userIsFirstVisiting: false,
-      added_entries: 1,
       valid: true,
-      confirmation: false,
+      current_idx: 0,
       final_idx: 0,
-      startTime: new Date()
+      confirmation: false,
+      latest_idx: -1
     }
 
-    this.changeLabel = this.changeLabel.bind(this);
     this.doSubmit = this.doSubmit.bind(this);
+    this.doPrevious = this.doPrevious.bind(this);
+    this.doNext = this.doNext.bind(this);
+    this.proceedToConfirmation = this.proceedToConfirmation.bind(this);
+    this.cancelConfirmation = this.cancelConfirmation.bind(this);
     this.handleFieldChange = this.handleFieldChange.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
     this.addEntry = this.addEntry.bind(this);
-    this.proceedToConfirmation = this.proceedToConfirmation.bind(this);
-    this.cancelConfirmation = this.cancelConfirmation.bind(this);
+    this.loadingDoneHandler = this.loadingDoneHandler.bind(this);
+    this.updateData = this.updateData.bind(this);
     this.shouldPreventSubmissionBecauseOfUnanswerables = this.shouldPreventSubmissionBecauseOfUnanswerables.bind(this);
   }
 
+  loadingDoneHandler(seconds_taken) {
+    let previous_load_seconds = this.state.annotation_request.annotation ? this.state.annotation_request.annotation.load_seconds : 0;
+    this.setState({
+      annotation_request: {
+        ...this.state.annotation_request,
+        annotation: {
+          ...this.state.annotation_request.annotation,
+          load_seconds: seconds_taken + previous_load_seconds
+        }
+      }
+    })
+    console.log("Loading done!")
+  }
+
   shouldPreventSubmissionBecauseOfUnanswerables() {
-    if (Object.values(this.state.entries).length >= 5) {
+    if (Object.values(this.state.annotation_request.annotation.questions).length >= 5) {
       return false;
     }
 
     let retval = true;
-    Object.values(this.state.entries).forEach(entry => {
+    Object.values(this.state.annotation_request.annotation.questions).forEach(entry => {
       if ("answers" in entry) {
         entry["answers"].forEach(answer => {
           if (answer["answer_type"] != "Unanswerable") {
@@ -184,214 +200,270 @@ class QuestionGeneration extends React.Component {
     return retval;
   }
 
-  deleteEntry = (entryId) => {
-    let entries = this.state.entries
-    delete entries[entryId]
-
-    this.setState({
-      entries: entries
-    });
-  }
-
-  addEntry = () => {
-    const field_id = "qa_pair_entry_field_" + this.state.added_entries
-    console.log("adding entry \"" + field_id + "\"")
-
-    this.setState({
-      entries: {
-        ...this.state.entries,
-        [field_id]: {}
-      },
-      added_entries: this.state.added_entries + 1
-    });
-  }
-
-  componentDidMount() {
-    localStorage.setItem('phase', "phase_2");
-    var dataset = "annotation"
-    if (this.props.dataset){
-        dataset = this.props.dataset
+  updateData(is_initial) {
+    var dataset = "annotation";
+    if (this.props.dataset) {
+      dataset = this.props.dataset;
     }
 
-    if (localStorage.getItem('login')) {
-      if (this.props.finish_at){
-        this.setState({
-          final_idx: this.props.finish_at
-        })
-      } else {      
+    console.log(dataset);
+
+    if (localStorage.getItem('token')) {
+      console.log("I'm getting new data for dataset " + dataset);
       var request = {
         method: "post",
         baseURL: config.api_url,
-        url: "/user_statistics.php",
+        url: "/annotations/p2/" + localStorage.getItem('user_id'),
         data: {
           dataset: dataset,
-          logged_in_user_id: localStorage.getItem('user_id'),
-          req_type: 'get-statistics',
-          get_by_user_id: localStorage.getItem('user_id')
+        },
+        headers: {
+          'Authorization': localStorage.getItem('token')
         }
       };
 
       axios(request).then((response) => {
+        let all_annotation_requests = response.data.annotationRequests;
+
+        // If a cutoff has been specified, discard requests after the cutoff:
+        if (this.props.finish_at) {
+          all_annotation_requests = all_annotation_requests.slice(0, this.props.finish_at);
+        }
+
+        // Set the final index to the number of annotation requests:
         this.setState({
-          final_idx: response.data.phase_2.annotations_assigned
-        })
+          final_idx: all_annotation_requests.length
+        });
 
-      }).catch((error) => { window.alert(error) });
-    }
-
-      let pc = Number(localStorage.pc);
-      if (pc !== 0) {
-        var request = {
-          method: "post",
-          baseURL: config.api_url,
-          url: "/question_answering.php",
-          data: {
-            dataset: dataset,
-            user_id: localStorage.getItem('user_id'),
-            req_type: 'reload-data',
-            offset: pc - 1
-          }
-        };
-
-        axios(request).then((response) => {
-          if (response.data) {
-            console.log(response.data);
-            const new_claim = {
-              web_archive: response.data.web_archive,
-              claim_text: response.data.cleaned_claim,
-              claim_speaker: response.data.speaker,
-              claim_date: response.data.check_date,
-              country_code: response.data.country_code,
-              claim_source: response.data.claim_source,
-              other_extracted_claims: response.data.other_extracted_claims
-            };
-
-            if (new_claim.claim_date) {
-              var claim_date = new Date(new_claim.claim_date + "T00:00:00.0Z");
-              new_claim.claim_date = moment(claim_date).format('DD/MM/YYYY');
+        let current_idx = 0;
+        if (is_initial) {
+          // Set the current index to the first request that has not been submitted:
+          for (let i = 0; i < all_annotation_requests.length; i++) {
+            current_idx = i;
+            if (!all_annotation_requests[i].has_been_submitted) {
+              break;
             }
-
-            localStorage.claim_norm_id = response.data.claim_norm_id;
-            this.setState({ claim: new_claim });
-
-            const new_header = { claim_correction: response.data.claim_correction, should_correct: response.data.should_correct };
-            this.setState({ qa_pair_header: new_header })
-            console.log(this.state.qa_pair_header);
-
-            const new_footer = { label: response.data.label };
-            this.setState({ qa_pair_footer: new_footer })
-
-            const new_entries = response.data.entries;
-            this.setState({ entries: new_entries });
-
-            // TODO: This is a terrible hack to get around not currently storing added_entries in the DB. Please fix later.
-            var new_entry_count = 0
-            Object.keys(new_entries).forEach(key => {
-              var n = parseInt(key.split("_").at(-1))
-
-              new_entry_count = Math.max(new_entry_count, n)
-            })
-            new_entry_count += 1
-            this.setState({ added_entries: new_entry_count });
-            // ----------------------------------------------------------------------------------------------------------
-          } else {
-            window.alert("No more claims!");
           }
-        }).catch((error) => { window.alert(error) })
-      } else {
-        var request = {
-          method: "post",
-          baseURL: config.api_url,
-          url: "/question_answering.php",
-          data: {
-            dataset: dataset,
-            user_id: localStorage.getItem('user_id'),
-            req_type: 'next-data'
-          }
-        };
 
-        axios(request).then((response) => {
-          if (response.data) {
-            let finished_annotations = Number(localStorage.finished_qa_annotations)
-            if (dataset === "training"){
-                finished_annotations = Number(localStorage.train_finished_qa_annotations)
-            }
+          this.setState({
+            current_idx: current_idx,
+            latest_idx: current_idx - 1
+          });
+        } else {
+          current_idx = this.state.current_idx;
+        }
 
-            if (finished_annotations === 0) {
-              this.setState({ userIsFirstVisiting: true });
-            }
-            console.log(response.data);
-            const new_claim = {
-              web_archive: response.data.web_archive,
-              claim_text: response.data.cleaned_claim,
-              claim_speaker: response.data.speaker,
-              claim_date: response.data.check_date,
-              country_code: response.data.country_code,
-              claim_source: response.data.claim_source,
-              other_extracted_claims: response.data.other_extracted_claims
-            };
-
-            if (new_claim.claim_date) {
-              var claim_date = new Date(new_claim.claim_date + "T00:00:00.0Z");
-              new_claim.claim_date = moment(claim_date).format('DD/MM/YYYY');
-            }
-
-            localStorage.claim_norm_id = response.data.claim_norm_id;
-            this.setState({ claim: new_claim });
-            const new_entries = { "qa_pair_entry_field_0": {} };
-            this.setState({ entries: new_entries });
-          } else {
-            window.alert("No more claims!");
-          }
-        }).catch((error) => { window.alert(error) })
+        // If the current annotation request has no annotation, add the default one:
+        if (!all_annotation_requests[current_idx].annotation) {
+          all_annotation_requests[current_idx].annotation = this.get_default_annotation();
       }
+
+        // Memorize the current annotation request:
+        this.setState({
+          annotation_request: all_annotation_requests[current_idx],
+          request_timestamp: new Date(),
+          confirmation: false,
+          valid: true
+        });
+
+        // If the user is visiting for the first time, set the flag:
+        if (current_idx === 0 && is_initial) {
+          this.setState({
+            userIsFirstVisiting: true
+          });
+        }
+
+      }).catch((error) => { window.alert(error); });
     }
   }
 
-  setEntries = (newEntries) => {
+  get_default_question = () => {
+    return {
+      "question": "",
+      "answers": [
+        {
+          "answer": "",
+          "answer_type": "",
+          "source_url": "",
+          "source_medium": "",
+          "bool_explanation": ""
+        }
+      ],
+    }
+  }
+
+  get_default_annotation = () => {
+    return {
+      "questions": [
+        this.get_default_question()
+      ],
+      "label": ""
+    }
+  }
+
+
+  deleteEntry = (entryId) => {
+    let entries = this.state.annotation_request.annotation.questions
+    entries.splice(entryId, 1)
+
     this.setState({
-      entries: newEntries
-    })
+      annotation_request: {
+        ...this.state.annotation_request,
+        annotation: {
+          ...this.state.annotation_request.annotation,
+          questions: entries
+        }
+      }
+    });
+  }
+
+  addEntry = () => {
+    let entries = this.state.annotation_request.annotation.questions
+    entries.push(this.get_default_question())
+
+    this.setState({
+      annotation_request: {
+        ...this.state.annotation_request,
+        annotation: {
+          ...this.state.annotation_request.annotation,
+          questions: entries
+        }
+      }
+    });
   }
 
   handleFieldChange(fieldId, element, value) {
-    // console.log(fieldId)
-    if (fieldId === "qa_pair_header") {
+    console.log("Field change " + fieldId + " " + element + " " + value)
+    if (fieldId === "claim_header" || fieldId === "claim_footer") {
       this.setState(prevState => ({
-        [fieldId]: {
-          ...prevState[fieldId],
-          [element]: value
-        }
-      }))
-    } else if (fieldId === "qa_pair_footer") {
-      this.setState(prevState => ({
-        [fieldId]: {
-          ...prevState[fieldId],
-          [element]: value
-        }
-      }))
-    } else {
-      this.setState(prevState => ({
-        entries: {
-          ...prevState.entries,
-          [fieldId]: {
-            ...prevState.entries[fieldId],
+        annotation_request: {
+          ...prevState.annotation_request,
+          annotation: {
+            ...prevState.annotation_request.annotation,
             [element]: value
           }
         }
       }))
+    } else {
+      this.setState(prevState => ({
+        annotation_request: {
+          ...prevState.annotation_request,
+          annotation: {
+            ...prevState.annotation_request.annotation,
+            questions: prevState.annotation_request.annotation.questions.map((entry, idx) => {
+              if (idx === fieldId) {
+                return {
+                  ...entry,
+                  [element]: value
+                }
+              } else {
+                return entry
+              }
+            }
+            )
+          }
+        }
+      }))
     }
   }
+
+  async doSubmit() {
+    var dataset = "annotation"
+    if (this.props.dataset) {
+      dataset = this.props.dataset
+    }
+
+    var current_idx = this.state.current_idx
+    let is_at_last_claim = current_idx + 1 === this.state.final_idx;
+
+    let actual_finish_path = this.props.finish_path ? this.props.finish_path : "/control/";
+
+    if (validate(this.state)) {
+      let now_timestamp = new Date();
+      let seconds_taken = (now_timestamp - this.state.request_timestamp) / 1000;
+      let annotation_request = this.state.annotation_request;
+
+      annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds : seconds_taken;
+      annotation_request.annotation.work_seconds = annotation_request.annotation.work_seconds ? annotation_request.annotation.work_seconds + seconds_taken : seconds_taken;
+      annotation_request.submit_timestamp = now_timestamp;
+
+      var request = {
+        method: "post",
+        baseURL: config.api_url,
+        url: "/annotations/submit/",
+        data: {
+          annotation_request: annotation_request,
+          dataset: dataset,
+          phase: 2,
+          user_id: localStorage.getItem('user_id'),
+        },
+        headers: {
+          'Authorization': localStorage.getItem('token')
+        }
+      };
+
+      console.log("Making submission")
+
+      axios(request).then((response) => {
+        console.log(response)
+        if (is_at_last_claim) {
+          window.location.href = actual_finish_path
+        } else {
+          // If the current idx is higher than latest idx, update it:
+          if (current_idx > this.state.latest_idx) {
+            this.setState({
+              latest_idx: current_idx,
+              userIsFirstVisiting: false
+            });
+          }
+
+          // Go to the next claim, then update data:
+          this.doNext();
+        }
+      }).catch((error) => { window.alert(error) })
+    } else {
+      this.setState({
+        valid: false
+      });
+    }
+  }
+
+  componentDidMount() {
+    //localStorage.setItem('phase', "phase_1");
+    this.updateData(true);
+  }
+
+  doNext() {
+    this.setState({
+      current_idx: this.state.current_idx + 1
+    }, () => {
+      this.updateData(false);
+    }
+    );
+  }
+
+  doPrevious() {
+    this.setState({
+      current_idx: this.state.current_idx - 1
+    }, () => {
+      this.updateData(false);
+    }
+    );
+  }
+
 
   changeLabel = event => {
     const { name, value } = event.target;
 
     this.setState({
-      qa_pair_footer: {
-        ...this.state.qa_pair_footer,
-        label: value
+      annotation_request: {
+        ...this.state.annotation_request,
+        annotation: {
+          ...this.state.annotation_request.annotation,
+          [name]: value
+        }
       }
-    })
+    });
   }
 
   proceedToConfirmation() {
@@ -420,103 +492,17 @@ class QuestionGeneration extends React.Component {
     });
   }
 
-  async doSubmit() {
-
-    var dataset = "annotation"
-    if (this.props.dataset){
-        dataset = this.props.dataset
-    }
-
-    let finished_annotations = Number(localStorage.finished_qa_annotations)
-    if (dataset === "training"){
-        finished_annotations = Number(localStorage.train_finished_qa_annotations)
-    }
-
-    var current_idx = finished_annotations + 1 - Number(localStorage.pc);
-
-    let is_at_last_claim = current_idx === this.state.final_idx;
-    let should_use_finish_path = this.props.finish_path && is_at_last_claim
-
-    // e.preventDefault();
-    console.log("Valid: " + validate(this.state));
-    if (validate(this.state)) {
-      let pc = Number(localStorage.pc);
-      // console.log(pc);
-      if (pc !== 0) {
-        localStorage.pc = Number(localStorage.pc) - 1;
-        var request = {
-          method: "post",
-          baseURL: config.api_url,
-          url: "/question_answering.php",
-          data: {
-            user_id: localStorage.getItem('user_id'),
-            dataset: dataset,
-            req_type: 'resubmit-data',
-            entries: this.state.entries,
-            added_entries: this.state.added_entries,
-            qa_pair_header: this.state.qa_pair_header,
-            qa_pair_footer: this.state.qa_pair_footer,
-            claim_norm_id: localStorage.claim_norm_id,
-            startTime: this.state.startTime.toUTCString(),
-            submitTime: new Date().toUTCString()
-          }
-        };
-
-        await axios(request).then((response) => {
-          console.log(response.data);
-          localStorage.claim_norm_id = 0;
-
-          if (should_use_finish_path) {
-            console.log("redirect")
-            window.location.assign(this.props.finish_path);
-          } else {
-            window.location.reload(false);
-          }
-        }).catch((error) => { window.alert(error) })
-      } else {
-        // console.log(this.state.added_entries);
-        var request = {
-          method: "post",
-          baseURL: config.api_url,
-          url: "/question_answering.php",
-          data: {
-            user_id: localStorage.getItem('user_id'),
-            dataset: dataset,
-            req_type: 'submit-data',
-            entries: this.state.entries,
-            added_entries: this.state.added_entries,
-            qa_pair_header: this.state.qa_pair_header,
-            qa_pair_footer: this.state.qa_pair_footer,
-            startTime: this.state.startTime.toUTCString(),
-            submitTime: new Date().toUTCString()
-          }
-        };
-
-        await axios(request).then((response) => {
-          if (dataset === "training"){
-            localStorage.train_finished_qa_annotations = Number(localStorage.train_finished_qa_annotations) + 1;
-          } else {
-            localStorage.finished_qa_annotations = Number(localStorage.finished_qa_annotations) + 1;
-          }          
-          console.log(response.data);
-
-          if (should_use_finish_path) {
-            window.location.assign(this.props.finish_path);
-          } else {
-            window.location.reload(false);
-          }
-        }).catch((error) => { window.alert(error) })
-      }
-
-    } else {
-      this.setState({
-        valid: false
-      });
-    }
-  }
-
   render() {
-    if (!localStorage.getItem('login')) {
+    var dataset = "annotation"
+    if (this.props.dataset) {
+      dataset = this.props.dataset
+    }
+
+    console.log("Current state:")
+    console.log(this.state)
+    console.log(this.state.annotation_request.article.fact_checking_article)
+
+    if (!localStorage.getItem('token')) {
       return <Redirect to='/' />;
     }
 
@@ -597,47 +583,35 @@ class QuestionGeneration extends React.Component {
       },
     ];
 
-    var dataset = "annotation"
-    if (this.props.dataset){
-      dataset = this.props.dataset
-    }
-    let finished_annotations = Number(localStorage.finished_qa_annotations)
-    if (dataset === "training"){
-      finished_annotations = Number(localStorage.train_finished_qa_annotations)
-    }
-
-    var current_idx = finished_annotations + 1 - Number(localStorage.pc);
-
-    console.log("Norm id:")
-    console.log(localStorage.claim_norm_id)
-
     return (
       <QAPageDiv>
         {!this.state.confirmation ?
           <TourProvider steps={steps}>
-            <QAPageView claim={this.state.claim} phase={2} />
+            <QAPageView src={this.state.annotation_request.article.fact_checking_article} loadingDoneHandler={this.loadingDoneHandler} />
             <QADataField>
               <QuestionGenerationBar
                 handleFieldChange={this.handleFieldChange}
-                current_idx={current_idx}
+                current_idx={this.state.current_idx}
                 final_idx={this.state.final_idx}
-                claim={this.state.claim}
-                entries={this.state.entries}
+                latest_idx={this.state.latest_idx}
+                annotation={this.state.annotation_request.annotation}
+                static_data={this.state.annotation_request}
                 addEntry={this.addEntry}
                 deleteEntry={this.deleteEntry}
+                handleSkip={this.skipHandler}
                 doSubmit={this.proceedToConfirmation}
-                header={this.state.qa_pair_header}
-                footer={this.state.qa_pair_footer}
                 valid={this.state.valid}
                 dataset={dataset}
                 finish_path={this.props.finish_path}
+                doNext={this.doNext}
+                doPrevious={this.doPrevious}
               />
-              <SearchField claim_date={this.state.claim.claim_date} country_code={this.state.claim.country_code} />
+              <SearchField annotation_request={this.state.annotation_request} />
             </QADataField>
             {this.state.userIsFirstVisiting ? <TourWrapper /> : ""}
           </TourProvider>
           :
-          <QuestionGenerationConfirmation claim_correction={this.state.qa_pair_header? this.state.qa_pair_header.claim_correction : ""} confirmFunction={this.doSubmit} cancelFunction={this.cancelConfirmation} current_idx={current_idx} final_idx={this.state.final_idx} claim={this.state.claim} entries={this.state.entries} label={this.state.qa_pair_footer.label} footer={this.state.qa_pair_footer} changeLabel={this.changeLabel} />
+          <QuestionGenerationConfirmation annotation_request={this.state.annotation_request} confirmFunction={this.doSubmit} cancelFunction={this.cancelConfirmation} current_idx={this.state.current_idx} final_idx={this.state.final_idx} changeLabel={this.changeLabel} />
         }
       </QAPageDiv>
     );

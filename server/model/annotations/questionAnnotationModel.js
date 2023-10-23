@@ -6,6 +6,8 @@ const questionAnnotationSchema = new mongoose.Schema({
     work_seconds: Number,
     questions: [QuestionModel.schema],
     search_queries: [String],
+    claim_correction: String,
+    should_correct: Boolean,
     skipped: Boolean,
     skipped_reason: String,
 });

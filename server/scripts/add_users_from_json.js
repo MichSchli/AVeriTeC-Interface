@@ -6,7 +6,7 @@ const fs = require('fs');
 const { json } = require('express');
 const { exit } = require('process');
 const bcrypt = require('bcrypt');
-const createTrainingRequests = require('../utils/createTrainingRequests');
+const { createTrainingRequests, resetTrainingRequests } = require('../utils/trainingRequestUtils');
 
 console.log("Connecting to MongoDB at " + url);
 mongoose.connect(url, options);
@@ -16,7 +16,7 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-var data_url = "../data/admin_users.json"
+var data_url = "data/admin_users.json"
 var phase = 1;
 
 var jsonData = JSON.parse(fs.readFileSync(data_url, 'utf8'));
@@ -36,7 +36,8 @@ jsonData.map( async (user) => {
     console.log("Successfully inserted user");
 
     // Create training requests for the new user
-    await createTrainingRequests(user);
+    await createTrainingRequests(user, 1);
+    await createTrainingRequests(user, 2);
 
   } ).catch(function(error){
     console.log(error)      // Failure

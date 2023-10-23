@@ -303,6 +303,10 @@ class MetadataEntryBar extends React.Component {
           dataset={this.props.dataset}
           valid={this.props.valid}
           handleFieldChange={this.props.handleFieldChange}
+          current_idx={this.props.current_idx}
+          latest_idx={this.props.latest_idx}
+          doNext={this.props.doNext}
+          doPrevious={this.props.doPrevious}
         />
       </div>
     );
