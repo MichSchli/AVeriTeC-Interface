@@ -166,7 +166,7 @@ class TrainingOverlay extends React.Component {
     var current_idx = 0
     var final_idx = 0
 
-    if (this.state.annotationRequests.length == 0){
+    if (this.state.annotationRequests.length == 0) {
       return <div></div>
     }
 
@@ -178,62 +178,30 @@ class TrainingOverlay extends React.Component {
     let annotation = this.state.annotationRequests[this.state.shown_annotation_id].annotation;
     let annotationRequest = this.state.annotationRequests[this.state.shown_annotation_id];
     if (!annotation) {
-      annotation = { "claims": [] }
+      annotation = {}
     }
 
     let gold_annotations = this.state.annotationRequests[this.state.shown_annotation_id].gold_annotations;
 
-    if (this.props.phase === 1) {
-      annotator_view = <MetadataEntryBar posthocView={true} current_idx={current_idx} final_idx={final_idx} annotation={annotation} />
-      gold_view = gold_annotations.map((gold_annotation, index) => {
-        return <div>
-          <SepBox>
-            <EntryCard>
-              <h3>Suggested Annotation #{index + 1}</h3>
-            </EntryCard>
-          </SepBox>
-          <MetadataEntryBar posthocView={true} annotation={gold_annotation} />
-        </div>
-      })
-
-    } else if (this.props.phase === 2) {
-      annotator_view = <QuestionGenerationBar posthocView={true} current_idx={current_idx} final_idx={final_idx} annotation={annotation} static_data={annotationRequest} />
-
-      gold_view = gold_annotations.map((annotation, index) => {
-        return <div>
-          <SepBox>
-            <EntryCard>
-              <h3>Suggested Annotation #{index + 1}</h3>
-            </EntryCard>
-          </SepBox>
-          <QuestionGenerationBar posthocView={true} annotation={annotation} static_data={annotationRequest} />
-        </div>
-      })
+    let DisplayClass = MetadataEntryBar
+    if (this.props.phase === 2) {
+      DisplayClass = QuestionGenerationBar
     } else if (this.props.phase === 3) {
-      annotator_view = <VerdictValidationBar
-        posthocView={true}
-        current_idx={current_idx}
-        final_idx={final_idx}
-        claim={this.state.shown_annotation.claim}
-        annotation={this.state.shown_annotation.annotation}
-      />
-
-      gold_view = this.state.gold_annotations.map((annotation, index) => {
-        return <div>
-          <SepBox>
-            <EntryCard>
-              <h3>Suggested Annotation #{index + 1}</h3>
-            </EntryCard>
-          </SepBox>
-          <VerdictValidationBar
-            posthocView={true}
-            claim={annotation.claim}
-            annotation={annotation.annotation}
-          />
-          <P3SepDiv />
-        </div>
-      })
+      DisplayClass = VerdictValidationBar
     }
+
+    annotator_view = <DisplayClass posthocView={true} current_idx={current_idx} final_idx={final_idx} annotation={annotation} static_data={annotationRequest} />
+
+    gold_view = gold_annotations.map((annotation, index) => {
+      return <div>
+        <SepBox>
+          <EntryCard>
+            <h3>Suggested Annotation #{index + 1}</h3>
+          </EntryCard>
+        </SepBox>
+        <DisplayClass posthocView={true} annotation={annotation} static_data={annotationRequest} />
+      </div>
+    })
 
     return (
       <div>

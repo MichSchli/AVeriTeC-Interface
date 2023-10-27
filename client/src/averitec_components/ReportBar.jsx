@@ -42,7 +42,7 @@ class ReportBar extends React.Component {
   render() {
     let phase = this.props.phase;
     var extra_media_skipper = ""
-    if (phase === 'phase_2' || phase === 'phase_4') {
+    if (phase == 2 || phase == 4) {
       extra_media_skipper = <EntryCard>
         <ReportDiv data-tour="report">
           <ReportTextDiv>

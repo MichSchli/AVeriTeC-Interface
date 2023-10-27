@@ -5,7 +5,9 @@ import config from "../config.json"
 import axios from "axios";
 
 export default function UserDetailsOverview(props) {
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({
+        "statistics": {}
+    });
     const [taskStats, setTaskStats] = useState({});
 
     useEffect(() => {
@@ -33,45 +35,6 @@ export default function UserDetailsOverview(props) {
             } else {
                 // Replace with:
                 setUser(response.data);
-                /*setUser({
-                    username: "Michael",
-                    phase_1: {
-                        annotations_done: 5,
-                        annotations_assigned: 10,
-                        claims_skipped: 1,
-                        annotations_timed_out: 0,
-                        speed_traps_hit: 0,
-                        average_training_label_agreement: 0.8,
-                        average_training_claim_overlap_rouge: 0.3,
-                        average_training_strategy_f1: 0.8,
-                        average_training_claim_type_f1: 0.8,
-                        average_load_time: 2,
-                        average_task_time: 5
-                    },
-                    phase_2: {
-                        annotations_done: 5,
-                        annotations_assigned: 10,
-                        claims_skipped: 1,
-                        annotations_timed_out: 0,
-                        speed_traps_hit: 0,
-                        average_training_label_agreement: 0.8,
-                        average_training_question_overlap_rouge: 0.3,
-                        average_training_answer_overlap_rouge: 0.3,
-                        average_load_time: 1,
-                        average_task_time: 10,
-                        average_agreement_with_p3_annotators: 0.7
-                    },
-                    phase_3: {
-                        annotations_done: 5,
-                        annotations_assigned: 10,
-                        claims_skipped: 1,
-                        annotations_timed_out: 0,
-                        speed_traps_hit: 0,
-                        average_training_label_agreement: 0.8,
-                        average_task_time: 3,
-                        average_agreement_with_p2_annotators: 0.9
-                    }
-                })*/
             }
         }).catch((error) => { window.alert(error) })
 

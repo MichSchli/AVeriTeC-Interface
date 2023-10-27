@@ -35,6 +35,11 @@ const TextDiv = styled("div")`
 `
 
 export default function PhaseFourTopField(props) {
+  console.log("PhaseFourTopField")
+
+  let p2_label = props.static_data.p2_annotation? props.static_data.p2_annotation.label : "";
+  let p3_label = props.static_data.p3_annotation? props.static_data.p3_annotation.label : "";
+  let p3_justification = props.static_data.p3_annotation? props.static_data.p3_annotation.justification : "";
 
   return <div>
     <ClaimTopField
@@ -47,7 +52,7 @@ export default function PhaseFourTopField(props) {
       </TextDiv>
 
       <EntryDiv>
-        <SelectWithTooltip readOnly={true} name="label" valid={true} value={props.previous_label_data ? props.previous_label_data["phase_two_label"] : ""} label="Phase Two Label" items={["Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking"]} tooltip={
+        <SelectWithTooltip readOnly={true} name="label" valid={true} value={p2_label} label="Phase Two Label" items={["Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking"]} tooltip={
           <ul>
             <li>Supported: The claim is fully supported by the arguments and evidence presented.</li>
             <li>Refuted: The claim is fully contradicted by the arguments and evidence presented.</li>
@@ -62,7 +67,7 @@ export default function PhaseFourTopField(props) {
       </TextDiv>
 
       <EntryDiv>
-        <SelectWithTooltip readOnly={true} name="label" valid={true} value={props.previous_label_data ? props.previous_label_data["phase_three_label"] : ""} label="Phase Three Label" items={["Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking"]} tooltip={
+        <SelectWithTooltip readOnly={true} name="label" valid={true} value={p3_label} label="Phase Three Label" items={["Supported", "Refuted", "Not Enough Evidence", "Conflicting Evidence/Cherrypicking"]} tooltip={
           <ul>
             <li>Supported: The claim is fully supported by the arguments and evidence presented.</li>
             <li>Refuted: The claim is fully contradicted by the arguments and evidence presented.</li>
@@ -82,7 +87,7 @@ export default function PhaseFourTopField(props) {
           name='justification'
           data-tour="justification"
           label="Justification"
-          value={props.previous_label_data["justification"]}
+          value={p3_justification}
           multiline
           rows={5}
           InputProps={{ readOnly: true }}

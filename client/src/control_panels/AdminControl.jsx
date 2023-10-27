@@ -234,7 +234,7 @@ class AdminControl extends react.Component {
             data: {
                 assignments_per_user: this.state.assignment.n_to_assign,
                 user_ids: this.state.assignment.assignment_type === "selection" ? this.state.selected : uids,
-                phase : this.state.assignment.assignment_phase
+                phase: this.state.assignment.assignment_phase
             },
             headers: {
                 'Authorization': localStorage.getItem('token')
@@ -300,7 +300,7 @@ class AdminControl extends react.Component {
                     'Authorization': localStorage.getItem('token')
                 }
             };
-    
+
             axios(request).then((response) => {
                 this.setState({
                     availableClaimsData: [
@@ -351,7 +351,7 @@ class AdminControl extends react.Component {
                         let phase_id = "phase_" + index + "_training"
                         new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"] + " / " + new_dict[phase_id]["annotations_assigned"]
                     }
-                        
+
                     return new_dict
                 });
                 // ----------- 
@@ -416,13 +416,12 @@ class AdminControl extends react.Component {
             var request = {
                 method: "post",
                 baseURL: config.api_url,
-                url: "/admin_control.php",
+                url: "/users/update/" + params.id,
                 data: {
-                    user_id: localStorage.getItem('user_id'),
-                    req_type: 'edit-users',
-                    user_id_to_edit: params.id,
-                    target_field: params.field,
-                    target_value: params.value
+                    [params.field]: params.value
+                },
+                headers: {
+                    'Authorization': localStorage.getItem('token')
                 }
             };
 
@@ -446,11 +445,12 @@ class AdminControl extends react.Component {
             var request = {
                 method: "post",
                 baseURL: config.api_url,
-                url: "/admin_control.php",
+                url: "/users/deactivate_many",
                 data: {
-                    user_id: localStorage.getItem('user_id'),
-                    req_type: 'remove-users',
-                    user_ids_to_delete: this.state.selected
+                    user_ids: this.state.selected
+                },
+                headers: {
+                    'Authorization': localStorage.getItem('token')
                 }
             };
 
@@ -493,7 +493,6 @@ class AdminControl extends react.Component {
         for (let index = 0; index < this.state.n_users_to_create; index++) {
             let username = "user_" + (index + this.state.table.length * 10)
             let password = generatePassword();
-            let password_md5 = md5(password);
 
             generated_users = {
                 ...generated_users,
@@ -503,20 +502,21 @@ class AdminControl extends react.Component {
             var request = {
                 method: "post",
                 baseURL: config.api_url,
-                // url: "/registration.php",
-                url: "/registration_create.php",
+                url: "/users/register",
                 data: {
-                    name: username,
+                    username: username,
                     password: password,
-                    password_md5: password_md5
+                },
+                headers: {
+                    'Authorization': localStorage.getItem('token')
                 }
             };
-    
+
             axios(request).then((response) => {
                 console.log(response.data);
-                if (index === this.state.n_users_to_create - 1){
+                if (index === this.state.n_users_to_create - 1) {
                     this.loadTableFromDB();
-                }                
+                }
             }).catch((error) => { window.alert(error) })
         }
 
@@ -535,19 +535,19 @@ class AdminControl extends react.Component {
     addUser() {
         let username = this.state.new_username;
         let password = this.state.tempPassword;
-        let password_md5 = md5(password);
 
         // Create user
         // Warning: I copypasted this code from registration
         var request = {
             method: "post",
             baseURL: config.api_url,
-            // url: "/registration.php",
-            url: "/registration_create.php",
+            url: "/users/register",
             data: {
-                name: username,
+                username: username,
                 password: password,
-                password_md5: password_md5
+            },
+            headers: {
+                'Authorization': localStorage.getItem('token')
             }
         };
 

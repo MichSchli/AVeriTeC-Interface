@@ -128,9 +128,6 @@ class SearchField extends React.Component {
         /* Warning: I'm lazy, so there is a hack here; the site will crash if urls are not unique. We should ensure they are in any case though        
         */
 
-        console.log(props)
-        console.log("DONER")
-
         this.state = {
             searchQuery: "",
             page: 1,
@@ -155,7 +152,7 @@ class SearchField extends React.Component {
 
     doSearch = () => {
         var query = this.state.searchQuery
-        var claim_date = this.props.annotation_request.p1_annotation.claim_date
+        var claim_date = this.props.annotation_request.p1_annotation.claim_date? this.props.annotation_request.p1_annotation.claim_date : this.props.annotation_request.article.fact_checking_date
         var page = this.state.page
         var country_code = this.state.countryCode;
 
@@ -171,7 +168,8 @@ class SearchField extends React.Component {
             url: "/search",
             data: {
                 annotation_request: this.props.annotation_request,
-                phase: 2,
+                phase: this.props.phase,
+                dataset: this.props.dataset,
                 user_id: localStorage.getItem('user_id'),
                 query: query,
                 date: claim_date,

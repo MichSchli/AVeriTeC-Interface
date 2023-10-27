@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ClaimAnnotationModel = require('../annotations/claimNormAnnotationModel');
+const ClaimAnnotationModel = require('../annotations/claimAnnotationModel');
 const QuestionAnnotationModel = require('../annotations/questionAnnotationModel');
 const ControlAnnotationModel = require('../annotations/controlAnnotationModel');
 

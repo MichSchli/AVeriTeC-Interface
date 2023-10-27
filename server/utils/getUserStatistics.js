@@ -15,7 +15,8 @@ const getUserStatistics = (user) => {
         statistics[stats_phase_str] = {
             annotations_assigned: user[user_phase_str].length,
             annotations_done: completed_annotations.length,
-            annotations_per_minute: completed_annotations.length / completed_annotations.reduce((acc, request) => acc + request.annotation.work_seconds, 0) * 60,
+            average_task_time: completed_annotations.reduce((acc, request) => acc + request.annotation.work_seconds, 0) / completed_annotations.length,
+            average_load_time: completed_annotations.reduce((acc, request) => acc + (request.annotation.load_seconds ? request.annotation.load_seconds : 0), 0) / completed_annotations.length
         };
     }
     for (let phase = 1; phase <= 3; phase++) {
@@ -91,30 +92,28 @@ const getUserStatistics = (user) => {
     }
 
     // Compute average number of question per phase 2 and phase 4 annotation (given an annotation was done)
-    statistics.average_questions_p2 = 0;
-    user_phase_str = "p2_annotation_requests";
+    statistics.phase_2.average_questions = 0;
     counter = 0;
     for (let request of user[user_phase_str]) {
         if (request.annotation && request.annotation.questions) {
-            statistics.average_questions_p2 += request.annotation.questions.length;
+            statistics.phase_2.average_questions += request.annotation.questions.length;
             counter += 1;
         }
     }
     if (counter > 0) {
-        statistics.average_questions_p2 /= counter;
+        statistics.phase_2.average_questions /= counter;
     }
 
-    statistics.average_questions_p4 = 0;
-    user_phase_str = "p4_annotation_requests";
+    statistics.phase_4.average_questions = 0;
     counter = 0;
     for (let request of user[user_phase_str]) {
         if (request.annotation && request.annotation.questions) {
-            statistics.average_questions_p4 += request.annotation.questions.length;
+            statistics.phase_4.average_questions += request.annotation.questions.length;
             counter += 1;
         }
     }
     if (counter > 0) {
-        statistics.average_questions_p4 /= counter;
+        statistics.phase_4.average_questions /= counter;
     }
 
     return statistics;

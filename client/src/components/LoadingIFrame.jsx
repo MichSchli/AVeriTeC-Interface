@@ -32,13 +32,13 @@ function LoadingIFrame(props) {
   console.log("LoadingIFrame props:")
   console.log(props)
 
-  /*useEffect(() => {
+  useEffect(() => {
+    setLoading(true);
     setTimeout(() => {
       console.log("Page timed out. Removing loading wheel...")
-      setLoading(false)
-      props.loadingDoneHandler(30)
+      frameHasLoaded()
     }, 30000);
-  }, [])*/
+  }, [props.page_id])
 
   const frameHasLoaded = () => {
     var loading_stop_time = new Date();
@@ -52,7 +52,6 @@ function LoadingIFrame(props) {
     props.loadingDoneHandler(seconds_taken)
   };
 
-  console.log("Loading: " + props.src)
   let className = ''
 
   if (props.className !== undefined) {

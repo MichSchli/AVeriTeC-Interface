@@ -4,6 +4,7 @@ const ClaimAnnotationModel = require('../annotations/claimAnnotationModel');
 const claimNormAnnotationSchema = new mongoose.Schema({
     claims: [ClaimAnnotationModel.schema],
     skipped: Boolean,
+    skipped_reason: String,
     load_seconds: Number,
     work_seconds: Number,
 });

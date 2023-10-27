@@ -5,6 +5,7 @@ import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import TooltipQMark from './TooltipQMark';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
+import { formatDate } from '../utils/date_utils.js'
 
 const ElementContainer = styled.div`
     margin: 5px;
@@ -46,12 +47,6 @@ function shiftFromUTCDate(systemDate) {
         systemDate.getUTCMonth(),
         systemDate.getUTCDate()
     );
-}
-
-// Hack to format date strings to match material-ui date pickers:
-function formatDate(date){
-    date = new Date(date)
-    return ('00' + (date.getDate())).slice(-2) + "/" + ('00' + (date.getMonth() + 1)).slice(-2) + "/" + ('0000' + (date.getFullYear())).slice(-4)
 }
 
 export default function DatePickerWithTooltip(props) {

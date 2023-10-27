@@ -17,6 +17,8 @@ router.post('/list', checkAdmin, async (req, res) => {
     try {
         const { user_ids, phase, assignments_per_user } = req.body;
 
+        console.log("Assigning " + assignments_per_user.toString() + " annotation requests for phase " + phase.toString() + " to users: " + user_ids.toString());
+
         if (!user_ids) {
             return res.status(400).json({ message: 'User IDs are missing' });
         }
@@ -52,7 +54,7 @@ router.post('/list', checkAdmin, async (req, res) => {
         }
 
         // Find N annotation requests for each user that are not assigned to anyone
-        let annotationRequests = await annotationRequestModel.find({ assigned_to: null }).limit(assignments_per_user * user_ids.length).exec();
+        let annotationRequests = await annotationRequestModel.find({ assigned_user: null }).limit(assignments_per_user * user_ids.length).exec();
 
         // Keep track of how many requests we have assigned to each user. Initialize to 0.
         let user_counts = {};
@@ -67,13 +69,14 @@ router.post('/list', checkAdmin, async (req, res) => {
 
         // For each request, attempt to find a user whose id is not in the blocked_user_ids list, and who does not yet have N requests assigned to them
         // Assign to that user
-        annotationRequests.forEach(async (annotationRequest) => {
+        for (let j = 0; j < annotationRequests.length; j++) {
+            annotationRequest = annotationRequests[j];
             // Shuffle the users so we go in random order. This helps distribute requests somewhat evenly:
             users.sort(() => Math.random() - 0.5);
 
             for (let i = 0; i < users.length; i++) {
                 let user = users[i];
-                if (!user[user_assignment_field].includes(annotationRequest._id) && user_counts[user._id] < assignments_per_user) {
+                if (!annotationRequest.blocked_user_ids.includes(user._id) && user_counts[user._id] < assignments_per_user) {
                     // Update the annotation request
                     annotationRequest.assigned_user = user._id;
                     await annotationRequest.save();
@@ -83,10 +86,12 @@ router.post('/list', checkAdmin, async (req, res) => {
                     user_counts[user._id] += 1;
                     await user.save();
 
+                    console.log("Assigned request " + annotationRequest._id.toString() + " to user " + user.username.toString());
+
                     break;
                 }
             }
-        });
+        }
 
         // Find any unassigned requests in annotationRequests:
         let unassigned_requests = annotationRequests.filter((request) => request.assigned_user === null);

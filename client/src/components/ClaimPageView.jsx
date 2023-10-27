@@ -23,7 +23,7 @@ class ClaimPageView extends React.Component {
 
         return (
             <div data-tour="claim_page_view" style={this.props.style} className={className}>
-                <ClaimFrame src={this.props.src} loadingDoneHandler={this.props.loadingDoneHandler}/>
+                <ClaimFrame src={this.props.src} page_id={this.props.page_id} loadingDoneHandler={this.props.loadingDoneHandler}/>
             </div>
             
         );

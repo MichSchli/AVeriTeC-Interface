@@ -37,6 +37,34 @@ const populateQuery = [
       path: "annotation",
       model: "QuestionAnnotation"
     }
+  },
+  {
+    path: "p3_annotation_requests",
+    populate: {
+      path: "annotation",
+      model: "ControlAnnotation"
+    }
+  },
+  {
+    path: "training_p3_annotation_requests",
+    populate: {
+      path: "annotation",
+      model: "ControlAnnotation"
+    }
+  },
+  {
+    path: "p4_annotation_requests",
+    populate: {
+      path: "annotation",
+      model: "QuestionAnnotation"
+    }
+  },
+  {
+    path: "p5_annotation_requests",
+    populate: {
+      path: "annotation",
+      model: "ControlAnnotation"
+    }
   }
 ];
 
@@ -66,14 +94,16 @@ router.post('/register', async (req, res) => {
     await newUser.save();
 
     // Create training requests for the new user
-    await createTrainingRequests(newUser);
+    await createTrainingRequests(newUser, 1);
+    await createTrainingRequests(newUser, 2);
+    await createTrainingRequests(newUser, 3);
 
     // Generate a JWT token
     const token = jwt.sign({ userId: newUser._id, is_admin: newUser.is_admin }, loginConfig.jwt_secret_key, {
       expiresIn: loginConfig.token_expiration_time, // Token expiration time
     });
 
-    res.status(201).json({ message: 'User registered successfully', newUser, token });
+    res.status(201).json({ message: 'User registered successfully', user: newUser, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
@@ -241,7 +271,7 @@ router.get('/average_statistics', checkAdmin, async (req, res) => {
 
 
 // Update user route (only available for admins)
-router.put('/update/:userId', checkAdmin, async (req, res) => {
+router.post('/update/:userId', checkAdmin, async (req, res) => {
   try {
     const userId = req.params.userId;
     const { username, password, is_admin, is_active } = req.body;
@@ -253,11 +283,19 @@ router.put('/update/:userId', checkAdmin, async (req, res) => {
     }
 
     // Update user properties
-    user.username = username;
-    user.is_admin = is_admin;
-    user.is_active = is_active;
+    if (username !== undefined){
+      user.username = username;
+    }
 
-    if (password) {
+    if (is_admin !== undefined){
+      user.is_admin = is_admin;
+    }
+
+    if (is_active !== undefined){
+      user.is_active = is_active;
+    }
+
+    if (password !== undefined) {
       // Hash and update the password if provided
       const saltRounds = 10;
       user.passwordHash = await bcrypt.hash(password, saltRounds);
@@ -280,6 +318,9 @@ router.get('/all', checkAdmin, async (req, res) => {
     let users = await UserModel.find().populate(populateQuery)
       .lean().exec();
 
+    // Filter out inactivate users:
+    users = users.filter((user) => user.is_active);
+
     // Add statistics to each user
     let updated_users = await Promise.all(
       users.map(async (user) => {
@@ -294,5 +335,31 @@ router.get('/all', checkAdmin, async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+// Set multiple users to inactive (only available for admins)
+router.post('/deactivate_many', checkAdmin, async (req, res) => {
+  try {
+    const { user_ids } = req.body;
+
+    // Check if the user exists
+    const users = await UserModel.find({ _id: { $in: user_ids } });
+    if (!users) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user properties
+    users.forEach((user) => {
+      user.is_active = false;
+    });
+
+    await Promise.all(users.map((user) => user.save()));
+
+    res.status(200).json({ message: 'Users updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;

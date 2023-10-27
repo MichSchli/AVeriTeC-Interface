@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-const ClaimNormAnnotationModel = require('../annotations/claimNormAnnotationModel');
+const ClaimAnnotationModel = require('../annotations/claimAnnotationModel');
 const QuestionAnnotationModel = require('../annotations/questionAnnotationModel');
 const ControlAnnotationModel = require('../annotations/controlAnnotationModel');
 
 const trainingP3AnnotationRequestSchema = new mongoose.Schema({
     article: {type: mongoose.Schema.Types.ObjectId, ref: 'Article'},
     assigned_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    p1_annotation: ClaimNormAnnotationModel.schema,
+    p1_annotation: ClaimAnnotationModel.schema,
     p2_annotation: QuestionAnnotationModel.schema,
     annotation: ControlAnnotationModel.schema,
     gold_annotations: [ControlAnnotationModel.schema],

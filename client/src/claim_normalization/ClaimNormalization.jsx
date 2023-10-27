@@ -74,8 +74,6 @@ class ClaimNormalization extends React.Component {
                     "fact_checking_article": "",
                     "fact_checking_date": new Date(),
                 },
-                load_seconds: 0,
-                work_seconds: 0,
                 has_been_submitted: false
             },
             request_timestamp: new Date(),
@@ -84,7 +82,8 @@ class ClaimNormalization extends React.Component {
             current_idx: 0,
             final_idx: 0,
             confirmation: false,
-            latest_idx: -1
+            latest_idx: -1,
+            skip_enabled: false,
         }
 
         this.doSubmit = this.doSubmit.bind(this);
@@ -96,6 +95,7 @@ class ClaimNormalization extends React.Component {
         this.loadingDoneHandler = this.loadingDoneHandler.bind(this);
         this.doNext = this.doNext.bind(this);
         this.doPrevious = this.doPrevious.bind(this);
+        this.skipHandler = this.skipHandler.bind(this);
     }
 
     get_default_claim = () => {
@@ -117,9 +117,11 @@ class ClaimNormalization extends React.Component {
 
     get_default_annotation = () => {
         return {
-            "claims": [
+            claims: [
                 this.get_default_claim()
-            ]
+            ],
+            load_seconds: 0,
+            work_seconds: 0,
         }
     }
 
@@ -172,7 +174,7 @@ class ClaimNormalization extends React.Component {
                     annotation: {
                         ...prevState.annotation_request.annotation,
                         claims: prevState.annotation_request.annotation.claims.map((entry, idx) => {
-                            if (idx === fieldId) {
+                            if (idx == fieldId) {
                                 return {
                                     ...entry,
                                     [element]: value
@@ -380,17 +382,18 @@ class ClaimNormalization extends React.Component {
         return needs_confirmation;
     }
 
-    skipHandler() {
+    skipHandler(reason) {
         this.setState({
             annotation_request: {
                 ...this.state.annotation_request,
                 annotation: {
                     ...this.state.annotation_request.annotation,
                     skipped: true,
+                    skipped_reason: reason,
                     claims: []
                 }
             }
-        }).then(() => {
+        }, () => {
             this.doSubmit()
         });
     }
@@ -404,14 +407,15 @@ class ClaimNormalization extends React.Component {
                     ...this.state.annotation_request.annotation,
                     load_seconds: seconds_taken + previous_load_seconds
                 }
-            }
+            },
+            skip_enabled: !this.state.annotation_request.has_been_submitted
         })
-        console.log("Loading done!")
     }
 
     doNext() {
         this.setState({
-            current_idx: this.state.current_idx + 1
+            current_idx: this.state.current_idx + 1,
+            skip_enabled: false
         }, () => {
             this.updateData(false);
         }
@@ -420,7 +424,8 @@ class ClaimNormalization extends React.Component {
 
     doPrevious() {
         this.setState({
-            current_idx: this.state.current_idx - 1
+            current_idx: this.state.current_idx - 1,
+            skip_enabled: false
         }, () => {
             this.updateData(false);
         }
@@ -432,10 +437,6 @@ class ClaimNormalization extends React.Component {
         if (this.props.dataset) {
             dataset = this.props.dataset
         }
-
-        console.log("Current state:")
-        console.log(this.state)
-        console.log(this.state.annotation_request.article.fact_checking_article)
 
         if (!localStorage.getItem('token')) {
             return <Redirect to='/' />;
@@ -480,7 +481,7 @@ class ClaimNormalization extends React.Component {
             <PageDiv>
                 {!this.state.confirmation ?
                     <TourProvider steps={steps}>
-                        <NPageView src={this.state.annotation_request.article.fact_checking_article} loadingDoneHandler={this.loadingDoneHandler} />
+                        <NPageView src={this.state.annotation_request.article.fact_checking_article} page_id={this.state.annotation_request._id} loadingDoneHandler={this.loadingDoneHandler} />
                         <NEntryBar
                             handleFieldChange={this.handleFieldChange}
                             current_idx={this.state.current_idx}
@@ -496,6 +497,7 @@ class ClaimNormalization extends React.Component {
                             finish_path={this.props.finish_path}
                             doNext={this.doNext}
                             doPrevious={this.doPrevious}
+                            skip_enabled={this.state.skip_enabled}
                         />
                         {this.state.userIsFirstVisiting ? <TourWrapper /> : ""}
                     </TourProvider>

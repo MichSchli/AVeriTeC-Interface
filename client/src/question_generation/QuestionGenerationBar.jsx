@@ -10,30 +10,6 @@ class QuestionGenerationBar extends React.Component {
 
   render() {
 
-    let entries = this.props.entries;
-    if (!entries) {
-      console.log("warning: null entries")
-      entries = {}
-    }
-
-    let claim = this.props.claim
-    if (!claim) {
-      console.log("warning: null claim")
-      claim = {}
-    }
-
-    let header = this.props.header
-    if (!header) {
-      console.log("warning: null header")
-      header = {}
-    }
-
-    let footer = this.props.footer
-    if (!footer) {
-      console.log("warning: null footer")
-      footer = {}
-    }
-
     return (
       <div>
         {!this.props.posthocView ?
@@ -44,7 +20,7 @@ class QuestionGenerationBar extends React.Component {
               finalRedirect={this.props.finish_path}
               phaseName="Question Generation"
               phaseInstructions="Please read the claim below, and the fact checking article to the left. Then, construct question-answer pairs. You can use any links in the fact checking article to provide sources for your answers. If the links in the fact-checking article are not sufficient, you can also use our custom search field below; please do not use any other search field. If you cannot find an answer to a question you ask, please label that question &quot;Unanswerable&quot; and ask another question. When you have collected enough evidence to verify the claim independently of the fact checking article, please give your verdict. Please spend no more than 15 minutes on each claim." />
-            <ReportBar handleSkip={this.props.handleSkip} phase={this.props.phase} disabled={this.props.annotation && this.props.annotation.has_been_submitted} />
+            <ReportBar handleSkip={this.props.handleSkip} phase={2} disabled={!this.props.skip_enabled} />
           </div>
           : ""
         }

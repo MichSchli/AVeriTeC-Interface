@@ -14,8 +14,7 @@ db.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
-var data_url = "../data/p1.json"
-var phase = 1;
+var data_url = "data/p1.json"
 
 var jsonData = JSON.parse(fs.readFileSync(data_url, 'utf8'));
 
@@ -39,7 +38,7 @@ jsonData.map(async (article_json) => {
     }
 
     P1AnnotationRequestModel.create(annotationRequest).then(function (annotationRequest) {
-        console.log("Successfully inserted annotation request");
+        console.log("Successfully inserted annotation request for \"" + article.claim + "\" into database");
     }
     ).catch(function (error) {
         console.log(error)

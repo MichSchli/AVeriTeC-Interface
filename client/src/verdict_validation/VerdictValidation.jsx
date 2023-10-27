@@ -62,9 +62,9 @@ const QABox = styled.div`
 function validate(content) {
     var valid = true
 
-    if (!("label" in content["annotation"]) || notEmptyValidator(content["annotation"]["label"]).error) {
-        valid = content["annotation"]["unreadable"];
-    } else if (!("justification" in content["annotation"]) || notEmptyValidator(content["annotation"]["justification"]).error) {
+    if (!("label" in content) || notEmptyValidator(content["label"]).error) {
+        valid = content["unreadable"];
+    } else if (!("justification" in content) || notEmptyValidator(content["justification"]).error) {
         valid = false;
     }
 
@@ -77,20 +77,23 @@ class VerdictValidation extends React.Component {
         super(props);
 
         this.state = {
-            claim: {
-                web_archive: "",
-                claim_text: "",
-                claim_speaker: "",
-                claim_hyperlink: "",
-                claim_date: "",
-                questions: {}
+            annotation_request: {
+                annotation: this.get_default_annotation(),
+                p1_annotation: {
+                    "claim": "",
+                },
+                p2_annotation: {
+                    "should_correct": false,
+                },
+                has_been_submitted: false
             },
-            annotation: {},
-            valid: true,
-            submitted: false,
+            request_timestamp: new Date(),
             userIsFirstVisiting: false,
+            valid: true,
+            current_idx: 0,
             final_idx: 0,
-            startTime: new Date()
+            confirmation: false,
+            latest_idx: -1
         }
 
         this.handleFieldChange = this.handleFieldChange.bind(this);
@@ -99,221 +102,104 @@ class VerdictValidation extends React.Component {
         this.doNext = this.doNext.bind(this);
     }
 
+    get_default_annotation = () => {
+        return {
+            questions: [
+            ],
+            work_seconds: 0,
+        }
+    }
+
     handleFieldChange(fieldId, element, value) {
+        console.log("Field change " + fieldId + " " + element + " " + value)
         if (fieldId === "annotation") {
             this.setState(prevState => ({
-                [fieldId]: {
-                    ...prevState[fieldId],
-                    [element]: value
+                annotation_request: {
+                    ...prevState.annotation_request,
+                    annotation: {
+                        ...prevState.annotation_request.annotation,
+                        [element]: value
+                    }
                 }
             }))
         } else {
             this.setState(prevState => ({
-                claim: {
-                    ...prevState.claim,
-                    questions: {
-                        ...prevState.claim.questions,
-                        [fieldId]: {
-                            ...prevState.claim.questions[fieldId],
-                            [element]: value
+                annotation_request: {
+                    ...prevState.annotation_request,
+                    annotation: {
+                        ...prevState.annotation_request.annotation,
+                        questions: prevState.annotation_request.annotation.questions.map((entry, idx) => {
+                            if (idx == fieldId) {
+                                return {
+                                    ...entry,
+                                    [element]: value,
+                                }
+                            } else {
+                                return entry
+                            }
                         }
+                        )
                     }
                 }
             }))
-        }
-    }
-
-    componentDidMount() {
-        localStorage.setItem('phase', "phase_3");
-        var dataset = "annotation"
-        if (this.props.dataset){
-            dataset = this.props.dataset
-        }
-
-        if (localStorage.getItem('login')) {
-            if (this.props.finish_at){
-                this.setState({
-                  final_idx: this.props.finish_at
-                })
-              } else {  
-            var request = {
-                method: "post",
-                baseURL: config.api_url,
-                url: "/user_statistics.php",
-                data: {
-                    dataset: dataset,
-                    logged_in_user_id: localStorage.getItem('user_id'),
-                    req_type: 'get-statistics',
-                    get_by_user_id: localStorage.getItem('user_id')
-                }
-            };
-
-            axios(request).then((response) => {
-                this.setState({
-                    final_idx: response.data.phase_3.annotations_assigned
-                })
-
-            }).catch((error) => { window.alert(error) });
-        }
-
-            let pc = Number(localStorage.pc);
-            if (pc !== 0) {
-                var request = {
-                    method: "post",
-                    baseURL: config.api_url,
-                    url: "/verdict_validate.php",
-                    data: {
-                        dataset: dataset,
-                        user_id: localStorage.getItem('user_id'),
-                        req_type: 'reload-data',
-                        offset: pc - 1
-                    }
-                };
-
-                axios(request).then((response) => {
-                    if (response.data) {
-                        console.log("Recevied response")
-                        console.log(response.data);
-                        const new_claim = {
-                            web_archive: response.data.web_archive,
-                            claim_text: response.data.claim_text,
-                            claim_speaker: response.data.speaker,
-                            claim_source: response.data.claim_source,
-                            claim_hyperlink: response.data.claim_hyperlink,
-                            claim_date: response.data.claim_date,
-                            questions: response.data.questions,
-                            country_code: response.data.country_code
-                        };
-                        localStorage.claim_norm_id = response.data.claim_norm_id;
-                        this.setState({ claim: new_claim });
-                        this.setState({ annotation: response.data.annotation });
-                    } else {
-                        window.alert("No more claims!");
-                    }
-                }).catch((error) => { window.alert(error) })
-            } else {
-                var request = {
-                    method: "post",
-                    baseURL: config.api_url,
-                    url: "/verdict_validate.php",
-                    data: {
-                        dataset: dataset,
-                        user_id: localStorage.getItem('user_id'),
-                        req_type: 'next-data'
-                    }
-                };
-
-                axios(request).then((response) => {
-                    if (response.data) {
-                        console.log("Recevied response")
-                        console.log(response.data);
-                        let finished_annotations = Number(localStorage.finished_valid_annotations)
-                        if (dataset === "training"){
-                            finished_annotations = Number(localStorage.train_finished_valid_annotations)
-                        }
-
-                        if (finished_annotations === 0) {
-                            this.setState({ userIsFirstVisiting: true });
-                        }
-                        const new_claim = {
-                            web_archive: response.data.web_archive,
-                            claim_text: response.data.claim_text,
-                            claim_speaker: response.data.speaker,
-                            claim_source: response.data.claim_source,
-                            claim_hyperlink: response.data.claim_hyperlink,
-                            claim_date: response.data.claim_date,
-                            questions: response.data.questions,
-                            country_code: response.data.country_code,
-                        };
-                        this.setState({ claim: new_claim });
-                        console.log(this.state.claim);
-                    } else {
-                        window.alert("No more claims!");
-                    }
-                }).catch((error) => { window.alert(error) })
-            }
         }
     }
 
     async doSubmit() {
         var dataset = "annotation"
-        if (this.props.dataset){
+        if (this.props.dataset) {
             dataset = this.props.dataset
         }
 
-        let finished_annotations = Number(localStorage.finished_valid_annotations)
-        if (dataset === "training"){
-            finished_annotations = Number(localStorage.train_finished_valid_annotations)
-        }
+        var current_idx = this.state.current_idx
+        let is_at_last_claim = current_idx + 1 === this.state.final_idx;
 
-        var current_idx = finished_annotations + 1 - Number(localStorage.pc);
+        let actual_finish_path = this.props.finish_path ? this.props.finish_path : "/control/";
 
-        let is_at_last_claim = current_idx === this.state.final_idx;
-        let should_use_finish_path = this.props.finish_path && is_at_last_claim
+        console.log("Valid: " + validate(this.state.annotation_request.annotation));
+        if (validate(this.state.annotation_request.annotation)) {
+            let now_timestamp = new Date();
+            let seconds_taken = (now_timestamp - this.state.request_timestamp) / 1000;
+            let annotation_request = this.state.annotation_request;
 
-        if (validate(this.state)) {
-            let pc = Number(localStorage.pc);
-            if (pc !== 0) {
-                localStorage.pc = Number(localStorage.pc) - 1;
-                var request = {
-                    method: "post",
-                    baseURL: config.api_url,
-                    url: "/verdict_validate.php",
-                    data: {
-                        user_id: localStorage.getItem('user_id'),
-                        req_type: 'resubmit-data',
-                        dataset: dataset,
-                        annotation: this.state.annotation,
-                        questions: this.state.claim.questions,
-                        claim_norm_id: localStorage.claim_norm_id,
-                        startTime: this.state.startTime.toUTCString(),
-                        submitTime: new Date().toUTCString()
+            annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds : seconds_taken;
+            annotation_request.annotation.work_seconds = annotation_request.annotation.work_seconds ? annotation_request.annotation.work_seconds + seconds_taken : seconds_taken;
+
+            annotation_request.submit_timestamp = now_timestamp;
+
+            console.log("Submitting annotation request")
+            var request = {
+                method: "post",
+                baseURL: config.api_url,
+                url: "/annotations/submit/",
+                data: {
+                    annotation_request: annotation_request,
+                    dataset: dataset,
+                    phase: 3,
+                    user_id: localStorage.getItem('user_id'),
+                },
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            };
+
+            axios(request).then((response) => {
+                console.log(response)
+                if (is_at_last_claim) {
+                    window.location.href = actual_finish_path
+                } else {
+                    // If the current idx is higher than latest idx, update it:
+                    if (current_idx > this.state.latest_idx) {
+                        this.setState({
+                            latest_idx: current_idx,
+                            userIsFirstVisiting: false
+                        });
                     }
-                };
 
-                console.log(this.state.annotation)
-
-                await axios(request).then((response) => {
-                    console.log(response.data);
-                    localStorage.claim_norm_id = 0;
-
-                    if (should_use_finish_path) {
-                        window.location.assign(this.props.finish_path);
-                    } else {
-                        window.location.reload(false);
-                    }
-                }).catch((error) => { window.alert(error) })
-            } else {
-                var request = {
-                    method: "post",
-                    baseURL: config.api_url,
-                    url: "/verdict_validate.php",
-                    data: {
-                        user_id: localStorage.getItem('user_id'),
-                        dataset: dataset,
-                        req_type: 'submit-data',
-                        annotation: this.state.annotation,
-                        questions: this.state.claim.questions,
-                        startTime: this.state.startTime.toUTCString(),
-                        submitTime: new Date().toUTCString()
-                    }
-                };
-
-                await axios(request).then((response) => {
-                    console.log(response.data);
-                    if (dataset === "training"){
-                        localStorage.train_finished_valid_annotations = Number(localStorage.train_finished_valid_annotations) + 1;
-                    } else {
-                        localStorage.finished_valid_annotations = Number(localStorage.finished_valid_annotations) + 1;
-                    }                    
-
-                    if (should_use_finish_path) {
-                        window.location.assign(this.props.finish_path);
-                    } else {
-                        window.location.reload(false);
-                    }
-                }).catch((error) => { window.alert(error) })
-            }
+                    // Go to the next claim, then update data:
+                    this.doNext();
+                }
+            }).catch((error) => { window.alert(error) })
         } else {
             this.setState({
                 valid: false
@@ -321,18 +207,133 @@ class VerdictValidation extends React.Component {
         }
     }
 
-    doPrevious() {
-        localStorage.pc = Number(localStorage.pc) + 1;
-        window.location.reload(false);
+    updateData(is_initial) {
+        var dataset = "annotation";
+        if (this.props.dataset) {
+            dataset = this.props.dataset;
+        }
+
+        console.log(dataset);
+
+        if (localStorage.getItem('token')) {
+            console.log("I'm getting new data for dataset " + dataset);
+            var request = {
+                method: "post",
+                baseURL: config.api_url,
+                url: "/annotations/p3/" + localStorage.getItem('user_id'),
+                data: {
+                    dataset: dataset,
+                },
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            };
+
+            axios(request).then((response) => {
+                let all_annotation_requests = response.data.annotationRequests;
+
+                // If a cutoff has been specified, discard requests after the cutoff:
+                if (this.props.finish_at) {
+                    all_annotation_requests = all_annotation_requests.slice(0, this.props.finish_at);
+                }
+
+                // Set the final index to the number of annotation requests:
+                this.setState({
+                    final_idx: all_annotation_requests.length
+                });
+
+                let current_idx = 0;
+                if (is_initial) {
+                    // Set the current index to the first request that has not been submitted:
+                    for (let i = 0; i < all_annotation_requests.length; i++) {
+                        current_idx = i;
+                        if (!all_annotation_requests[i].has_been_submitted) {
+                            break;
+                        }
+                    }
+
+                    this.setState({
+                        current_idx: current_idx,
+                        latest_idx: current_idx - 1
+                    });
+                } else {
+                    current_idx = this.state.current_idx;
+                }
+
+                // If the current annotation request has no annotation, add the default one:
+                if (!all_annotation_requests[current_idx].annotation) {
+                    all_annotation_requests[current_idx].annotation = this.get_default_annotation();
+
+                    // Deep copy questions from P2 annotation:
+                    all_annotation_requests[current_idx].annotation.questions = all_annotation_requests[current_idx].p2_annotation.questions.map((question) => {
+                        return {
+                            question: question.question,
+                            answers: question.answers.map((answer) => {
+                                return {
+                                    answer: answer.answer,
+                                    boolean_explanation: answer.boolean_explanation,
+                                    answer_type: answer.answer_type,
+                                    source_url: answer.source_url,
+                                    source_medium: answer.source_medium,
+                                    cached_source_url: answer.cached_source_url
+                                }
+                            })
+                        }
+                    });
+                }
+
+                // Memorize the current annotation request:
+                this.setState({
+                    annotation_request: all_annotation_requests[current_idx],
+                    request_timestamp: new Date(),
+                    confirmation: false,
+                    valid: true
+                });
+
+                // If the user is visiting for the first time, set the flag:
+                if (current_idx === 0 && is_initial) {
+                    this.setState({
+                        userIsFirstVisiting: true
+                    });
+                }
+
+            }).catch((error) => { window.alert(error); });
+        }
+    }
+
+
+    componentDidMount() {
+        this.updateData(true);
     }
 
     doNext() {
-        localStorage.pc = Number(localStorage.pc) - 1;
-        window.location.reload(false);
+        this.setState({
+            current_idx: this.state.current_idx + 1
+        }, () => {
+            this.updateData(false);
+        }
+        );
+    }
+
+    doPrevious() {
+        this.setState({
+            current_idx: this.state.current_idx - 1
+        }, () => {
+            this.updateData(false);
+        }
+        );
     }
 
     render() {
-        if (!localStorage.getItem('login')) {
+        var dataset = "annotation"
+        if (this.props.dataset) {
+            dataset = this.props.dataset
+        }
+
+        console.log("Current state:")
+        console.log(this.state)
+
+        if (!localStorage.getItem('token')) {
             return <Redirect to='/' />;
         }
 
@@ -371,37 +372,21 @@ class VerdictValidation extends React.Component {
             },
         ];
 
-        var questionPairs = ""
-
-        if (this.state.claim && this.state.claim.questions) {
-            questionPairs = Object.keys(this.state.claim.questions).map(question_id => (
-                <EntryCard variant="outlined">
-                    <StaticQuestionEntryField id={question_id} data={this.state.claim.questions[question_id]} onChange={this.handleFieldChange} />
-                </EntryCard>
-            ));
-        }
-
         var dataset = "annotation"
-        if (this.props.dataset){
+        if (this.props.dataset) {
             dataset = this.props.dataset
         }
-
-        let finished_annotations = Number(localStorage.finished_valid_annotations)
-        if (dataset === "training"){
-            finished_annotations = Number(localStorage.train_finished_valid_annotations)
-        }
-
-        var current_idx = finished_annotations + 1 - Number(localStorage.pc);
 
         return (
             <div>
                 <TourProvider steps={steps}>
                     <VerdictValidationBar
-                        current_idx={current_idx}
+                        current_idx={this.state.current_idx}
                         final_idx={this.state.final_idx}
-                        claim={this.state.claim}
+                        latest_idx={this.state.latest_idx}
+                        annotation={this.state.annotation_request.annotation}
+                        static_data={this.state.annotation_request}
                         valid={this.state.valid}
-                        annotation={this.state.annotation}
                         handleFieldChange={this.handleFieldChange}
                         doPrevious={this.doPrevious}
                         doSubmit={this.doSubmit}

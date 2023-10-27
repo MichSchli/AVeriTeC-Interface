@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../model/userModel');
 const ArticleModel = require('../model/articleModel');
 const ClaimNormAnnotationModel = require('../model/annotations/claimNormAnnotationModel');
+const QuestionAnnotationModel = require('../model/annotations/questionAnnotationModel');
+const ControlAnnotationModel = require('../model/annotations/controlAnnotationModel');
 const P1AnnotationRequestModel = require('../model/annotationRequests/p1AnnotationRequestModel');
 const P2AnnotationRequestModel = require('../model/annotationRequests/p2AnnotationRequestModel');
 const P3AnnotationRequestModel = require('../model/annotationRequests/p3AnnotationRequestModel');
@@ -110,6 +112,82 @@ router.post('/p2/:user_id', checkUserOrAdmin, async (req, res) => {
       return res.status(400).json({ message: 'Invalid dataset type' });
     }
 
+    // Set question_problems and answer_problems fields to null. They are not used in P2:
+    for (let annotationRequest of annotationRequests) {
+      if (annotationRequest.annotation) {
+        for (let question of annotationRequest.annotation.questions) {
+          question.question_problems = null;
+          for (let answer of question.answers) {
+            answer.answer_problems = null;
+          }
+        }
+      }
+    }
+
+    // Repeat for gold annotations:
+    for (let annotationRequest of annotationRequests) {
+      if (annotationRequest.gold_annotations) {
+        for (let gold_annotation of annotationRequest.gold_annotations) {
+          for (let question of gold_annotation.questions) {
+            question.question_problems = null;
+            for (let answer of question.answers) {
+              answer.answer_problems = null;
+            }
+          }
+        }
+      }
+    }
+    
+    res.status(200).json({ annotationRequests });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Route to get P3 annotation requests or training requests for the user
+router.post('/p3/:user_id', checkUserOrAdmin, async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { dataset } = req.body;
+
+    console.log("Fetching " + dataset + " requests for user " + user_id)
+
+    const user = await UserModel.findById(user_id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    let annotationRequests;
+    if (dataset === 'annotation') {
+      annotationRequests = user.p3_annotation_requests;
+      await user.populate({
+        path: 'p3_annotation_requests',
+        populate: [{
+          path: 'article',
+          model: 'Article',
+        }, {
+          path: 'annotation',
+          model: 'ControlAnnotation',
+        }],
+      })
+    } else if (dataset === 'training') {
+      annotationRequests = user.training_p3_annotation_requests;
+      await user.populate({
+        path: 'training_p3_annotation_requests',
+        populate: [{
+          path: 'article',
+          model: 'Article',
+        }, {
+          path: 'annotation',
+          model: 'ControlAnnotation',
+        }],
+      })
+    } else {
+      return res.status(400).json({ message: 'Invalid dataset type' });
+    }
+
 
     res.status(200).json({ annotationRequests });
   } catch (error) {
@@ -117,6 +195,71 @@ router.post('/p2/:user_id', checkUserOrAdmin, async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+// Route to get P4 annotation requests for the user
+router.post('/p4/:user_id', checkUserOrAdmin, async (req, res) => {
+  try {
+    const { user_id } = req.params;
+
+    console.log("Fetching P4 requests for user " + user_id)
+
+    const user = await UserModel.findById(user_id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    let annotationRequests = user.p4_annotation_requests;
+    await user.populate({
+      path: 'p4_annotation_requests',
+      populate: [{
+        path: 'article',
+        model: 'Article',
+      }, {
+        path: 'annotation',
+        model: 'QuestionAnnotation',
+      }],
+    })
+
+    res.status(200).json({ annotationRequests });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Route to get P5 annotation requests for the user
+router.post('/p5/:user_id', checkUserOrAdmin, async (req, res) => {
+  try {
+    const { user_id } = req.params;
+
+    console.log("Fetching P5 requests for user " + user_id)
+
+    const user = await UserModel.findById(user_id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    let annotationRequests = user.p5_annotation_requests;
+    await user.populate({
+      path: 'p5_annotation_requests',
+      populate: [{
+        path: 'article',
+        model: 'Article',
+      }, {
+        path: 'annotation',
+        model: 'ControlAnnotation',
+      }],
+    })
+
+    res.status(200).json({ annotationRequests });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 // Route to submit an edit for an annotation request
 router.post('/submit', checkUserIsAssigned, async (req, res) => {
@@ -207,9 +350,11 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
       }
     }
 
-    // If some child requests have been assigned, return an error:
+    // If some child requests have been assigned, we are done:
     if (any_child_request_assigned) {
-      return res.status(400).json({ message: 'Cannot change annotation, as the previous data has already been passed to another annotator in the next phase' });
+      console.log("Submitted update for annotation request " + dbAnnotationRequest._id + " but some child requests have already been assigned. I will not create new ones")
+      await dbAnnotationRequest.save();
+      return res.status(200).json({ message: 'Annotation request submitted' });
     }
 
     // Delete all child requests:
@@ -253,10 +398,15 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
           continue;
         }
 
+        // Make list of other extracted claims for P2
+        let other_extracted_claims = annotation_request.annotation.claims.filter((other_claim) => other_claim.claim !== claim.claim);
+        other_extracted_claims = other_extracted_claims.map((other_claim) => other_claim.claim);
+
         let child_request = new P2AnnotationRequestModel({
           article: dbAnnotationRequest.article,
           blocked_user_ids: [req.userId],
-          p1_annotation: { claim },
+          p1_annotation: claim,
+          other_extracted_claims: other_extracted_claims,
         });
         await child_request.save();
         dbAnnotationRequest.child_requests.push(child_request._id);
@@ -273,16 +423,6 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
       });
       await child_request.save();
       dbAnnotationRequest.child_requests.push(child_request._id);
-    } else if (phase === 3) {
-      let child_request = new P4AnnotationRequestModel({
-        article: dbAnnotationRequest.article,
-        blocked_user_ids: [...dbAnnotationRequest.blocked_user_ids, req.userId],
-        p1_annotation: dbAnnotationRequest.p1_annotation,
-        p2_annotation: dbAnnotationRequest.p2_annotation,
-        p3_annotation: annotation_request.annotation,
-      });
-      await child_request.save();
-      dbAnnotationRequest.child_requests.push(child_request._id);
     } else if (phase === 4) {
       let child_request = new P5AnnotationRequestModel({
         article: dbAnnotationRequest.article,
@@ -291,6 +431,19 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
         p2_annotation: dbAnnotationRequest.p2_annotation,
         p3_annotation: dbAnnotationRequest.p3_annotation,
         p4_annotation: annotation_request.annotation,
+      });
+      await child_request.save();
+      dbAnnotationRequest.child_requests.push(child_request._id);
+    }
+
+    // In P3, create a child request only if P2 and P3 labels disagree:
+    if (phase === 3 && dbAnnotationRequest.p2_annotation && dbAnnotationRequest.p2_annotation.label !== annotation_request.annotation.label) {
+      let child_request = new P4AnnotationRequestModel({
+        article: dbAnnotationRequest.article,
+        blocked_user_ids: [...dbAnnotationRequest.blocked_user_ids, req.userId],
+        p1_annotation: dbAnnotationRequest.p1_annotation,
+        p2_annotation: dbAnnotationRequest.p2_annotation,
+        p3_annotation: annotation_request.annotation,
       });
       await child_request.save();
       dbAnnotationRequest.child_requests.push(child_request._id);

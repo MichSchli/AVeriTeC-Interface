@@ -7,6 +7,7 @@ import countryFlagEmoji from "country-flag-emoji";
 import Checkbox from '@mui/material/Checkbox';
 import { FormControlLabel } from '@mui/material';
 import { ClassNames } from '@emotion/react';
+import { formatDate } from '../utils/date_utils.js'
 
 const EntryCard = styled(Card)`
   margin:10px;
@@ -95,12 +96,6 @@ const TextRightEntryDiv = styled.div`
   }
 `
 
-// Hack to format date strings to match material-ui date pickers:
-function formatDate(date){
-  date = new Date(date)
-  return ('00' + (date.getDate())).slice(-2) + "/" + ('00' + (date.getMonth() + 1)).slice(-2) + "/" + ('0000' + (date.getFullYear())).slice(-4)
-}
-
 class ClaimTopField extends React.Component {
   constructor(props) {
     super(props);
@@ -155,9 +150,6 @@ class ClaimTopField extends React.Component {
         </ul>
       </OtherClaimWarningDiv>
     }
-
-    console.log("Top field")
-    console.log(this.props.static_data)
 
     return (
       <EntryCard>

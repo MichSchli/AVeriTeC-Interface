@@ -51,8 +51,9 @@ const WarningDiv = styled.div`
 function validate(content) {
   var valid = true
 
-  console.log("validating...")
-  console.log(content)
+  if (content["annotation_request"]["annotation"]["skipped"] == true) {
+    return true
+  }
 
   if (!("label" in content["annotation_request"]["annotation"]) || notEmptyValidator(content["annotation_request"]["annotation"]["label"]).error) {
     console.log("no label");
@@ -139,8 +140,6 @@ class QuestionGeneration extends React.Component {
         p1_annotation: {
           "claim": "",
         },
-        load_seconds: 0,
-        work_seconds: 0,
         has_been_submitted: false,
       },
       request_timestamp: new Date(),
@@ -149,10 +148,12 @@ class QuestionGeneration extends React.Component {
       current_idx: 0,
       final_idx: 0,
       confirmation: false,
-      latest_idx: -1
+      latest_idx: -1,
+      skip_enabled: false
     }
 
     this.doSubmit = this.doSubmit.bind(this);
+    this.skipHandler = this.skipHandler.bind(this);
     this.doPrevious = this.doPrevious.bind(this);
     this.doNext = this.doNext.bind(this);
     this.proceedToConfirmation = this.proceedToConfirmation.bind(this);
@@ -174,7 +175,8 @@ class QuestionGeneration extends React.Component {
           ...this.state.annotation_request.annotation,
           load_seconds: seconds_taken + previous_load_seconds
         }
-      }
+      },
+      skip_enabled: !this.state.annotation_request.has_been_submitted
     })
     console.log("Loading done!")
   }
@@ -198,6 +200,22 @@ class QuestionGeneration extends React.Component {
     });
 
     return retval;
+  }
+
+  skipHandler(reason) {
+    this.setState({
+      annotation_request: {
+        ...this.state.annotation_request,
+        annotation: {
+          ...this.state.annotation_request.annotation,
+          skipped: true,
+          skipped_reason: reason,
+          questions: []
+        }
+      }
+    }, () => {
+      this.doSubmit()
+    });
   }
 
   updateData(is_initial) {
@@ -256,7 +274,7 @@ class QuestionGeneration extends React.Component {
         // If the current annotation request has no annotation, add the default one:
         if (!all_annotation_requests[current_idx].annotation) {
           all_annotation_requests[current_idx].annotation = this.get_default_annotation();
-      }
+        }
 
         // Memorize the current annotation request:
         this.setState({
@@ -279,8 +297,8 @@ class QuestionGeneration extends React.Component {
 
   get_default_question = () => {
     return {
-      "question": "",
-      "answers": [
+      question: "",
+      answers: [
         {
           "answer": "",
           "answer_type": "",
@@ -289,6 +307,8 @@ class QuestionGeneration extends React.Component {
           "bool_explanation": ""
         }
       ],
+      load_seconds: 0,
+      work_seconds: 0,
     }
   }
 
@@ -351,7 +371,7 @@ class QuestionGeneration extends React.Component {
           annotation: {
             ...prevState.annotation_request.annotation,
             questions: prevState.annotation_request.annotation.questions.map((entry, idx) => {
-              if (idx === fieldId) {
+              if (idx == fieldId) {
                 return {
                   ...entry,
                   [element]: value
@@ -435,7 +455,8 @@ class QuestionGeneration extends React.Component {
 
   doNext() {
     this.setState({
-      current_idx: this.state.current_idx + 1
+      current_idx: this.state.current_idx + 1,
+      skip_enabled: false
     }, () => {
       this.updateData(false);
     }
@@ -444,7 +465,8 @@ class QuestionGeneration extends React.Component {
 
   doPrevious() {
     this.setState({
-      current_idx: this.state.current_idx - 1
+      current_idx: this.state.current_idx - 1,
+      skip_enabled: false
     }, () => {
       this.updateData(false);
     }
@@ -587,7 +609,7 @@ class QuestionGeneration extends React.Component {
       <QAPageDiv>
         {!this.state.confirmation ?
           <TourProvider steps={steps}>
-            <QAPageView src={this.state.annotation_request.article.fact_checking_article} loadingDoneHandler={this.loadingDoneHandler} />
+            <QAPageView src={this.state.annotation_request.article.fact_checking_article} page_id={this.state.annotation_request._id} loadingDoneHandler={this.loadingDoneHandler} />
             <QADataField>
               <QuestionGenerationBar
                 handleFieldChange={this.handleFieldChange}
@@ -605,8 +627,9 @@ class QuestionGeneration extends React.Component {
                 finish_path={this.props.finish_path}
                 doNext={this.doNext}
                 doPrevious={this.doPrevious}
+                skip_enabled={this.state.skip_enabled}
               />
-              <SearchField annotation_request={this.state.annotation_request} />
+              <SearchField annotation_request={this.state.annotation_request} phase={2} dataset={this.props.dataset} />
             </QADataField>
             {this.state.userIsFirstVisiting ? <TourWrapper /> : ""}
           </TourProvider>

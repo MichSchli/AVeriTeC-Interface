@@ -1,6 +1,7 @@
 const e = require('express');
 const TrainingP1AnnotationRequestModel = require('../model/annotationRequests/trainingP1AnnotationRequestModel');
 const TrainingP2AnnotationRequestModel = require('../model/annotationRequests/trainingP2AnnotationRequestModel');
+const TrainingP3AnnotationRequestModel = require('../model/annotationRequests/trainingP3AnnotationRequestModel');
 const mongoose = require('mongoose');
 
 const createTrainingRequests = async (user, phase) => {
@@ -16,6 +17,11 @@ const createTrainingRequests = async (user, phase) => {
     if (!user.training_p2_annotation_requests) {
       user.training_p2_annotation_requests = [];
     }
+  } else if (phase == 3) {
+    templateRequests = await TrainingP3AnnotationRequestModel.find({ assigned_user: null }).exec();
+    if (!user.training_p3_annotation_requests) {
+      user.training_p3_annotation_requests = [];
+    }
   }
 
   await user.save();
@@ -29,6 +35,8 @@ const createTrainingRequests = async (user, phase) => {
       requestModel = TrainingP1AnnotationRequestModel;
     } else if (phase == 2) {
       requestModel = TrainingP2AnnotationRequestModel;
+    } else if (phase == 3) {
+      requestModel = TrainingP3AnnotationRequestModel;
     }
 
     const newRequest = new requestModel({
@@ -47,6 +55,8 @@ const createTrainingRequests = async (user, phase) => {
       user.training_p1_annotation_requests.push(newRequest._id);
     } else if (phase == 2) {
       user.training_p2_annotation_requests.push(newRequest._id);
+    } else if (phase == 3) {
+      user.training_p3_annotation_requests.push(newRequest._id);
     }
     
     await user.save();
@@ -68,6 +78,9 @@ const resetUserTrainingRequests = async (user, phase) => {
   } else if (phase == 2) {
     templateRequests = await TrainingP2AnnotationRequestModel.find({ assigned_user: null }).exec();
     user.training_p2_annotation_requests = [];
+  } else if (phase == 3) {
+    templateRequests = await TrainingP3AnnotationRequestModel.find({ assigned_user: null }).exec();
+    user.training_p3_annotation_requests = [];
   }
 
   await user.save();
@@ -81,6 +94,8 @@ const resetUserTrainingRequests = async (user, phase) => {
       requestModel = TrainingP1AnnotationRequestModel;
     } else if (phase == 2) {
       requestModel = TrainingP2AnnotationRequestModel;
+    } else if (phase == 3) {
+      requestModel = TrainingP3AnnotationRequestModel;
     }
 
     const newRequest = new requestModel({
@@ -99,6 +114,8 @@ const resetUserTrainingRequests = async (user, phase) => {
       user.training_p1_annotation_requests.push(newRequest._id);
     } else if (phase == 2) {
       user.training_p2_annotation_requests.push(newRequest._id);
+    } else if (phase == 3) {
+      user.training_p3_annotation_requests.push(newRequest._id);
     }
 
     await user.save();

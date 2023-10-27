@@ -59,57 +59,46 @@ const QABox = styled.div`
 `
 
 class VerdictValidationBar extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+
+    var questionPairs = ""
+
+    if (this.props.annotation && this.props.annotation.questions) {
+      questionPairs = Object.keys(this.props.annotation.questions).map(question_id => (
+        <EntryCard variant="outlined">
+          <StaticQuestionEntryField posthocView={this.props.posthocView} id={question_id} data={this.props.annotation.questions[question_id]} onChange={this.props.handleFieldChange} />
+        </EntryCard>
+      ));
     }
 
-    render() {
-        let claim = this.props.claim
-        if (!claim) {
-            console.log("warning: null claim")
-            claim = {}
-        }
-
-        let annotation = this.props.annotation
-        if (!annotation) {
-            console.log("warning: null annotation")
-            annotation = {}
-        }
-
-        var questionPairs = ""
-
-        if (claim && claim.questions) {
-            questionPairs = Object.keys(claim.questions).map(question_id => (
-                <EntryCard variant="outlined">
-                    <StaticQuestionEntryField posthocView={this.props.posthocView} id={question_id} data={claim.questions[question_id]} onChange={this.props.handleFieldChange} />
-                </EntryCard>
-            ));
-        }
-
-        return <div>
-            {!this.props.posthocView ?
-                <div>
-                    <RightBox>
-                        <RightPhaseControl current_idx={this.props.current_idx} final_idx={this.props.final_idx} phaseName="Quality Control" phaseInstructions="Please read the claim and the question-answer pairs. Then, give your verdict on the claim. Do not look at any external information; make your verdict based ONLY on the question-answer pairs. If there are any problems with a question-answer pair, please use the form to report it. Do not use the information in any question-answer pair you report to make your verdict." />
-                    </RightBox>
-                    <LeftBox>
-                        <ValidationClaimTopField shouldUseVagueLabel={this.props.shouldUseVagueLabel} posthocView={this.props.posthocView} claim={claim} valid={this.props.valid} data={annotation} ask_for_justification onChange={this.props.handleFieldChange} id="annotation" />
-                    </LeftBox>
-                </div>
-
-                : <ValidationClaimTopField shouldUseVagueLabel={this.props.shouldUseVagueLabel} posthocView={this.props.posthocView} claim={claim} valid={this.props.valid} data={annotation} ask_for_justification onChange={this.props.handleFieldChange} id="annotation" />
-            }
-            <QABox >
-                <div data-tour="question_view">
-                    {questionPairs}
-                </div>
-                {!this.props.posthocView ?
-                    <NavBar onPrevious={this.props.doPrevious} onSubmit={this.props.doSubmit} onNext={this.props.doNext} dataset={this.props.dataset} />
-                    : ""
-                }
-            </QABox>
+    return <div>
+      {!this.props.posthocView ?
+        <div>
+          <RightBox>
+            <RightPhaseControl current_idx={this.props.current_idx} final_idx={this.props.final_idx} phaseName="Quality Control" phaseInstructions="Please read the claim and the question-answer pairs. Then, give your verdict on the claim. Do not look at any external information; make your verdict based ONLY on the question-answer pairs. If there are any problems with a question-answer pair, please use the form to report it. Do not use the information in any question-answer pair you report to make your verdict." />
+          </RightBox>
+          <LeftBox>
+            <ValidationClaimTopField shouldUseVagueLabel={this.props.shouldUseVagueLabel} posthocView={this.props.posthocView} static_data={this.props.static_data} valid={this.props.valid} data={this.props.annotation} ask_for_justification onChange={this.props.handleFieldChange} id="annotation" />
+          </LeftBox>
         </div>
-    }
+
+        : <ValidationClaimTopField shouldUseVagueLabel={this.props.shouldUseVagueLabel} posthocView={this.props.posthocView} static_data={this.props.static_data} valid={this.props.valid} data={this.props.annotation} ask_for_justification onChange={this.props.handleFieldChange} id="annotation" />
+      }
+      <QABox >
+        <div data-tour="question_view">
+          {questionPairs}
+        </div>
+        {!this.props.posthocView ?
+          <NavBar onPrevious={this.props.doPrevious} onSubmit={this.props.doSubmit} onNext={this.props.doNext} dataset={this.props.dataset} current_idx={this.props.current_idx} latest_idx={this.props.latest_idx} />
+          : ""
+        }
+      </QABox>
+    </div>
+  }
 }
 
 

@@ -50,6 +50,7 @@ class Registration extends React.Component {
     };
     console.log(this.state);
     axios(request).then((response) => {
+      console.log(response)
       if (!response.data.token && response.data.message){
         window.alert(response.data.message)
       } else{
