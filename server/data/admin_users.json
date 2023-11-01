@@ -18,5 +18,30 @@
         "username": "zhenyun",
         "password": "admin",
         "is_admin": true
+    },
+    {
+        "username": "ff_p1",
+        "password": "admin",
+        "is_admin": true
+    },
+    {
+        "username": "ff_p2",
+        "password": "admin",
+        "is_admin": true
+    },
+    {
+        "username": "ff_p3",
+        "password": "admin",
+        "is_admin": true
+    },
+    {
+        "username": "ff_p4",
+        "password": "admin",
+        "is_admin": true
+    },
+    {
+        "username": "ff_p5",
+        "password": "admin",
+        "is_admin": true
     }
 ]

@@ -14,7 +14,7 @@ db.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
-var data_url = "data/p1.json"
+var data_url = "data/fullfact.json"
 
 var jsonData = JSON.parse(fs.readFileSync(data_url, 'utf8'));
 
@@ -29,7 +29,7 @@ jsonData.map(async (article_json) => {
         article_id = article._id;
     }
     else {
-        let article = await articleModel.create(article_json);
+        article = await articleModel.create(article_json);
         article_id = article._id;
     }
 

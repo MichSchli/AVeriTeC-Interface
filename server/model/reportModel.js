@@ -9,11 +9,18 @@ const reportSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    annotation: {
+    annotationRequestId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Annotation',
     },
+    phase: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String, // Report status tracks where in the system the report is. Options: pending, submitted, verified, deleted.
+        required: true
+    }
 });
 
 const ReportModel = mongoose.model('Report', reportSchema);
