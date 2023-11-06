@@ -14,6 +14,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { TextField } from '@mui/material';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
 import {
     AreaChart,
     Area,
@@ -148,7 +152,8 @@ class AdminControl extends react.Component {
             },
             new_username: "",
             n_users_to_create: 1,
-            processing_assignment: true
+            processing_assignment: true,
+            show_type: 0,
         }
 
         this.cellEdit = this.cellEdit.bind(this);
@@ -317,12 +322,42 @@ class AdminControl extends react.Component {
 
             }).catch((error) => { window.alert(error) });
 
+            var cutoff_date = null;
+
+            if (this.state.show_type === 1) {
+                // Cutoff at last sunday, 23:59:59
+                cutoff_date = new Date();
+                cutoff_date.setDate(cutoff_date.getDate() - cutoff_date.getDay());
+                cutoff_date.setHours(23, 59, 59, 999);
+            } else if (this.state.show_type === 2) {
+                // Cutoff at last day of last month, 23:59:59
+                cutoff_date = new Date();
+                cutoff_date.setDate(0);
+                cutoff_date.setHours(23, 59, 59, 999);
+            }
+
+            var upper_cutoff_date = null;
+            if (this.state.show_type === 3) {
+                // Cutoff at sunday before last sunday, 23:59:59
+                cutoff_date = new Date();
+                cutoff_date.setDate(cutoff_date.getDate() - cutoff_date.getDay() - 7);
+                cutoff_date.setHours(23, 59, 59, 999);
+
+                // Upper cutoff at last sunday, 23:59:59
+                upper_cutoff_date = new Date();
+                upper_cutoff_date.setDate(upper_cutoff_date.getDate() - upper_cutoff_date.getDay());
+                upper_cutoff_date.setHours(23, 59, 59, 999);
+            }
+
+            console.log("Cutoff at: " + cutoff_date)
 
             var request = {
-                method: "get",
+                method: "post",
                 baseURL: config.api_url,
                 url: "/users/all",
                 data: {
+                    stats_date_cutoff: cutoff_date,
+                    stats_upper_date_cutoff: upper_cutoff_date,
                 },
                 headers: {
                     'Authorization': localStorage.getItem('token')
@@ -340,16 +375,29 @@ class AdminControl extends react.Component {
                         total_minutes_working: user_dict.statistics.total_time_spent / 60,
                         total_minutes_training: user_dict.statistics.total_time_spent_training / 60,
                         total_minutes_loading: user_dict.statistics.total_time_loading / 60,
+                        average_questions_p2: user_dict.statistics.phase_2.average_questions,
+                        average_questions_p4: user_dict.statistics.phase_4.average_questions,
                     }
 
                     for (let index = 1; index <= 5; index++) {
                         let phase_id = "phase_" + index
-                        new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"] + " / " + new_dict[phase_id]["annotations_assigned"]
+                        if (this.state.show_type === 0) {
+                            new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"] + " / " + new_dict[phase_id]["annotations_assigned"]
+                        } else {
+                            new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"]
+
+                        }
+                        new_dict["finished_" + phase_id + "_per_hour"] = new_dict[phase_id]["annotations_per_hour"] ? new_dict[phase_id]["annotations_per_hour"].toFixed(2) : ""
                     }
 
                     for (let index = 1; index <= 3; index++) {
                         let phase_id = "phase_" + index + "_training"
-                        new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"] + " / " + new_dict[phase_id]["annotations_assigned"]
+                        if (this.state.show_type === 0) {
+                            new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"] + " / " + new_dict[phase_id]["annotations_assigned"]
+                        } else {
+                            new_dict["finished_" + phase_id + "_prop"] = new_dict[phase_id]["annotations_done"]
+
+                        }
                     }
 
                     return new_dict
@@ -361,7 +409,7 @@ class AdminControl extends react.Component {
                         {
                             field: "id",
                             headerName: "ID",
-                            width: 120,
+                            width: 240,
                             renderCell: (cellValues) => {
                                 return <a href={`/user?id=${cellValues.row.id}`}>{cellValues.row.id}</a>;
                             }
@@ -371,13 +419,21 @@ class AdminControl extends react.Component {
                         { field: "finished_phase_1_prop", headerName: "Phase 1 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
                         { field: "finished_phase_2_prop", headerName: "Phase 2 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
                         { field: "finished_phase_3_prop", headerName: "Phase 3 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_1_training_prop", headerName: "Phase 1 Training Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_2_training_prop", headerName: "Phase 2 Training Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_3_training_prop", headerName: "Phase 3 Training Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
                         { field: "finished_phase_4_prop", headerName: "Phase 4 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
                         { field: "finished_phase_5_prop", headerName: "Phase 5 Finished", type: "string", editable: false, width: 250, sortComparator: propComparator, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_1_per_hour", headerName: "Phase 1 Rate (A/h)", type: "number", editable: false, width: 250, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_2_per_hour", headerName: "Phase 2 Rate (A/h)", type: "number", editable: false, width: 250, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_3_per_hour", headerName: "Phase 3 Rate (A/h)", type: "number", editable: false, width: 250, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_4_per_hour", headerName: "Phase 4 Rate (A/h)", type: "number", editable: false, width: 250, align: "right", headerAlign: "right" },
+                        { field: "finished_phase_5_per_hour", headerName: "Phase 5 Rate (A/h)", type: "number", editable: false, width: 250, align: "right", headerAlign: "right" },
                         { field: "total_minutes_working", headerName: "Total Minutes Working (incl. Loading)", type: "number", editable: false, width: 220 },
                         { field: "total_minutes_training", headerName: "Total Minutes Training", type: "number", editable: false, width: 220 },
                         { field: "total_minutes_loading", headerName: "Total Minutes Loading", type: "number", editable: false, width: 220 },
                         { field: "total_skips", headerName: "Total Pages Skipped", type: "number", editable: false, width: 220 },
-                        { field: "total_timeouts", headerName: "Timeouts", type: "number", editable: false, width: 220 },
+                        { field: "total_timeouts", headerName: "Page Timeouts", type: "number", editable: false, width: 220 },
                         { field: "total_speed_traps", headerName: "Speed traps hit", type: "number", editable: false, width: 220 },
                         { field: "average_questions_p2", headerName: "Average P2 Questions", type: "number", editable: false, width: 220 },
                         { field: "average_questions_p4", headerName: "Average P4 Questions", type: "number", editable: false, width: 220 },
@@ -698,6 +754,27 @@ class AdminControl extends react.Component {
                         >
                             Download as JSON
                         </JsonButton>
+                        <FormControl
+                            size="small"
+                            sx={{
+                                margin: "8px",
+                                width: 200
+                            }}>
+                            <InputLabel shrink>Display</InputLabel>
+                            <Select label={"show_type"} value={this.state.show_type} onChange={
+                                (event) => {
+                                    console.log(this.state.show_type)
+                                    this.setState({ show_type: event.target.value }, () => {
+                                        this.loadTableFromDB()
+                                    });
+                                }
+                            }>
+                                <MenuItem value={0}>All time</MenuItem>
+                                <MenuItem value={1}>This week</MenuItem>
+                                <MenuItem value={2}>This month</MenuItem>
+                                <MenuItem value={3}>Last week</MenuItem>
+                            </Select>
+                        </FormControl>
 
                         <DeleteButton variant="contained" color="error" startIcon={<DeleteIcon />} onClick={this.deleteRows}>
                             Delete Selected

@@ -7,6 +7,7 @@ const userRoutes = require('./routes/userRoutes');
 const annotationRoutes = require('./routes/annotationRoutes');
 const assignmentRoutes = require('./routes/assignmentRoutes');
 const searchRoutes = require('./routes/searchRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 const { url, options } = require('./config/mongodb_config');
 
 console.log("Connecting to MongoDB at " + url);
@@ -40,6 +41,7 @@ app.use('/users', userRoutes);
 app.use('/annotations', annotationRoutes);
 app.use('/assignment', assignmentRoutes);
 app.use('/search', searchRoutes);
+app.use('/reports', reportRoutes)
 
 // Start the server
 app.listen(PORT, () => {

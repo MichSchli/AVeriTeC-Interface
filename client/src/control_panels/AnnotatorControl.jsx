@@ -6,10 +6,28 @@ import AdminControl from './AdminControl';
 import { Redirect } from "react-router-dom";
 import TrainingControl from './TrainingControl';
 import PhaseStatsControl from './PhaseStatsControl';
+import ReportControl from './ReportControl';
 import config from "../config.json"
 import axios from "axios";
 
 const AssignmentField = styled(AssignmentControl)`
+    width:33.333%;
+    float:left;
+
+    @media (max-width: 640px)  {
+        width:320px;
+    }
+
+    @media (min-width: 640px) and (max-width: 960px)  {
+        width:50%;
+    }
+    
+    @media (min-width: 960px)  {
+        width:33.333%;
+    }
+`
+
+const ReportField = styled(ReportControl)`
     width:33.333%;
     float:left;
 
@@ -64,6 +82,50 @@ class AnnotatorControl extends React.Component {
                 is_admin: localStorage.getItem('is_admin') === "true"
             },
             logged_in: localStorage.getItem('token') !== undefined,
+            reports_initial: {
+                phase_1: {
+                    done: 0,
+                    total: 0
+                },
+                phase_2: {
+                    done: 0,
+                    total: 0
+                },
+                phase_3: {
+                    done: 0,
+                    total: 0
+                },
+                phase_4: {
+                    done: 0,
+                    total: 0
+                },
+                phase_5: {
+                    done: 0,
+                    total: 0
+                }
+            },
+            reports_confirm: {
+                phase_1: {
+                    done: 0,
+                    total: 0
+                },
+                phase_2: {
+                    done: 0,
+                    total: 0
+                },
+                phase_3: {
+                    done: 0,
+                    total: 0
+                },
+                phase_4: {
+                    done: 0,
+                    total: 0
+                },
+                phase_5: {
+                    done: 0,
+                    total: 0
+                }
+            },
             assignments: {
                 phase_1: {
                     done: 0,
@@ -170,6 +232,27 @@ class AnnotatorControl extends React.Component {
             })
 
         }).catch((error) => { window.alert(error) });
+
+        // If the user is admin, also get reports
+        if (this.state.user.is_admin) {
+            var request = {
+                method: "get",
+                baseURL: config.api_url,
+                url: "/reports/overview",
+                data: {
+                },
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            };
+
+            axios(request).then((response) => {
+                this.setState({
+                    reports_initial: response.data.reports_initial,
+                    reports_confirm: response.data.reports_confirm
+                });
+            }).catch((error) => { window.alert(error) });
+        }
     }
 
     render() {
@@ -183,6 +266,20 @@ class AnnotatorControl extends React.Component {
         return (
             <div>
                 <UserPanel user={this.state.user} />
+                {(this.state.user.is_admin === true) ?
+                    <div>
+                        {(this.state.reports_initial.phase_1.total > 0) ? <ReportField name="P1 Report Initial" page="reports_initial" phase={1} done={this.state.reports_initial.phase_1.done} total={this.state.reports_initial.phase_1.total} /> : ""}
+                        {(this.state.reports_initial.phase_2.total > 0) ? <ReportField name="P2 Report Initial" page="reports_initial" phase={2} done={this.state.reports_initial.phase_2.done} total={this.state.reports_initial.phase_2.total} /> : ""}
+                        {(this.state.reports_initial.phase_3.total > 0) ? <ReportField name="P3 Report Initial" page="reports_initial" phase={3} done={this.state.reports_initial.phase_3.done} total={this.state.reports_initial.phase_3.total}/> : ""}
+                        {(this.state.reports_initial.phase_4.total > 0) ? <ReportField name="P4 Report Initial" page="reports_initial" phase={4} done={this.state.reports_initial.phase_4.done} total={this.state.reports_initial.phase_4.total}/> : ""}
+                        {(this.state.reports_initial.phase_5.total > 0) ? <ReportField name="P5 Report Initial" page="reports_initial" phase={5} done={this.state.reports_initial.phase_5.done} total={this.state.reports_initial.phase_5.total}/> : ""}
+                        {(this.state.reports_confirm.phase_1.total > 0) ? <ReportField name="P1 Report Confirm" page="reports_confirm" phase={1} done={this.state.reports_confirm.phase_1.done} total={this.state.reports_confirm.phase_1.total}/> : ""}
+                        {(this.state.reports_confirm.phase_2.total > 0) ? <ReportField name="P2 Report Confirm" page="reports_confirm" phase={2} done={this.state.reports_confirm.phase_2.done} total={this.state.reports_confirm.phase_2.total}/> : ""}
+                        {(this.state.reports_confirm.phase_3.total > 0) ? <ReportField name="P3 Report Confirm" page="reports_confirm" phase={3} done={this.state.reports_confirm.phase_3.done} total={this.state.reports_confirm.phase_3.total}/> : ""}
+                        {(this.state.reports_confirm.phase_4.total > 0) ? <ReportField name="P4 Report Confirm" page="reports_confirm" phase={4} done={this.state.reports_confirm.phase_4.done} total={this.state.reports_confirm.phase_4.total}/> : ""}
+                        {(this.state.reports_confirm.phase_5.total > 0) ? <ReportField name="P5 Report Confirm" page="reports_confirm" phase={5} done={this.state.reports_confirm.phase_5.done} total={this.state.reports_confirm.phase_5.total}/> : ""}
+                    </div>
+                    : ""}
                 <div>
                     {(this.state.assignments.phase_1.total > 0) ? <AssignmentField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1} /> : ""}
                     {(this.state.assignments.phase_2.total > 0) ? <AssignmentField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2} /> : ""}

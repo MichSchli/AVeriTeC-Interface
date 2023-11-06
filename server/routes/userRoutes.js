@@ -223,44 +223,70 @@ router.get('/average_statistics', checkAdmin, async (req, res) => {
     const users = await UserModel.find().populate(populateQuery).lean().exec();
 
     let statistics = {};
+    let counters = {};
 
     // Add all statistics together
     users.forEach((user) => {
       let user_statistics = getUserStatistics(user);
 
-      // For all keys, if the value is a dict, recursively add the values. Otherwise, just add the values.
       Object.keys(user_statistics).forEach((key) => {
-        if (typeof user_statistics[key] === 'object') {
+        // For all keys starting with "phase_", the value is a dict
+        // Recursively add according to special rules
+        if (key.startsWith("phase_")) {
           if (!statistics[key]) {
             statistics[key] = {};
+            counters[key] = {};
           }
           Object.keys(user_statistics[key]).forEach((subkey) => {
             if (!statistics[key][subkey]) {
               statistics[key][subkey] = 0;
+              counters[key][subkey] = 0;
             }
-            statistics[key][subkey] += user_statistics[key][subkey];
+
+            // For annotations_done, annotations_assigned, and annotations_per_hour, add the values if assigned > 0:
+            if (subkey == "annotations_done" || subkey == "annotations_assigned" || subkey == "annotations_per_hour") {
+              if (user_statistics[key][subkey] > 0) {
+                statistics[key][subkey] += user_statistics[key][subkey];
+                counters[key][subkey] += 1;
+              }
+            }
+
+            // For timekeeping values and questions, add the values if done > 0:
+            else if (subkey == "average_task_time" || subkey == "average_load_time" || subkey == "average_questions") {
+              if (user_statistics[key]["annotations_done"] > 0) {
+                statistics[key][subkey] += user_statistics[key][subkey];
+                counters[key][subkey] += 1;
+              }
+            }
           });
-        } else {
-          if (!statistics[key]) {
-            statistics[key] = 0;
-          }
-          statistics[key] += user_statistics[key];
         }
-      }
-      );
+
+        // For all other keys, add the values if they are not undefined:
+        else {
+          if (user_statistics[key] !== undefined) {
+            if (!statistics[key]) {
+              statistics[key] = 0;
+              counters[key] = 0;
+            }
+            statistics[key] += user_statistics[key];
+            counters[key] += 1;
+          }
+        }
+      });
     });
 
-    // Divide all keys by number of users. Also for keys where the values are dicts.
-    let num_users = users.length;
+    // Divide statistics by counters
     Object.keys(statistics).forEach((key) => {
-      if (typeof statistics[key] === 'object') {
+      if (key.startsWith("phase_")) {
         Object.keys(statistics[key]).forEach((subkey) => {
-          statistics[key][subkey] /= num_users;
+          statistics[key][subkey] /= counters[key][subkey];
         });
-      } else {
-        statistics[key] /= num_users;
+      }
+      else {
+        statistics[key] /= counters[key];
       }
     });
+
 
     res.status(200).json(statistics);
   } catch (error) {
@@ -283,15 +309,15 @@ router.post('/update/:userId', checkAdmin, async (req, res) => {
     }
 
     // Update user properties
-    if (username !== undefined){
+    if (username !== undefined) {
       user.username = username;
     }
 
-    if (is_admin !== undefined){
+    if (is_admin !== undefined) {
       user.is_admin = is_admin;
     }
 
-    if (is_active !== undefined){
+    if (is_active !== undefined) {
       user.is_active = is_active;
     }
 
@@ -311,9 +337,18 @@ router.post('/update/:userId', checkAdmin, async (req, res) => {
 });
 
 // Get all user statistics route (only available for admins)
-router.get('/all', checkAdmin, async (req, res) => {
+router.post('/all', checkAdmin, async (req, res) => {
   try {
-    
+    var { stats_date_cutoff, stats_upper_date_cutoff } = req.body;
+    if (stats_date_cutoff) {
+      stats_date_cutoff = new Date(stats_date_cutoff);
+    }
+    if (stats_upper_date_cutoff) {
+      stats_upper_date_cutoff = new Date(stats_upper_date_cutoff);
+    }
+
+    console.log("Getting all user statistics between " + stats_date_cutoff + " and " + stats_upper_date_cutoff)
+
     // Have to use lean to get a json user object we can modify easily:
     let users = await UserModel.find().populate(populateQuery)
       .lean().exec();
@@ -324,7 +359,7 @@ router.get('/all', checkAdmin, async (req, res) => {
     // Add statistics to each user
     let updated_users = await Promise.all(
       users.map(async (user) => {
-        statistics = getUserStatistics(user);
+        statistics = getUserStatistics(user, stats_date_cutoff, stats_upper_date_cutoff);
         return { ...user, statistics: statistics };
       })
     );

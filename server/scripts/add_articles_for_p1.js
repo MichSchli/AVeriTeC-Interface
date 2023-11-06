@@ -14,7 +14,7 @@ db.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
-var data_url = "data/fullfact.json"
+var data_url = "data/fullfact_wayback.json"
 
 var jsonData = JSON.parse(fs.readFileSync(data_url, 'utf8'));
 

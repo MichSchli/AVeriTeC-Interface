@@ -147,7 +147,8 @@ class PhaseFourQuestionGeneration extends React.Component {
       current_idx: 0,
       final_idx: 0,
       confirmation: false,
-      latest_idx: -1
+      latest_idx: -1,
+      memorized_load_seconds: 0
     }
 
     this.doSubmit = this.doSubmit.bind(this);
@@ -164,14 +165,13 @@ class PhaseFourQuestionGeneration extends React.Component {
   }
 
   loadingDoneHandler(seconds_taken) {
-    let previous_load_seconds = this.state.annotation_request.annotation ? this.state.annotation_request.annotation.load_seconds : 0;
     this.setState({
       annotation_request: {
         ...this.state.annotation_request,
         annotation: {
           ...this.state.annotation_request.annotation,
-          load_seconds: seconds_taken + previous_load_seconds
-        }
+        },
+        memorized_load_seconds: seconds_taken
       }
     })
     console.log("Loading done!")
@@ -402,8 +402,20 @@ class PhaseFourQuestionGeneration extends React.Component {
       let seconds_taken = (now_timestamp - this.state.request_timestamp) / 1000;
       let annotation_request = this.state.annotation_request;
 
-      annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds : seconds_taken;
+      let memorized_load_seconds = this.state.memorized_load_seconds;
+
+      if (memorized_load_seconds > seconds_taken) {
+        window.alert("Warning: Encountered timekeeping error. Please note load time for this hit may be off. Please report this, and continue as usual. Work time measured is not affected.")
+        memorized_load_seconds = seconds_taken;
+      }
+
+      if (memorized_load_seconds == 0) {
+        memorized_load_seconds = seconds_taken;
+      }
+
+      annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds + memorized_load_seconds : memorized_load_seconds;
       annotation_request.annotation.work_seconds = annotation_request.annotation.work_seconds ? annotation_request.annotation.work_seconds + seconds_taken : seconds_taken;
+
       annotation_request.submit_timestamp = now_timestamp;
 
       var request = {
@@ -454,7 +466,8 @@ class PhaseFourQuestionGeneration extends React.Component {
 
   doNext() {
     this.setState({
-      current_idx: this.state.current_idx + 1
+      current_idx: this.state.current_idx + 1,
+      memorized_load_seconds: 0
     }, () => {
       this.updateData(false);
     }
@@ -463,7 +476,8 @@ class PhaseFourQuestionGeneration extends React.Component {
 
   doPrevious() {
     this.setState({
-      current_idx: this.state.current_idx - 1
+      current_idx: this.state.current_idx - 1,
+      memorized_load_seconds: 0
     }, () => {
       this.updateData(false);
     }
