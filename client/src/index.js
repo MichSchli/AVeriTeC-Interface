@@ -33,6 +33,8 @@ import PrePhaseFiveScreen from './phase_five_verdict_validation/PrePhaseFiveScre
 import PostPhaseFiveScreen from './phase_five_verdict_validation/PostPhaseFiveScreen';
 import PhaseFiveVerdictValidation from './phase_five_verdict_validation/PhaseFiveVerdictValidation'
 
+import ReportOverlay from './reports/ReportOverlay'
+
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 const routing = (
@@ -185,6 +187,38 @@ const routing = (
       </Route>
       <Route path="/phase_5">
         <PhaseFiveVerdictValidation finish_path="/phase_5/completed/" />
+      </Route>
+
+      <Route path="/reports_initial/phase_1">
+        <ReportOverlay phase={1} is_confirmation_view={false} />
+      </Route>
+      <Route path="/reports_initial/phase_2">
+        <ReportOverlay phase={2} is_confirmation_view={false} />
+      </Route>
+      <Route path="/reports_initial/phase_3">
+        <ReportOverlay phase={3} is_confirmation_view={false} />
+      </Route>
+      <Route path="/reports_initial/phase_4">
+        <ReportOverlay phase={4} is_confirmation_view={false} />
+      </Route>
+      <Route path="/reports_initial/phase_5">
+        <ReportOverlay phase={5} is_confirmation_view={false} />
+      </Route>
+
+      <Route path="/reports_confirm/phase_1">
+        <ReportOverlay phase={1} is_confirmation_view={true} />
+      </Route>
+      <Route path="/reports_confirm/phase_2">
+        <ReportOverlay phase={2} is_confirmation_view={true} />
+      </Route>
+      <Route path="/reports_confirm/phase_3">
+        <ReportOverlay phase={3} is_confirmation_view={true} />
+      </Route>
+      <Route path="/reports_confirm/phase_4">
+        <ReportOverlay phase={4} is_confirmation_view={true} />
+      </Route>
+      <Route path="/reports_confirm/phase_5">
+        <ReportOverlay phase={5} is_confirmation_view={true} />
       </Route>
       
     </Switch>

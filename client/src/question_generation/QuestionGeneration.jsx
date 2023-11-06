@@ -149,7 +149,8 @@ class QuestionGeneration extends React.Component {
       final_idx: 0,
       confirmation: false,
       latest_idx: -1,
-      skip_enabled: false
+      skip_enabled: false,
+      memorized_load_seconds: 0
     }
 
     this.doSubmit = this.doSubmit.bind(this);
@@ -167,16 +168,15 @@ class QuestionGeneration extends React.Component {
   }
 
   loadingDoneHandler(seconds_taken) {
-    let previous_load_seconds = this.state.annotation_request.annotation ? this.state.annotation_request.annotation.load_seconds : 0;
     this.setState({
       annotation_request: {
         ...this.state.annotation_request,
         annotation: {
           ...this.state.annotation_request.annotation,
-          load_seconds: seconds_taken + previous_load_seconds
         }
       },
-      skip_enabled: !this.state.annotation_request.has_been_submitted
+      skip_enabled: !this.state.annotation_request.has_been_submitted,
+      memorized_load_seconds: seconds_taken
     })
     console.log("Loading done!")
   }
@@ -402,9 +402,21 @@ class QuestionGeneration extends React.Component {
       let now_timestamp = new Date();
       let seconds_taken = (now_timestamp - this.state.request_timestamp) / 1000;
       let annotation_request = this.state.annotation_request;
+      
+      let memorized_load_seconds = this.state.memorized_load_seconds;
 
-      annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds : seconds_taken;
-      annotation_request.annotation.work_seconds = annotation_request.annotation.work_seconds ? annotation_request.annotation.work_seconds + seconds_taken : seconds_taken;
+            if (memorized_load_seconds > seconds_taken) {
+                window.alert("Warning: Encountered timekeeping error. Please note load time for this hit may be off. Please report this, and continue as usual. Work time measured is not affected.")
+                memorized_load_seconds = seconds_taken;
+            }
+
+            if (memorized_load_seconds == 0) {
+                memorized_load_seconds = seconds_taken;
+            }
+
+            annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds + memorized_load_seconds : memorized_load_seconds;
+            annotation_request.annotation.work_seconds = annotation_request.annotation.work_seconds ? annotation_request.annotation.work_seconds + seconds_taken : seconds_taken;
+
       annotation_request.submit_timestamp = now_timestamp;
 
       var request = {
@@ -456,7 +468,8 @@ class QuestionGeneration extends React.Component {
   doNext() {
     this.setState({
       current_idx: this.state.current_idx + 1,
-      skip_enabled: false
+      skip_enabled: false,
+      memorized_load_seconds: 0
     }, () => {
       this.updateData(false);
     }
@@ -466,7 +479,8 @@ class QuestionGeneration extends React.Component {
   doPrevious() {
     this.setState({
       current_idx: this.state.current_idx - 1,
-      skip_enabled: false
+      skip_enabled: false,
+      memorized_load_seconds: 0
     }, () => {
       this.updateData(false);
     }

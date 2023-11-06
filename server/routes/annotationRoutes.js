@@ -15,6 +15,7 @@ const P5AnnotationRequestModel = require('../model/annotationRequests/p5Annotati
 const TrainingP1AnnotationRequestModel = require('../model/annotationRequests/trainingP1AnnotationRequestModel');
 const TrainingP2AnnotationRequestModel = require('../model/annotationRequests/trainingP2AnnotationRequestModel');
 const TrainingP3AnnotationRequestModel = require('../model/annotationRequests/trainingP3AnnotationRequestModel');
+const ReportModel = require('../model/reportModel');
 const loginConfig = require('../config/login_config');
 const { checkAdmin, checkUserOrAdmin, checkUserIsAssigned } = require('../middleware/authMiddleware');
 
@@ -321,6 +322,17 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
     dbAnnotationRequest.annotation = annotation_request.annotation;
 
     console.log("Saving annotation request " + dbAnnotationRequest._id + " with annotation " + JSON.stringify(annotation_request.annotation));
+
+    // If this is not a training request or a resubmission, create a report:
+    if (dataset != "training" && first_time_flag) {
+      let report = new ReportModel({
+        phase: phase,
+        annotationRequestId: dbAnnotationRequest._id,
+        status: "pending",
+      });
+
+      await report.save();
+    }
 
     // If it a training request or a skip, we are done:
     if (dataset === 'training' || annotation_request.annotation.skipped) {

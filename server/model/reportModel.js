@@ -1,14 +1,8 @@
 const mongoose = require('mongoose');
 
 const reportSchema = new mongoose.Schema({
-    reportReason: {
-        type: String,
-        required: true,
-    },
-    suggestedAction: {
-        type: String,
-        required: true,
-    },
+    reportReason: String,
+    suggestedAction: String,
     annotationRequestId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -18,7 +12,7 @@ const reportSchema = new mongoose.Schema({
         required: true
     },
     status: {
-        type: String, // Report status tracks where in the system the report is. Options: pending, submitted, verified, deleted.
+        type: String, // Report status tracks where in the system the report is. Options: pending, submitted, skipped, accepted, rejected.
         required: true
     }
 });

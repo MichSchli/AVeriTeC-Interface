@@ -2,8 +2,32 @@ const e = require('express');
 const mongoose = require('mongoose');
 const UserModel = require('../model/userModel');
 
-const getUserStatistics = (user) => {
+const getUserStatistics = (user, date_cutoff, upper_date_cutoff) => {
     statistics = {};
+
+    // If the cutoff date is specified, only consider annotation requests after that date
+    if (date_cutoff) {
+        for (let phase = 1; phase <= 5; phase++) {
+            user_phase_str = "p" + phase.toString() + "_annotation_requests";
+            user[user_phase_str] = user[user_phase_str].filter((request) => request.first_submission_timestamp > date_cutoff);
+        }
+        for (let phase = 1; phase <= 3; phase++) {
+            user_phase_str = "training_p" + phase.toString() + "_annotation_requests";
+            user[user_phase_str] = user[user_phase_str].filter((request) => request.first_submission_timestamp > date_cutoff);
+        }
+    }
+
+    // If the upper cutoff date is specified, only consider annotation requests before that date
+    if (upper_date_cutoff) {
+        for (let phase = 1; phase <= 5; phase++) {
+            user_phase_str = "p" + phase.toString() + "_annotation_requests";
+            user[user_phase_str] = user[user_phase_str].filter((request) => request.first_submission_timestamp < upper_date_cutoff);
+        }
+        for (let phase = 1; phase <= 3; phase++) {
+            user_phase_str = "training_p" + phase.toString() + "_annotation_requests";
+            user[user_phase_str] = user[user_phase_str].filter((request) => request.first_submission_timestamp < upper_date_cutoff);
+        }
+    }
 
     // Compute completion statistics for real and training claims
     for (let phase = 1; phase <= 5; phase++) {
@@ -16,7 +40,8 @@ const getUserStatistics = (user) => {
             annotations_assigned: user[user_phase_str].length,
             annotations_done: completed_annotations.length,
             average_task_time: completed_annotations.reduce((acc, request) => acc + request.annotation.work_seconds, 0) / completed_annotations.length,
-            average_load_time: completed_annotations.reduce((acc, request) => acc + (request.annotation.load_seconds ? request.annotation.load_seconds : 0), 0) / completed_annotations.length
+            average_load_time: completed_annotations.reduce((acc, request) => acc + (request.annotation.load_seconds ? request.annotation.load_seconds : 0), 0) / completed_annotations.length,
+            annotations_per_hour: completed_annotations.length / completed_annotations.reduce((acc, request) => acc + request.annotation.work_seconds, 0) * 3600,
         };
     }
     for (let phase = 1; phase <= 3; phase++) {
@@ -28,7 +53,7 @@ const getUserStatistics = (user) => {
         statistics[stats_phase_str] = {
             annotations_assigned: user[user_phase_str].length,
             annotations_done: user[user_phase_str].filter((request) => request.annotation !== undefined).length,
-            annotations_per_minute: completed_annotations.length / completed_annotations.reduce((acc, request) => acc + request.annotation.work_seconds, 0) * 60,
+            annotations_per_hour: completed_annotations.length / completed_annotations.reduce((acc, request) => acc + request.annotation.work_seconds, 0) * 3600,
         };
     }
 
@@ -69,12 +94,12 @@ const getUserStatistics = (user) => {
         }
     }
 
-    // Compute total timeouts (load time > 30 sec)
+    // Compute total timeouts (load time >= 30 sec)
     statistics.total_timeouts = 0;
     for (let phase = 1; phase <= 5; phase++) {
         user_phase_str = "p" + phase.toString() + "_annotation_requests";
         for (let request of user[user_phase_str]) {
-            if (request.annotation && request.annotation.load_seconds > 30) {
+            if (request.annotation && request.annotation.load_seconds >= 30) {
                 statistics.total_timeouts += 1;
             }
         }
@@ -85,7 +110,7 @@ const getUserStatistics = (user) => {
     for (let phase = 1; phase <= 5; phase++) {
         user_phase_str = "p" + phase.toString() + "_annotation_requests";
         for (let request of user[user_phase_str]) {
-            if (request.annotation && request.annotation.work_seconds < 5) {
+            if (request.annotation && request.annotation.work_seconds < 10) {
                 statistics.total_speed_traps += 1;
             }
         }
@@ -94,7 +119,7 @@ const getUserStatistics = (user) => {
     // Compute average number of question per phase 2 and phase 4 annotation (given an annotation was done)
     statistics.phase_2.average_questions = 0;
     counter = 0;
-    for (let request of user[user_phase_str]) {
+    for (let request of user["p2_annotation_requests"]) {
         if (request.annotation && request.annotation.questions) {
             statistics.phase_2.average_questions += request.annotation.questions.length;
             counter += 1;
@@ -106,7 +131,7 @@ const getUserStatistics = (user) => {
 
     statistics.phase_4.average_questions = 0;
     counter = 0;
-    for (let request of user[user_phase_str]) {
+    for (let request of user["p4_annotation_requests"]) {
         if (request.annotation && request.annotation.questions) {
             statistics.phase_4.average_questions += request.annotation.questions.length;
             counter += 1;

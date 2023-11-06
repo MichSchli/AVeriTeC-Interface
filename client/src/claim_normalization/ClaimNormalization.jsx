@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import MetadataEntryBar from './MetadataEntryBar';
 import ClaimPageView from '../components/ClaimPageView';
 import styled from 'styled-components';
@@ -84,6 +84,7 @@ class ClaimNormalization extends React.Component {
             confirmation: false,
             latest_idx: -1,
             skip_enabled: false,
+            memorized_load_seconds: 0
         }
 
         this.doSubmit = this.doSubmit.bind(this);
@@ -210,7 +211,18 @@ class ClaimNormalization extends React.Component {
             console.log("Current annotation request:")
             console.log(annotation_request)
 
-            annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds : seconds_taken;
+            let memorized_load_seconds = this.state.memorized_load_seconds;
+
+            if (memorized_load_seconds > seconds_taken) {
+                window.alert("Warning: Encountered timekeeping error. Please note load time for this hit may be off. Please report this, and continue as usual. Work time measured is not affected.")
+                memorized_load_seconds = seconds_taken;
+            }
+
+            if (memorized_load_seconds == 0) {
+                memorized_load_seconds = seconds_taken;
+            }
+
+            annotation_request.annotation.load_seconds = annotation_request.annotation.load_seconds ? annotation_request.annotation.load_seconds + memorized_load_seconds : memorized_load_seconds;
             annotation_request.annotation.work_seconds = annotation_request.annotation.work_seconds ? annotation_request.annotation.work_seconds + seconds_taken : seconds_taken;
 
             annotation_request.submit_timestamp = now_timestamp;
@@ -334,7 +346,6 @@ class ClaimNormalization extends React.Component {
                         userIsFirstVisiting: true
                     });
                 }
-
             }).catch((error) => { window.alert(error); });
         }
     }
@@ -399,23 +410,23 @@ class ClaimNormalization extends React.Component {
     }
 
     loadingDoneHandler(seconds_taken) {
-        let previous_load_seconds = this.state.annotation_request.annotation ? this.state.annotation_request.annotation.load_seconds : 0;
         this.setState({
             annotation_request: {
                 ...this.state.annotation_request,
                 annotation: {
-                    ...this.state.annotation_request.annotation,
-                    load_seconds: seconds_taken + previous_load_seconds
+                    ...this.state.annotation_request.annotation
                 }
             },
-            skip_enabled: !this.state.annotation_request.has_been_submitted
+            skip_enabled: !this.state.annotation_request.has_been_submitted,
+            memorized_load_seconds: seconds_taken
         })
     }
 
     doNext() {
         this.setState({
             current_idx: this.state.current_idx + 1,
-            skip_enabled: false
+            skip_enabled: false,
+            memorized_load_seconds: 0
         }, () => {
             this.updateData(false);
         }
@@ -425,7 +436,8 @@ class ClaimNormalization extends React.Component {
     doPrevious() {
         this.setState({
             current_idx: this.state.current_idx - 1,
-            skip_enabled: false
+            skip_enabled: false,
+            memorized_load_seconds: 0
         }, () => {
             this.updateData(false);
         }
