@@ -47,26 +47,21 @@ class ReportControl extends React.Component {
                     <Header>Reports: {this.props.name}</Header>
                     <CountBox>{assignments}</CountBox>
 
-                    {this.props.done != this.props.total?
-                    this.props.done === 0?
-                        <StartButton variant="contained" color="primary" onClick={(e) => {
+                    {this.props.done === 0?
+                        <StartButton variant="contained" color="primary" disabled={this.props.done == this.props.total} onClick={(e) => {
                             e.preventDefault();
                             window.location.assign(nextAssignmentLink);
                             }}>
                             Start
                         </StartButton>
                         :
-                        <StartButton variant="contained" color="primary" onClick={(e) => {
+                        <StartButton variant="contained" color="primary" disabled={this.props.done == this.props.total} onClick={(e) => {
                             e.preventDefault();
                             window.location.assign(nextAssignmentLink);
                             // TODO make sure we start the right location
                             }}>
                             Resume
-                        </StartButton>
-                    :
-                    <StartButton variant="contained" color="primary" disabled>
-                        Start
-                    </StartButton>                    
+                        </StartButton>               
                     }
                 </EntryCard> 
             </div>

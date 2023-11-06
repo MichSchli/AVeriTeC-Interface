@@ -255,8 +255,8 @@ class PhaseFourQuestionGeneration extends React.Component {
         if (!all_annotation_requests[current_idx].annotation) {
           all_annotation_requests[current_idx].annotation = this.get_default_annotation();
 
-          // Deep copy questions from P2 annotation:
-          all_annotation_requests[current_idx].annotation.questions = all_annotation_requests[current_idx].p2_annotation.questions.map((question) => {
+          // Deep copy questions from P3 annotation:
+          all_annotation_requests[current_idx].annotation.questions = all_annotation_requests[current_idx].p3_annotation.questions.map((question) => {
             return {
               question: question.question,
               question_problems: question.question_problems,

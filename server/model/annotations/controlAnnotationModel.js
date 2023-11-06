@@ -3,7 +3,6 @@ const QuestionModel = require('../questionModel');
 
 const controlAnnotationModelSchema = new mongoose.Schema({
     label: String,
-    load_seconds: Number,
     work_seconds: Number,
     justification: String,
     unreadable: Boolean,

@@ -138,7 +138,7 @@ router.post('/p2/:user_id', checkUserOrAdmin, async (req, res) => {
         }
       }
     }
-    
+
     res.status(200).json({ annotationRequests });
   } catch (error) {
     console.error(error);
@@ -387,6 +387,13 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
     }
     dbAnnotationRequest.child_requests = [];
 
+    // Check if there is a fullfact user to auto-assign to. Their name is e.g. "ff_p2" if the current phase is 1
+    let fullfact_user = await UserModel.findOne({ username: "ff_p" + (phase + 1).toString() });
+    if (fullfact_user) {
+      console.log("There is a fullfact user: " + fullfact_user.username + ". I will assign any child annotation requests to them.")
+    }
+
+
     // In P1, create a child request for each claim in the annotation:
     if (phase === 1) {
       for (let claim of annotation_request.annotation.claims) {
@@ -419,6 +426,7 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
           blocked_user_ids: [req.userId],
           p1_annotation: claim,
           other_extracted_claims: other_extracted_claims,
+          assigned_user: fullfact_user ? fullfact_user._id : undefined,
         });
         await child_request.save();
         dbAnnotationRequest.child_requests.push(child_request._id);
@@ -432,6 +440,7 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
         blocked_user_ids: [...dbAnnotationRequest.blocked_user_ids, req.userId],
         p1_annotation: dbAnnotationRequest.p1_annotation,
         p2_annotation: annotation_request.annotation,
+        assigned_user: fullfact_user ? fullfact_user._id : undefined,
       });
       await child_request.save();
       dbAnnotationRequest.child_requests.push(child_request._id);
@@ -443,6 +452,7 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
         p2_annotation: dbAnnotationRequest.p2_annotation,
         p3_annotation: dbAnnotationRequest.p3_annotation,
         p4_annotation: annotation_request.annotation,
+        assigned_user: fullfact_user ? fullfact_user._id : undefined,
       });
       await child_request.save();
       dbAnnotationRequest.child_requests.push(child_request._id);
@@ -456,6 +466,7 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
         p1_annotation: dbAnnotationRequest.p1_annotation,
         p2_annotation: dbAnnotationRequest.p2_annotation,
         p3_annotation: annotation_request.annotation,
+        assigned_user: fullfact_user ? fullfact_user._id : undefined,
       });
       await child_request.save();
       dbAnnotationRequest.child_requests.push(child_request._id);

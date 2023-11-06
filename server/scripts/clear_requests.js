@@ -5,6 +5,7 @@ const P3AnnotationRequestModel = require('../model/annotationRequests/p3Annotati
 const P4AnnotationRequestModel = require('../model/annotationRequests/p4AnnotationRequestModel');
 const P5AnnotationRequestModel = require('../model/annotationRequests/p5AnnotationRequestModel');
 const articleModel = require('../model/articleModel');
+const reportModel = require('../model/reportModel');
 var fs = require('fs');
 const { url, options } = require('../config/mongodb_config');
 
@@ -51,3 +52,13 @@ dumpAnnotationRequestsToJson(P2AnnotationRequestModel, "data/request_backup/p2_a
 dumpAnnotationRequestsToJson(P3AnnotationRequestModel, "data/request_backup/p3_annotation_requests.json");
 dumpAnnotationRequestsToJson(P4AnnotationRequestModel, "data/request_backup/p4_annotation_requests.json");
 dumpAnnotationRequestsToJson(P5AnnotationRequestModel, "data/request_backup/p5_annotation_requests.json");
+
+// Delete the reports table from the DB
+console.log("Now deleting all reports from the database");
+reportModel.deleteMany({}).then(function () {
+    console.log("Data deleted"); // Success
+}
+).catch(function (error) {
+    console.log(error)      // Failure
+}
+);

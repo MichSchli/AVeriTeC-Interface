@@ -266,6 +266,20 @@ class AnnotatorControl extends React.Component {
         return (
             <div>
                 <UserPanel user={this.state.user} />
+                <div>
+                    {(this.state.assignments.phase_1.total > 0) ? <AssignmentField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1} /> : ""}
+                    {(this.state.assignments.phase_2.total > 0) ? <AssignmentField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2} /> : ""}
+                    {(this.state.assignments.phase_3.total > 0) ? <AssignmentField name="Quality Control" page="phase_3" assignments={this.state.assignments.phase_3} /> : ""}
+                    {(this.state.assignments.phase_4.total > 0) ? <AssignmentField name="Dispute Resolution" page="phase_4" assignments={this.state.assignments.phase_4} /> : ""}
+                    {(this.state.assignments.phase_5.total > 0) ? <AssignmentField name="Post-Resolution Quality Control" page="phase_5" assignments={this.state.assignments.phase_5} /> : ""}
+                </div>
+                <SepDiv />
+                <div>
+                    {(this.state.assignments.phase_1_training.total > 0) ? <TrainingField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1_training} /> : ""}
+                    {(this.state.assignments.phase_2_training.total > 0) ? <TrainingField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2_training} /> : ""}
+                    {(this.state.assignments.phase_3_training.total > 0) ? <TrainingField name="Quality Control" page="phase_3" assignments={this.state.assignments.phase_3_training} /> : ""}
+                </div>
+                <SepDiv />
                 {(this.state.user.is_admin === true) ?
                     <div>
                         {(this.state.reports_initial.phase_1.total > 0) ? <ReportField name="P1 Report Initial" page="reports_initial" phase={1} done={this.state.reports_initial.phase_1.done} total={this.state.reports_initial.phase_1.total} /> : ""}
@@ -280,19 +294,6 @@ class AnnotatorControl extends React.Component {
                         {(this.state.reports_confirm.phase_5.total > 0) ? <ReportField name="P5 Report Confirm" page="reports_confirm" phase={5} done={this.state.reports_confirm.phase_5.done} total={this.state.reports_confirm.phase_5.total}/> : ""}
                     </div>
                     : ""}
-                <div>
-                    {(this.state.assignments.phase_1.total > 0) ? <AssignmentField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1} /> : ""}
-                    {(this.state.assignments.phase_2.total > 0) ? <AssignmentField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2} /> : ""}
-                    {(this.state.assignments.phase_3.total > 0) ? <AssignmentField name="Quality Control" page="phase_3" assignments={this.state.assignments.phase_3} /> : ""}
-                    {(this.state.assignments.phase_4.total > 0) ? <AssignmentField name="Dispute Resolution" page="phase_4" assignments={this.state.assignments.phase_4} /> : ""}
-                    {(this.state.assignments.phase_5.total > 0) ? <AssignmentField name="Post-Resolution Quality Control" page="phase_5" assignments={this.state.assignments.phase_5} /> : ""}
-                </div>
-                <SepDiv />
-                <div>
-                    {(this.state.assignments.phase_1_training.total > 0) ? <TrainingField name="Claim Normalization" page="phase_1" assignments={this.state.assignments.phase_1_training} /> : ""}
-                    {(this.state.assignments.phase_2_training.total > 0) ? <TrainingField name="Question Generation" page="phase_2" assignments={this.state.assignments.phase_2_training} /> : ""}
-                    {(this.state.assignments.phase_3_training.total > 0) ? <TrainingField name="Quality Control" page="phase_3" assignments={this.state.assignments.phase_3_training} /> : ""}
-                </div>
                 {(this.state.user.is_admin === true) ? <AdminPanel>
                     <AdminControl name="Users" />
                     <PhaseStatsControl phase={1} name={"Analysis | Claim Normalization"} />
