@@ -13,7 +13,7 @@ const loginConfig = require('../config/login_config');
 const { checkAdmin, checkUserOrAdmin, checkUserIsAssigned } = require('../middleware/authMiddleware');
 
 // Route to assign N annotation requests to user ids in a specified list
-router.post('/list', checkAdmin, async (req, res) => {
+router.post('/assign_to_list', checkAdmin, async (req, res) => {
     try {
         const { user_ids, phase, assignments_per_user } = req.body;
 
@@ -97,6 +97,86 @@ router.post('/list', checkAdmin, async (req, res) => {
         let unassigned_requests = annotationRequests.filter((request) => request.assigned_user === null);
         let user_message = unassigned_requests.length > 0 ? "Assignment complete. Warning: " + unassigned_requests.length.toString() + " requests were not assigned, as some included users have handled these in previous phases. Please try again." : "Assignment complete. All requests were assigned.";
         return res.status(200).json({ message: user_message, unassigned_requests: unassigned_requests });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Route to remove N annotation requests from user ids in a specified list
+router.post('/unassign_from_list', checkAdmin, async (req, res) => {
+    try {
+        const { user_ids, phase, assignments_per_user } = req.body;
+
+        console.log("Assigning " + assignments_per_user.toString() + " annotation requests for phase " + phase.toString() + " to users: " + user_ids.toString());
+
+        if (!user_ids) {
+            return res.status(400).json({ message: 'User IDs are missing' });
+        }
+
+        if (!phase) {
+            return res.status(400).json({ message: 'Phase is missing' });
+        }
+
+        if (!assignments_per_user) {
+            return res.status(400).json({ message: 'Number of annotation requests is missing' });
+        }
+
+        let annotationRequestModel;
+
+        switch (parseInt(phase)) {
+            case 1:
+                annotationRequestModel = P1AnnotationRequestModel;
+                break;
+            case 2:
+                annotationRequestModel = P2AnnotationRequestModel;
+                break;
+            case 3:
+                annotationRequestModel = P3AnnotationRequestModel;
+                break;
+            case 4:
+                annotationRequestModel = P4AnnotationRequestModel;
+                break;
+            case 5:
+                annotationRequestModel = P5AnnotationRequestModel;
+                break;
+            default:
+                return res.status(400).json({ message: 'Invalid phase (' + phase.toString() + ')' });
+        }
+
+        // Retrieve all the users from the database based on their ids:
+        let users = await UserModel.find({ _id: { $in: user_ids } }).exec();
+        let user_assignment_field = "p" + phase.toString() + "_annotation_requests";
+
+        // For each user, find up to N annotation requests assigned to them, with no submitted annotation
+        // Set the assigned user for those to undefined
+        for (let i = 0; i < users.length; i++) {
+            let user = users[i];
+            
+            let request_ids = user[user_assignment_field];
+            let requests = await annotationRequestModel.find({ _id: { $in: request_ids } }).exec();
+
+            let new_requests = [];
+            let counter = 0;
+
+            for (let j = 0; j < requests.length; j++) {
+                let request = requests[j];
+                if (!request.annotation && counter < assignments_per_user) {
+                    request.assigned_user = undefined;
+                    await request.save();
+                    counter += 1;
+                } else {
+                    new_requests.push(request);
+                }
+            }
+
+            user[user_assignment_field] = new_requests.map((request) => request._id);
+            await user.save();
+
+            console.log("Unassigned requests for user " + user.username.toString());
+        }
+
+        return res.status(200).json({ message: "Unassignment complete." });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });

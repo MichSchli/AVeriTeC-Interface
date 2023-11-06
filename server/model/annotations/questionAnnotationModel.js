@@ -3,6 +3,7 @@ const QuestionModel = require('../questionModel');
 
 const questionAnnotationSchema = new mongoose.Schema({
     label: String,
+    load_seconds: Number,
     work_seconds: Number,
     questions: [QuestionModel.schema],
     search_queries: [String],

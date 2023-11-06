@@ -315,7 +315,7 @@ class ReportOverlay extends React.Component {
               margin: "8px",
               width: 400
             }}>
-            <InputLabel shrink>Report Reason</InputLabel>
+            <InputLabel shrink>Suggested Action</InputLabel>
             <Select label={"report_action"} disabled={is_confirmation_view} value={this_report.suggestedAction} onChange={
               (event) => {
                 this.setState({

@@ -232,12 +232,16 @@ class AdminControl extends react.Component {
             })
         }
 
+        let request_n = this.state.assignment.n_to_assign < 0? -this.state.assignment.n_to_assign : this.state.assignment.n_to_assign
+        let request_url = this.state.assignment.n_to_assign < 0? "/assignment/unassign_from_list" : "/assignment/assign_to_list"
+        
+
         var request = {
             method: "post",
             baseURL: config.api_url,
-            url: "/assignment/list",
+            url: request_url,
             data: {
-                assignments_per_user: this.state.assignment.n_to_assign,
+                assignments_per_user: request_n,
                 user_ids: this.state.assignment.assignment_type === "selection" ? this.state.selected : uids,
                 phase: this.state.assignment.assignment_phase
             },

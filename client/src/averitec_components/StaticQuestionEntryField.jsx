@@ -92,11 +92,7 @@ class StaticQuestionEntryField extends React.Component {
                 source_url = answer.source_url
             }
 
-            // Hack to let us reuse code between P2 and P3, because for some reason we did not use the same object for answers
-            let boolean_explanation = answer.explanation
-            if (!boolean_explanation) {
-                boolean_explanation = answer.bool_explanation
-            }
+            let boolean_explanation = answer.boolean_explanation
 
             let answer_text = answer.answer;
             if (boolean_explanation) {
