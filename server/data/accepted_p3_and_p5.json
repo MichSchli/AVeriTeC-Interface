@@ -1,137 +1,234 @@
 [
   {
-    "_id": "6543a437c22fb25d2726a751",
+    "_id": "6548d3107cd8c725379bd0c4",
     "article": {
-      "_id": "6543a2bf7dd939944c0de7bf",
-      "fact_checking_article": "https://web.archive.org/web/20231101171208/https://fullfact.org/health/private-healthcare-gp-general-practice-nhs-spending/",
+      "_id": "6548c6aab43a41916375723e",
+      "fact_checking_article": "https://web.archive.org/web/20231012175349/https://fullfact.org/immigration/labour-forced-to-accept-100000-migrants/",
       "__v": 0
     },
     "blocked_user_ids": [
-      "654100532e5a71c56fa264d9",
-      "654100532e5a71c56fa264f2",
-      "654100532e5a71c56fa264f4",
-      "654100532e5a71c56fa264f8"
+      "6548c6b4414b62360d8c23c9",
+      "6548c6b4414b62360d8c23db",
+      "6548c6b4414b62360d8c23d5",
+      "6548c6b4414b62360d8c23e1"
     ],
     "p1_annotation": {
-      "claim": "test article",
-      "label": "Refuted",
-      "claim_date": "2023-11-15T13:23:52.000Z",
+      "claim": "This is a test claim",
+      "label": "Not Enough Evidence",
+      "claim_date": "2023-11-16T11:07:39.000Z",
       "speaker": "speaker",
-      "original_claim_url": "",
+      "media_source": "www.mediasource.url",
+      "original_claim_url": "e.e.e",
       "reporting_source": "gggg",
-      "location_ISO_code": "",
+      "location_ISO_code": "AQ",
       "claim_types": [
-        "Position Statement",
-        "Numerical Claim"
+        "Causal Claim",
+        "Position Statement"
       ],
       "fact_checking_strategies": [
-        "Image Analysis",
-        "Video Analysis"
+        "Consultation",
+        "Satirical Source Identification"
       ],
-      "_id": "6543a30cc22fb25d2726944d"
+      "_id": "6548c9127cd8c725379bbab1"
     },
     "p2_annotation": {
-      "label": "Supported",
-      "work_seconds": 16.765,
+      "label": "Conflicting Evidence/Cherrypicking",
+      "work_seconds": 57.559,
       "questions": [
         {
-          "question": "refet",
+          "question": "How is test?",
           "answers": [
             {
-              "answer": "Yes",
-              "boolean_explanation": "eee",
-              "answer_type": "Boolean",
+              "answer": "fisk",
+              "answer_type": "Extractive",
               "source_url": "efefe.fefe",
-              "source_medium": "Audio",
+              "source_medium": "Video",
               "answer_problems": [],
-              "_id": "6543a3b6c22fb25d27269a89"
+              "_id": "6548d2577cd8c725379bc30c"
+            },
+            {
+              "answer": "Yes",
+              "boolean_explanation": "because fusk",
+              "answer_type": "Boolean",
+              "source_url": "efefe.efe",
+              "source_medium": "PDF",
+              "answer_problems": [],
+              "_id": "6548d2577cd8c725379bc30d"
             }
           ],
           "question_problems": [],
-          "_id": "6543a3b6c22fb25d27269a88"
+          "_id": "6548d2577cd8c725379bc30b"
+        },
+        {
+          "question": "efe",
+          "answers": [
+            {
+              "answer": "qeqr",
+              "answer_type": "Abstractive",
+              "source_url": "efefe.fefe",
+              "source_medium": "Web table",
+              "answer_problems": [],
+              "_id": "6548d2587cd8c725379bc30f"
+            }
+          ],
+          "question_problems": [],
+          "_id": "6548d2587cd8c725379bc30e"
         }
       ],
       "search_queries": [],
-      "_id": "6543a3b6c22fb25d27269a87"
+      "claim_correction": "Test correction",
+      "should_correct": true,
+      "_id": "6548d2577cd8c725379bc30a"
     },
     "p3_annotation": {
       "label": "Refuted",
-      "load_seconds": 6.675,
-      "work_seconds": 6.675,
-      "justification": "refuted",
+      "load_seconds": 14.699,
+      "work_seconds": 14.699,
+      "justification": "no",
       "questions": [
         {
-          "question": "refet",
+          "question": "How is test?",
           "answers": [
             {
-              "answer": "Yes",
-              "boolean_explanation": "eee",
-              "answer_type": "Boolean",
+              "answer": "fisk",
+              "answer_type": "Extractive",
               "source_url": "efefe.fefe",
-              "source_medium": "Audio",
+              "source_medium": "Video",
               "answer_problems": [],
-              "_id": "6543a3f5c22fb25d2726a0d7"
+              "_id": "6548d2847cd8c725379bc9af"
+            },
+            {
+              "answer": "Yes",
+              "boolean_explanation": "because fusk",
+              "answer_type": "Boolean",
+              "source_url": "efefe.efe",
+              "source_medium": "PDF",
+              "answer_problems": [],
+              "_id": "6548d2847cd8c725379bc9b0"
             }
           ],
           "question_problems": [],
-          "_id": "6543a3f5c22fb25d2726a0d6"
+          "_id": "6548d2847cd8c725379bc9ae"
+        },
+        {
+          "question": "efe",
+          "answers": [
+            {
+              "answer": "qeqr",
+              "answer_type": "Abstractive",
+              "source_url": "efefe.fefe",
+              "source_medium": "Web table",
+              "answer_problems": [
+                "I believe the source may be biased"
+              ],
+              "_id": "6548d2847cd8c725379bc9b2"
+            }
+          ],
+          "question_problems": [],
+          "_id": "6548d2847cd8c725379bc9b1"
         }
       ],
-      "_id": "6543a3f5c22fb25d2726a0d5"
+      "_id": "6548d2847cd8c725379bc9ad"
     },
     "p4_annotation": {
       "label": "Refuted",
-      "work_seconds": 11.994,
+      "work_seconds": 110.141,
       "questions": [
         {
-          "question": "refet",
+          "question": "How is test?",
           "answers": [
             {
-              "answer": "Yes",
-              "boolean_explanation": "eee",
-              "answer_type": "Boolean",
+              "answer": "fisk",
+              "answer_type": "Extractive",
               "source_url": "efefe.fefe",
-              "source_medium": "Audio",
+              "source_medium": "Video",
               "answer_problems": [],
-              "_id": "6543a437c22fb25d2726a75b"
+              "_id": "6548d3107cd8c725379bd0d4"
+            },
+            {
+              "answer": "Yes",
+              "boolean_explanation": "because fusk3333",
+              "answer_type": "Boolean",
+              "source_url": "efefe.efe",
+              "source_medium": "PDF",
+              "answer_problems": [],
+              "_id": "6548d3107cd8c725379bd0d5"
             }
           ],
           "question_problems": [],
-          "_id": "6543a437c22fb25d2726a75a"
+          "_id": "6548d3107cd8c725379bd0d3"
+        },
+        {
+          "question": "efe",
+          "answers": [
+            {
+              "answer": "qeqr",
+              "answer_type": "Abstractive",
+              "source_url": "efefe.fefe",
+              "source_medium": "Web table",
+              "answer_problems": [],
+              "_id": "6548d3107cd8c725379bd0d7"
+            }
+          ],
+          "question_problems": [],
+          "_id": "6548d3107cd8c725379bd0d6"
         }
       ],
       "search_queries": [],
-      "_id": "6543a437c22fb25d2726a759"
+      "_id": "6548d3107cd8c725379bd0d2"
     },
     "__v": 0,
-    "assigned_user": "654100532e5a71c56fa2650a",
+    "assigned_user": "6548c6b4414b62360d8c23e7",
     "annotation": {
       "label": "Refuted",
-      "load_seconds": 5.8,
-      "work_seconds": 5.8,
-      "justification": "ref",
+      "load_seconds": 32.186,
+      "work_seconds": 32.186,
+      "justification": "no",
       "questions": [
         {
-          "question": "refet",
+          "question": "How is test?",
           "answers": [
             {
-              "answer": "Yes",
-              "boolean_explanation": "eee",
-              "answer_type": "Boolean",
+              "answer": "fisk",
+              "answer_type": "Extractive",
               "source_url": "efefe.fefe",
-              "source_medium": "Audio",
+              "source_medium": "Video",
               "answer_problems": [],
-              "_id": "6543a44fc22fb25d2726ae19"
+              "_id": "6548d3707cd8c725379bd87d"
+            },
+            {
+              "answer": "Yes",
+              "boolean_explanation": "because fusk3333",
+              "answer_type": "Boolean",
+              "source_url": "efefe.efe",
+              "source_medium": "PDF",
+              "answer_problems": [],
+              "_id": "6548d3707cd8c725379bd87e"
             }
           ],
           "question_problems": [],
-          "_id": "6543a44fc22fb25d2726ae18"
+          "_id": "6548d3707cd8c725379bd87c"
+        },
+        {
+          "question": "efe",
+          "answers": [
+            {
+              "answer": "qeqr",
+              "answer_type": "Abstractive",
+              "source_url": "efefe.fefe",
+              "source_medium": "Web table",
+              "answer_problems": [],
+              "_id": "6548d3707cd8c725379bd880"
+            }
+          ],
+          "question_problems": [],
+          "_id": "6548d3707cd8c725379bd87f"
         }
       ],
-      "_id": "6543a44fc22fb25d2726ae17"
+      "_id": "6548d3707cd8c725379bd87b"
     },
-    "first_submission_timestamp": "2023-11-02T13:29:51.188Z",
+    "first_submission_timestamp": "2023-11-06T11:52:16.538Z",
     "has_been_submitted": true,
-    "last_submission_timestamp": "2023-11-02T13:29:51.188Z"
+    "last_submission_timestamp": "2023-11-06T11:52:16.538Z"
   }
 ]
