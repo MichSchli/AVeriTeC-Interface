@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
 import axios from 'axios';
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import config from "../config.json"
 
 const AvatarBox = styled.div`
@@ -24,7 +24,7 @@ const TopSpacing = styled.div`
     width:100%;
 `
 
-class Login extends React.Component{
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,92 +39,95 @@ class Login extends React.Component{
   handleFormSubmit = e => {
     e.preventDefault();
     var request = {
-          method: "post",
-          baseURL: config.api_url,
-          url: "/users/login",
-          data:{
-              username: this.state.name,
-              password: this.state.password
-          }
-      };
+      method: "post",
+      baseURL: config.api_url,
+      url: "/users/login",
+      data: {
+        username: this.state.name,
+        password: this.state.password
+      }
+    };
 
-      axios(request).then((response) => {
-          if (!response.data.token && response.data.message){
-            window.alert(response.data.message)
-          } else{
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('username', response.data.user.username);
-            localStorage.setItem('user_id', response.data.user._id);
-            localStorage.setItem('is_admin', response.data.user.is_admin);
-            this.setState({login: response.data.token !== undefined})
-          }
-      }).catch((error) => {window.alert(error)})	
+    axios(request).then((response) => {
+      if (!response.data.token && response.data.message) {
+        window.alert(response.data.message)
+      } else {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', response.data.user.username);
+        localStorage.setItem('user_id', response.data.user._id);
+        localStorage.setItem('is_admin', response.data.user.is_admin);
+        this.setState({ login: response.data.token !== undefined })
+      }
+    }).catch((error) => {
+      console.log("ERROR")
+      window.alert(error.response.data.message)
+    });
   }
 
   render() {
     if (this.state.login) {
-      return <Redirect to='/control'/>;
+      return <Redirect to='/control' />;
     }
 
     return (
-        <Container>
-          <div>
-            <TopSpacing/>
-            <AvatarBox>
-              <Avatar>
-                <LockOutlinedIcon />
-              </Avatar>
-            </AvatarBox>
-            <AvatarBox>
-              <Typography component="h1" variant="h5">Sign in</Typography>
-            </AvatarBox>
-            <form noValidate>
-              <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="name"
-                  label="User Name"
-                  name="name"
-                  autoFocus
-                  onChange={e => this.setState({name: e.target.value })}
-              />
-              <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  onChange={e => this.setState({password: e.target.value })}
-              />
-              <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={e => this.handleFormSubmit(e)}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                {/*<Grid item xs>*/}
-                {/*  <Link href="#" variant="body2">*/}
-                {/*    Forgot password?*/}
-                {/*  </Link>*/}
-                {/*</Grid>*/}
-                <Grid item>
-                  <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+      <Container>
+        <div>
+          <TopSpacing />
+          <AvatarBox>
+            <Avatar>
+              <LockOutlinedIcon />
+            </Avatar>
+          </AvatarBox>
+          <AvatarBox>
+            <Typography component="h1" variant="h5">Sign in</Typography>
+          </AvatarBox>
+          <form noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="User Name"
+              name="name"
+              autoFocus
+              onChange={e => this.setState({ name: e.target.value })}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              onChange={e => this.setState({ password: e.target.value })}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={e => this.handleFormSubmit(e)}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              {/*<Grid item xs>*/}
+              {/*  <Link href="#" variant="body2">*/}
+              {/*    Forgot password?*/}
+              {/*  </Link>*/}
+              {/*</Grid>*/}
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
               </Grid>
-            </form>
-          </div>
-        </Container>
+            </Grid>
+          </form>
+        </div>
+      </Container>
     );
   }
 }

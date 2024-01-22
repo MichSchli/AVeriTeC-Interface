@@ -228,8 +228,6 @@ class ReportOverlay extends React.Component {
       return <div>No reports. You should not see this screen.</div>
     }
 
-    console.log(this.state)
-
     let annotation = this.state.reports[this.state.shown_report_id].annotationRequest.annotation;
     let annotationRequest = this.state.reports[this.state.shown_report_id].annotationRequest;
     if (!annotation) {
@@ -252,6 +250,10 @@ class ReportOverlay extends React.Component {
     let this_report = this.state.reports[this.state.shown_report_id]
 
     let is_confirmation_view = this.props.is_confirmation_view
+
+    console.log(this.state)
+    console.log("Reporttt")
+    console.log(this_report)
 
     return (
       <div>
@@ -293,7 +295,7 @@ class ReportOverlay extends React.Component {
               width: 400
             }}>
             <InputLabel shrink>Report Reason</InputLabel>
-            <Select label={"report_reason"} disabled={is_confirmation_view} value={this_report.reportReason} onChange={
+            <Select label={"report_reason"} disabled={is_confirmation_view} value={this_report.reportReason? this_report.reportReason : ""} onChange={
               (event) => {
                 this.setState({
                   reports: this.state.reports.map((report, idx) => {
@@ -316,7 +318,7 @@ class ReportOverlay extends React.Component {
               width: 400
             }}>
             <InputLabel shrink>Suggested Action</InputLabel>
-            <Select label={"report_action"} disabled={is_confirmation_view} value={this_report.suggestedAction} onChange={
+            <Select label={"report_action"} disabled={is_confirmation_view} value={this_report.suggestedAction? this_report.suggestedAction : ""} onChange={
               (event) => {
                 this.setState({
                   reports: this.state.reports.map((report, idx) => {
