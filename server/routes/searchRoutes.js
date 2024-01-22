@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
         // Call the python script. Give query, page, date, and country_code as arguments.
         // They are all named arguments.
         // Format date from ie 2020-11-18T00:00:00.000Z to dd/mm/yyyy, or if undefined don't give it as an argument
-        const python_exc = "/Users/michaelschlichtkrull/anaconda3/envs/AveritecBaseline/bin/python"
+        const python_exc = "/home/michael/anaconda3/envs/averitec/bin/python"
         var date_string = ""
         var pyProg;
         if (date) {

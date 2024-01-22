@@ -156,6 +156,14 @@ router.post('/p3/:user_id', checkUserOrAdmin, async (req, res) => {
 
     const user = await UserModel.findById(user_id);
 
+    let n_requests = 0;
+
+    if (user.p3_annotation_requests) {
+      n_requests += user.p3_annotation_requests.length;
+    }
+
+    console.log("User has " + n_requests.toString() + " P3 annotation requests")
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
