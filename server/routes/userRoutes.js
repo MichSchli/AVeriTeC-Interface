@@ -8,6 +8,12 @@ const { checkAdmin, checkUserOrAdmin } = require('../middleware/authMiddleware')
 const { createTrainingRequests, resetTrainingRequests } = require('../utils/trainingRequestUtils');
 const getUserStatistics = require('../utils/getUserStatistics');
 
+const P1AnnotationRequestModel = require('../model/annotationRequests/p1AnnotationRequestModel');
+const P2AnnotationRequestModel = require('../model/annotationRequests/p2AnnotationRequestModel');
+const P3AnnotationRequestModel = require('../model/annotationRequests/p3AnnotationRequestModel');
+const P4AnnotationRequestModel = require('../model/annotationRequests/p4AnnotationRequestModel');
+const P5AnnotationRequestModel = require('../model/annotationRequests/p5AnnotationRequestModel');
+
 // Query to populate a user:
 const populateQuery = [
   {
@@ -118,18 +124,18 @@ router.post('/login', async (req, res) => {
     // Check if the user exists
     const user = await UserModel.findOne({ username });
     if (!user) {
-      return res.status(401).json({ message: 'Unknown username' });
+      return res.status(401).json({ message: 'Authentication failed: Unknown username' });
     }
 
     // Verify the password
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Authentication failed' });
+      return res.status(401).json({ message: 'Authentication failed: Wrong password' });
     }
 
     // If the user is not active, return an error
     if (!user.is_active) {
-      return res.status(401).json({ message: 'User is inactive' });
+      return res.status(401).json({ message: 'Authentication failed: User is inactive' });
     }
 
     // Generate a JWT token
@@ -386,6 +392,53 @@ router.post('/deactivate_many', checkAdmin, async (req, res) => {
     users.forEach((user) => {
       user.is_active = false;
     });
+
+    // Unassign all requests from those users, so long as no annotation was submitted
+    for (let user_i = 0; user_i < users.length; user_i++) {
+      let user = users[user_i];
+      for (let i = 1; i <= 5; i++) {
+        let annotationRequestModel;
+        switch (parseInt(i)) {
+          case 1:
+            annotationRequestModel = P1AnnotationRequestModel;
+            break;
+          case 2:
+            annotationRequestModel = P2AnnotationRequestModel;
+            break;
+          case 3:
+            annotationRequestModel = P3AnnotationRequestModel;
+            break;
+          case 4:
+            annotationRequestModel = P4AnnotationRequestModel;
+            break;
+          case 5:
+            annotationRequestModel = P5AnnotationRequestModel;
+            break;
+          default:
+            return res.status(400).json({ message: 'Invalid phase (' + phase.toString() + ')' });
+        }
+
+        let user_assignment_field = "p" + i.toString() + "_annotation_requests";
+
+        let new_request_ids = [];
+        let request_ids = user[user_assignment_field];
+        let requests = await annotationRequestModel.find({ _id: { $in: request_ids } }).exec();
+
+        for (let j = 0; j < requests.length; j++) {
+          let request = requests[j];
+          if (!request.annotation) {
+            request.assigned_user = undefined;
+            await request.save();
+          } else {
+            new_request_ids.push(request._id);
+          }
+        }
+
+        user[user_assignment_field] = new_request_ids;
+        console.log("Deleted requests from user " + user.username + " for phase " + i.toString());
+        console.log("I kept " + new_request_ids.length.toString() + " requests as they had annotations submitted");
+      }
+    }
 
     await Promise.all(users.map((user) => user.save()));
 

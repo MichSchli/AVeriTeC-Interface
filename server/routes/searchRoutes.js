@@ -40,8 +40,6 @@ router.post('/', async (req, res) => {
             console.log("Executing search query with command: " + python_exc + " utils/web_search.py --query " + query + " --page " + page + " --country_code " + country_code)
         }
 
-
-
         // Collect data from script
         let dataString = '';
         pyProg.stdout.on('data', function (data) {
@@ -64,6 +62,8 @@ router.post('/', async (req, res) => {
                 page: page,
                 result_urls: search_results.map((result) => result.link),
                 timestamp: Date.now(),
+                location_ISO_code: country_code,
+                cutoff_timestamp: date ? date : null
             };
 
             // Save search record
