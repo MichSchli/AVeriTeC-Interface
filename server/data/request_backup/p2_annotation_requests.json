@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "_id": "6551f6a67b048f1e938446a6",
+    "article": {
+      "_id": "654915b6c44b0d11131c954a",
+      "fact_checking_article": "https://web.archive.org/web/20231101171208/https://fullfact.org/health/private-healthcare-gp-general-practice-nhs-spending/",
+      "__v": 0
+    },
+    "assigned_user": "654915bed35c395e0aef352d",
+    "blocked_user_ids": [
+      "654915bed35c395e0aef3514"
+    ],
+    "p1_annotation": {
+      "claim": "lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very long lalalala test very l",
+      "label": "Refuted",
+      "claim_date": "2023-11-03T10:12:05.000Z",
+      "speaker": "",
+      "original_claim_url": "",
+      "reporting_source": "e.e.e",
+      "location_ISO_code": "",
+      "claim_types": [
+        "Quote Verification",
+        "Event/Property Claim"
+      ],
+      "fact_checking_strategies": [
+        "Consultation",
+        "Media Source Discovery"
+      ],
+      "_id": "6551f6a67b048f1e938446a7"
+    },
+    "other_extracted_claims": [
+      "The NHS spends £320 per person on “private healthcare providing NHS care”, equating to 90p per person per day."
+    ],
+    "child_requests": [],
+    "__v": 0
+  }
+]

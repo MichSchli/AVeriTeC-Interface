@@ -156,6 +156,14 @@ router.post('/p3/:user_id', checkUserOrAdmin, async (req, res) => {
 
     const user = await UserModel.findById(user_id);
 
+    let n_requests = 0;
+
+    if (user.p3_annotation_requests) {
+      n_requests += user.p3_annotation_requests.length;
+    }
+
+    console.log("User has " + n_requests.toString() + " P3 annotation requests")
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -396,6 +404,8 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
 
     // In P1, create a child request for each claim in the annotation:
     if (phase === 1) {
+      let is_disabled_for_fullfact = true;
+
       for (let claim of annotation_request.annotation.claims) {
         console.log("Creating child request for claim \"" + claim.claim + "\"")
         // If Speculative Claim, Opinion Claim, Media Publishing Claim, or Media Analysis Claim is in the list of claim types, skip the claim:
@@ -412,7 +422,7 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
           should_skip = true;
         }
 
-        if (should_skip) {
+        if (should_skip && !is_disabled_for_fullfact) {
           console.log("Skipping claim \"" + claim.claim + "\"")
           continue;
         }
@@ -470,6 +480,12 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
       });
       await child_request.save();
       dbAnnotationRequest.child_requests.push(child_request._id);
+    }
+
+    if (fullfact_user) {
+      let fullfact_user_assignment_field = "p" + (phase + 1).toString() + "_annotation_requests";
+      fullfact_user[fullfact_user_assignment_field].push(...dbAnnotationRequest.child_requests);
+      await fullfact_user.save();
     }
 
     await dbAnnotationRequest.save();

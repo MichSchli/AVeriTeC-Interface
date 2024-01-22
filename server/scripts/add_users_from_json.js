@@ -16,7 +16,7 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-var data_url = "data/admin_users.json"
+var data_url = "data/admin_users_ff.json"
 var phase = 1;
 
 var jsonData = JSON.parse(fs.readFileSync(data_url, 'utf8'));
