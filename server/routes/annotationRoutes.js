@@ -404,7 +404,7 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
 
     // In P1, create a child request for each claim in the annotation:
     if (phase === 1) {
-      let is_disabled_for_fullfact = true;
+      let is_disabled_for_fullfact = false;
 
       for (let claim of annotation_request.annotation.claims) {
         console.log("Creating child request for claim \"" + claim.claim + "\"")
