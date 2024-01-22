@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"Averitec.questionannotations"}],"uuid":"6bd4fc0555764df3b3205e1a68a1b1da","collectionName":"questionannotations","type":"collection"}

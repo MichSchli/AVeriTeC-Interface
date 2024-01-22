@@ -72,7 +72,7 @@ class NoteScreen extends React.Component {
                             </PaddingTypographBox>
                         </BarPartBox>
                         <LogoutBox>
-                        <WhiteLink target="_blank" rel="noopener noreferrer" href={config.api_url + "/guideline.pdf"} >Guidelines</WhiteLink> | <WhiteLink href="/control" >Control Panel</WhiteLink> | <WhiteLink href="#" onClick={() => {
+                        <WhiteLink target="_blank" rel="noopener noreferrer" href={config.site_url + "/guideline.pdf"} >Guidelines</WhiteLink> | <WhiteLink href="/control" >Control Panel</WhiteLink> | <WhiteLink href="#" onClick={() => {
                             localStorage.clear();
                             window.location.href = "/";
                         }}>Log out</WhiteLink>
