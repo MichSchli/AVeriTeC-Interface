@@ -40,10 +40,12 @@ export function noUrlOverlapValidator(blocked_url) {
   // Take the last element of the blocked url
   blocked_url_split = blocked_url_split[blocked_url_split.length - 1]
 
+  // Remove any extra / at the end of the blocked url
+  if (blocked_url_split.endsWith("/")){
+    blocked_url_split = blocked_url_split.slice(0, -1);
+  }
+
   return (data) => {
-    console.log(data)
-    console.log(blocked_url_split)
-    console.log(data.includes(blocked_url_split))
     if (data && blocked_url_split && data.includes(blocked_url_split)) {
       console.log("URL overlaps with blocked URL")
       return { error: true, message: "URL overlaps with blocked URL" }

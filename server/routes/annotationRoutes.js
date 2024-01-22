@@ -332,7 +332,7 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
     console.log("Saving annotation request " + dbAnnotationRequest._id + " with annotation " + JSON.stringify(annotation_request.annotation));
 
     // If this is not a training request or a resubmission, create a report:
-    if (dataset != "training" && first_time_flag) {
+    if (dataset != "training" && first_time_flag && !annotation_request.annotation.skipped) {
       let report = new ReportModel({
         phase: phase,
         annotationRequestId: dbAnnotationRequest._id,
@@ -469,7 +469,7 @@ router.post('/submit', checkUserIsAssigned, async (req, res) => {
     }
 
     // In P3, create a child request only if P2 and P3 labels disagree:
-    if (phase === 3 && dbAnnotationRequest.p2_annotation && dbAnnotationRequest.p2_annotation.label !== annotation_request.annotation.label) {
+    if (phase === 3 && dbAnnotationRequest.p2_annotation && dbAnnotationRequest.p2_annotation.label !== annotation_request.annotation.label && !annotation_request.annotation.unreadable) {
       let child_request = new P4AnnotationRequestModel({
         article: dbAnnotationRequest.article,
         blocked_user_ids: [...dbAnnotationRequest.blocked_user_ids, req.userId],

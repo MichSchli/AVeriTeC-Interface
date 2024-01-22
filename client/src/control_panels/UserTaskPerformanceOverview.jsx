@@ -174,8 +174,8 @@ export default function UserTaskPerformanceOverview(props) {
                     <YAxis unit=" s" />
                     <Tooltip />
                     <Legend />
-                    <Bar name="User" dataKey="user" fill="#8884d8" unit=" m" />
-                    <Bar name="Average (active)" dataKey="average" fill="#82ca9d" unit=" m" />
+                    <Bar name="User" dataKey="user" fill="#8884d8" unit=" s" />
+                    <Bar name="Average (active)" dataKey="average" fill="#82ca9d" unit=" s" />
                 </BarChart>
             </ChartBox>
             :

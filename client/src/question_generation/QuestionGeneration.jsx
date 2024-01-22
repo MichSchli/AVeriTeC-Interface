@@ -51,6 +51,8 @@ const WarningDiv = styled.div`
 function validate(content) {
   var valid = true
 
+  console.log("Validating...")
+
   if (content["annotation_request"]["annotation"]["skipped"] == true) {
     return true
   }
@@ -275,6 +277,10 @@ class QuestionGeneration extends React.Component {
         if (!all_annotation_requests[current_idx].annotation) {
           all_annotation_requests[current_idx].annotation = this.get_default_annotation();
         }
+
+        // Set skipped to false and skipped_reason to "":
+        all_annotation_requests[current_idx].annotation.skipped = false;
+        all_annotation_requests[current_idx].annotation.skipped_reason = "";
 
         // Memorize the current annotation request:
         this.setState({

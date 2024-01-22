@@ -329,8 +329,11 @@ class ClaimNormalization extends React.Component {
                     all_annotation_requests[current_idx].annotation = this.get_default_annotation();
                 }
 
-                console.log("Current index: " + current_idx)
-                console.log(all_annotation_requests[current_idx])
+
+                // Set skipped to false and skipped_reason to "":
+                all_annotation_requests[current_idx].annotation.skipped = false;
+                all_annotation_requests[current_idx].annotation.skipped_reason = "";
+
 
                 // Memorize the current annotation request:
                 this.setState({

@@ -702,7 +702,8 @@ class AdminControl extends react.Component {
                                                 Temporary password:
                                             </ModalPartBox>
                                             <ModalPartBox>
-                                                <TextField value={this.state.tempPassword ? this.state.tempPassword : ""} size="small" InputProps={{ readOnly: true }} variant="filled" name="new_password"></TextField>
+                                                <TextField value={this.state.tempPassword ? this.state.tempPassword : ""} size="small" name="new_password" onChange={(event) => {this.setState(
+                                                    {tempPassword: event.target.value})}}></TextField>
                                             </ModalPartBox>
                                             <ModalPartBox>
                                                 <AddButton variant="contained" color="primary" onClick={() => { this.addUser(); close(); }}>

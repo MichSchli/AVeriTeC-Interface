@@ -8,6 +8,8 @@ const searchRecordSchema = new mongoose.Schema({
     page: Number,
     result_urls: [String],
     timestamp: Date,
+    location_ISO_code: String,
+    cutoff_timestamp: Date
 });
 
 const SearchRecordModel = mongoose.model('SearchRecord', searchRecordSchema);
