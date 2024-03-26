@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"Averitec.trainingp2annotationrequests"}],"uuid":"64aae0697ad74ebcb143892a8ad8b228","collectionName":"trainingp2annotationrequests","type":"collection"}

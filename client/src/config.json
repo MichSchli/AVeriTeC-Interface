@@ -1,5 +1,5 @@
 {
-    "api_url": "http://localhost:10000/",
-    "search_api_url": "http://localhost:10000/",
-    "server_api_url": "https://api.averitec.eu"
+    "api_url": "https://api.averitec.eu",
+    "search_api_url": "https://api.averitec.eu",
+    "site_url": "https://averitec.eu"
 }

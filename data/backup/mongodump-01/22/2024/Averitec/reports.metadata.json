@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"Averitec.reports"}],"uuid":"31ce84b9a3ef492389dba6050e323c66","collectionName":"reports","type":"collection"}
