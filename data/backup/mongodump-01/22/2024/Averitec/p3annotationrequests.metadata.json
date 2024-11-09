@@ -1,1 +1,0 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"Averitec.p3annotationrequests"}],"uuid":"9c80f806b4d3455e97fff12a71ff9f4f","collectionName":"p3annotationrequests","type":"collection"}

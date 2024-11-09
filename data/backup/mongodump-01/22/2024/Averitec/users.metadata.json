@@ -1,1 +1,0 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"Averitec.users"},{"v":{"$numberInt":"2"},"unique":true,"key":{"username":{"$numberInt":"1"}},"name":"username_1","ns":"Averitec.users","background":true}],"uuid":"72c74679b6654151838e3ae2fd40f666","collectionName":"users","type":"collection"}
